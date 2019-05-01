@@ -240,13 +240,12 @@ Praca ta koncentruje się głównie na tym pierwszym etapie analizy danych, któ
 \section{System odczytu danych teleskopu LST}
 Teleskop LST  ma lustro o średnicy 23 metrów, a kamera LST składa się z 1855 fotopowielaczy (PMT). Ze względu na dużą powierzchnie lustra, fotony tła nocnego nieba (ang. \textsl{night sky background}, NSB) również są rejestrowane z częstotliwością kilkuset MHz na piksel. W celu redukcji zanieczyszczenia sygnału przez NSB oraz poprawy stosunku sygnału do szumu, konieczne jest próbkowanie  sygnału z szybkością $\sim$ 1 GHz i zmniejszenie czasu całkowania sygnału do kilku ns \cite{dragon_lst}.
 \subsection{Wprowadzenie}
-Kamera LST składa się z 265 modułów, a każdy moduł składa się z 7 pikseli, co daje nam w sumie 1855 pikseli (fotopowielaczy), które tworzą kamerę LST. Jeden moduł (pokazany na rysunku \ref{fig:drs4}) składa się m.in. z chipu DRS4 będącym sercem układu odczytu sygnału, przedwzmacniacza ASIC. 
-W każdym module, sygnał z przedwzmacniacza jest dzielony na trzy linie: linię wysokiego wzmocnienia, linię niskiego wzmocnienia
-i linię wyzwalania (ang. \textsl{trigger}). Sygnały o wysokim wzmocnieniu (ang. \textsl{high gain}) i niskim wzmocnieniu (ang. \textsl{low gain}) są próbkowane przez układ DRS4 z częstotliwością 1\,GHz. Gdy następuje wyzwolenie sygnału, przebieg sygnału (ang. \textsl{waveform}) jest digitalizowany przez zewnętrzy przetwornik analogowo-cyfrowy (ADC) z częstotliwością $\sim$ 33\,MHz. Sygnał w postaci cyfrowej jest przesyłany do bramek programowalnych (FPGA), następnie do serwera, gdzie dane są przechowywane przez złącze Ethernet \cite{dragon_lst}. 
+Kamera LST składa się z 265 modułów, a każdy moduł składa się z 7 pikseli, co daje nam w sumie 1855 pikseli (fotopowielaczy), które tworzą kamerę LST. Jeden moduł (pokazany na rysunku \ref{fig:drs4}) składa się m.in. z chipu DRS4 będącym sercem układu odczytu sygnału, 7 fotopowielaczy(PMT), przedwzmacniacza.
+Z każdego piksela danego są odczytywane za pomocą jednego kanału chipu DRS4. W każdym module, sygnał z przedwzmacniacza jest dzielony na trzy linie: linię wysokiego wzmocnienia, linię niskiego wzmocnienia i linię wyzwalania (ang. \textsl{trigger}). Sygnały o wysokim wzmocnieniu (ang. \textsl{high gain}) i niskim wzmocnieniu (ang. \textsl{low gain}) są próbkowane przez układ DRS4 z częstotliwością 1\,GHz. Gdy następuje wyzwolenie sygnału, przebieg sygnału (ang. \textsl{waveform}) jest digitalizowany przez zewnętrzy przetwornik analogowo-cyfrowy (ADC) z częstotliwością $\sim$ 33\,MHz. Sygnał w postaci cyfrowej jest przesyłany do bramek programowalnych (FPGA), następnie do serwera, gdzie dane są przechowywane \cite{dragon_lst}. 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.1]{rysunki/dragon.png}
-\caption{System odczytu danych teleskopu LST z zaznaczonym chipem DRS4. Zdjęcie T. Saito.}
+\includegraphics[scale=0.35]{rysunki/modul.png}
+\caption{Jeden moduł systemu odczytu danych teleskopu LST.}
 \label{fig:drs4}
 \end{figure}
 \subsection{Chip DRS4}
@@ -262,40 +261,41 @@ kondensatorów(próbek) jest przechowywane przez system akwizycji danych (DAQ) \
 Chip DRS4 wymaga szeregu korekcji programowalnych w celu optymalnej pracy.
 \subsection{Procedury korekcji w DRS4}
 \subsubsection{Korekcja linii bazowej dla przypadków ze stałym czasem przyjścia}
-Każdy kondensator w chipie DRS4 ma swoją własną wartość szumów. Na rysunku pokazuje średnią wartość bazową (szumów) oraz jej RMS w funkcji absolutnej pozycji w pierścieniu domino \ref{fig:baseline_cap}. Rożna wartość bazowa danego kondensatora spowodowana jest fizyczną różnicą magazynowania ładunku w każdym kondensatorze, która jest większa niż jego RMS. Wyraźny skok na pozycji 512 spowodowany jest wewnętrzną konstrukcją chipu DRS4. Wartość bazowa każdego kondensatora musi być skalibrowany w celu osiągnięcia niskich wartości szumów elektroniki. W tym celu stosuje się prostą kalibracje polegającą na obliczeniu średniej wartości bazowej (szumu) w funkcji numeru kondensatora z danych pochodzących z pomiaru kalibracyjnego linii bazowej (ang. \textsl{pedestal run}). Ta obliczona średnia wartość bazowa może być następnie odjęta z sygnału dla danego kondensatora. 
+Każdy kondensator w chipie DRS4 ma swoją własną wartość szumów. Na rysunku pokazana jest średnią wartość bazową (szumów) oraz ich RMS w funkcji absolutnej pozycji w pierścieniu domino \ref{fig:baseline_cap}. Rożna wartość bazowa danego kondensatora spowodowana jest fizyczną różnicą magazynowania ładunku w każdym kondensatorze, która jest większa niż jego RMS. Wyraźny skok na pozycji 512 spowodowany jest wewnętrzną konstrukcją chipu DRS4. Wartość bazowa każdego kondensatora musi być skalibrowana w celu osiągnięcia niskich wartości szumów elektroniki. W tym celu stosuje się prostą kalibracje polegającą na obliczeniu średniej wartości bazowej (szumu) w funkcji numeru kondensatora z danych pochodzących z pomiaru kalibracyjnego linii bazowej (tzw. \textsl{pedestal run}). Ta obliczona średnia wartość bazowa może być następnie odjęta z sygnału dla danego kondensatora \cite{drs4_magic}. 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.23]{wykresy/drs4/pedestal_teoria.pdf}
+\includegraphics[scale=0.25]{wykresy/drs4/pedestal_teoria.pdf}
 \caption{Wartość bazowa 1024 kondensatorów jednego kanału chipu DRS4 w funkcji numeru kondensatora.}
 \label{fig:baseline_cap}
 \end{figure}
 \subsubsection{Korekcja czasowa linii bazowej dla przypadków z losowym czasem przyjścia}
-Nawet po zastosowaniu kalibracji opisanych w poprzedniej sekcji, linia bazowa nie jest w pełni stabilna dla wyzwalacza z losowym czasem przyjścia. Jest to spowodowane zależność linii bazowej od czasu odczytu danego kondensatora. Może się zdarzyć, że dany kondensator jest odczytywany w krótkim odstępie czasu, wtedy dochodzi do skoku sygnału na tym kondensatorze. Przykładowe przebiegi sygnału kiedy następuje skok sygnału przedstawiam na rysunku \ref{fig:dt_corr}. 
+Nawet po zastosowaniu kalibracji opisanych w poprzedniej sekcji, linia bazowa nie jest w pełni stabilna dla wyzwalacza z losowym czasem przyjścia. Jest to spowodowane zależność linii bazowej od czasu odczytu danego kondensatora. Może się zdarzyć, że dany kondensator jest odczytywany w krótkim odstępie czasu, wtedy dochodzi do skoku sygnału na tym kondensatorze \cite{drs4_magic}. Przykładowe przebiegi sygnału kiedy następuje skok sygnału przedstawiony jest na rysunku \ref{fig:dt_corr}. 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.35]{wykresy/drs4/dt_corr_teoria.pdf}
-\caption{Wartość bazowa 1024 kondensatorów jednego kanału chipu DRS4 w funkcji numeru kondensatora.}
+\includegraphics[scale=0.4]{wykresy/drs4/dt_corr_teoria.pdf}
+\caption{Przykładowe przebiegi sygnału w których wystąpił skok sygnału spowodowany krótkim czasem odczytu danego kondensatora.}
 \label{fig:dt_corr}
 \end{figure}
 W celu korekcji sygnału używa się funkcji potęgowej w postaci:
 \begin{equation}
-y = A dt^B + C
+y = A \cdot dt^B + C
 \end{equation}
 gdzie: $dt$ --- czas pomiędzy odczytem danego kondensatora; $A, B, C$ --- współczynniki wyznaczone eksperymentalnie. 
-Współczynniki te zależą głównie od temperatury w jakiej pracuje elektronika. Na rysunku \ref{fig:dt_corr_fit} pokazuje funkcje potęgową dopasowaną do danych w różnej temperaturze, dane pochodzą z testów Japonii. Jednym z moich zadań w tej pracy jest sprawdzenie jakie są współczynniki w układzie działającym w LST oraz czy są one różne dla różnych pikseli. 
+Współczynniki te zależą głównie od temperatury w jakiej pracuje elektronika. Na rysunku \ref{fig:dt_corr_fit} pokazana jest funkcja potęgowa dopasowana do danych w różnych temperaturach, dane pochodzą z testów Japonii. Jednym z moich zadań w tej pracy jest sprawdzenie jakie są współczynniki w układzie działającym w LST, oraz czy są one różne dla różnych pikseli. 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.55]{wykresy/drs4/dtcurve.pdf}
-\caption{Wartość bazowa 1024 kondensatorów jednego kanału chipu DRS4 w funkcji numeru kondensatora.}
+\includegraphics[scale=0.45]{wykresy/drs4/dtcurve.pdf}
+\caption{Funkcja potęgowa używana do korekcji skoku w linii bazowej, dopasowana do danych w różnych temperaturach. Wykres od Seiya Nozaki.}
 \label{fig:dt_corr_fit}
 \end{figure}
+\newpage
 \subsubsection{Interpolacja szumów niegaussowskich}
-Szumy niegaussowskie spowodowane  są skokiem napięcia podczas odczytu kondensatorów, występują one kiedy pierścień domino, z którego odczytywane są dane, zatrzymana się w wybranych miejscach w następujących po sobie zdarzeniach (ang. \textsl{event}). Występują dwa typy szumów niegausowskich:
+Szumy niegaussowskie spowodowane  są skokiem napięcia podczas odczytu kondensatorów, występują one kiedy pierścień domino, z którego odczytywane są dane, zatrzymana się w wybranych miejscach w następujących po sobie zdarzeniach (ang. \textsl{event}). Występują dwa typy szumów niegaussowskich:
 \begin{itemize}
 \item {\bf{typu A}} jest to mniejszy skok sygnału $\sim 20$ jednostek ADC, o szerokości jednej próbki.
 \item {\bf{typu B}} jest to większy skok sygnału $\sim 50 - 80$ jednostek ADC, o szerokości dwóch próbek.
 \end{itemize}
-Na rysunku \ref{fig:spike_corr} pokazany jest przebieg sygnału, gdzie występuje szum niegaussowski typu A i B. W celu korekcji sygnału, używa się interpolacji sygnału w miejscu gdzie szum powstał. 
+Na rysunku \ref{fig:spike_corr} pokazany jest przebieg sygnału, gdzie występuje szum niegaussowski typu A i B. W celu korekcji sygnału, używa się interpolacji sygnału w miejscu gdzie skok powstał. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.35]{wykresy/drs4/spike_teoria.pdf}
@@ -303,14 +303,16 @@ Na rysunku \ref{fig:spike_corr} pokazany jest przebieg sygnału, gdzie występuj
 \label{fig:spike_corr}
 \end{figure}
 \subsubsection{Korekcja czasowa}
-Innym, ważnym rodzajem korekcji, które należy zastosować w DRS4 jest korekcja czasu przyjścia impulsu. W chipie DRS4 występuje opóźnienie typowe 1\,ns (do 4\,ns) zależne od absolutnej pozycji impulsu w pierścieniu domino. Rożnicę w czasie przyjścia mogą być skalibrowane za pomocą impulsów kalibracyjnych. W tym celu oblicza się średni czas przyjścia impulsu w funkcji pozycji impulsu w pierścieniu domino. Zależność ta jest różna dla różnych kanałów w chipie DRS4. Dla każdego kanału wykorzystywane jest rozwinięcie w szereg fouriera, aby uzyskać funkcje (współczynniki) korekcji. 
+Innym, ważnym rodzajem korekcji, które należy zastosować w DRS4 jest korekcja czasu przyjścia impulsu. W chipie DRS4 występuje opóźnienie typowe to 1\,ns (do 4\,ns), zależne od absolutnej pozycji impulsu w pierścieniu domino. Rożnicę w czasie przyjścia mogą być skalibrowane za pomocą impulsów kalibracyjnych. W tym celu oblicza się średni czas przyjścia impulsu w funkcji pozycji impulsu w pierścieniu domino. Zależność ta jest różna dla różnych kanałów w chipie DRS4. Dla każdego kanału wykorzystywane jest rozwinięcie w szereg fouriera, aby uzyskać funkcje (współczynniki) korekcji \cite{drs4_magic}. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.45]{wykresy/drs4/time_corr.pdf}
-\caption{Przebieg sygnału w którym wystąpił szum niegausowski typu A (lewy) i B(prawy) u góry, na dole pokazany jest przebieg sygnału po dokonaniu interpolacji.}
+\caption{Kalibracja czasu przyjścia impulsów. Po lewej stronie : średni czas przyjścia w funkcji pozycji w pierścieniu DRS4 (punkty) wraz z rozwinięciem w szereg fouriera (czerwona krzywa). Po prawej stronie: rozkład czasów przyjścia przed (przerywana linia) i po (ciągła linia) kalibracji. Źródło: \cite{drs4_magic}. }
 \label{fig:spike_corr}
 \end{figure}
-
+\subsubsection{Implementacja korekcji}
+W ramach pracy zaimplementowane wyżej opisane korekcje w bibliotece cta-lstchian. Bibliotek cta-lstchain \cite{lstchain_url} jest biblioteką napisaną w języku Python do analizy danych z teleskopu LST. Biblioteka ta jest oparta o bibliotekę ctapipe \cite{ctapipe_url}, będącą podstawowym narzędziem do niskopoziomowej analizy danych z teleskopów CTA.
+\newpage
 \subsection{Tworzenie pliku z wartościami szumu dla każdego kondensatora}
 Każdy kondensator ma własna wartość szumów, co pokazuje na rysunku \ref{fig:ped_lg} i \ref{fig:ped_lg}. 
 
@@ -409,5 +411,11 @@ telescopes}, Nuclear Instruments and Methods in Physics Research A, 723, 109, (2
 \bibitem{drs4_psi}
 DRS4 datasheet rev. 0.9
 \url{https://www.psi.ch/sites/default/files/import/drs/DocumentationEN/DRS4_rev09.pdf}
+
+\bibitem{lstchain_url}
+\url{https://github.com/cta-observatory/cta-lstchain}
+
+\bibitem{ctapipe_url}
+\url{https://github.com/cta-observatory/ctapipe}
 \end{thebibliography}
 \end{document}
