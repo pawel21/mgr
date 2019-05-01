@@ -1,0 +1,413 @@
+\documentclass[a4paper,11pt,twoside]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+%\usepackage{amssymb}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{wrapfig}
+\usepackage{subfig}
+\usepackage{hyperref}
+\usepackage{sidecap}
+\usepackage{theorem}
+\usepackage{thc}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{siunitx}
+\usepackage{mathtools}
+\usepackage{caption}
+\usepackage{subfig}
+\usepackage{tikz}
+\setlength{\headheight}{15pt}
+
+\geometry{left=3 cm,right=3 cm, top=3.5 cm, bottom=3.5 cm}
+\fancyhf{}
+\fancyhead[RO,LE]{\footnotesize{\leftmark}}
+\fancyhead[LO,RE]{\thepage}
+
+\pagestyle{fancy}
+
+\renewcommand\maketitle{
+\begin{titlepage}
+\begin{center}
+
+\textbf{ \begin{huge}
+ Badanie i wdrożenie procedur niskopoziomowych korekcji przebiegu
+sygnałów systemu odczytu danych Dragon dla teleskopów LST.
+\end{huge}}
+
+\vspace{0.3cm}
+
+\begin{Large}
+ \textit{Uniwersytet Łódzki, 2018}
+\end{Large}
+
+\vspace{0.3cm}
+
+
+\begin{tabular}{ccc}
+\LARGE{Pawel Gliwny} \vspace{0.15cm}\\
+\end{tabular}
+
+
+\vspace{0.7cm}
+\large{Promotor\\dr. hab. Julian Sitarek}\\
+\vspace{0.7cm}
+\includegraphics[width=0.33\textwidth]{logo_wfis.png}\\
+\vspace{0.7cm}
+\begin{abstract}
+LST (Large Size Telescope) jest największym z typów teleskopów czerenkowskich wchodzących w skład budowanego właśnie Obserwatorium CTA (Cherenkov Telescope Array). Konstrukcja pierwszego teleskopu LST zakończyła się 10 października. Poprzez obserwowanie słabych i ultrakrótkich błysków promieniowania czerenkowa, teleskopy czerenkowskie są w stanie obserwować elektromagnetyczne kaskady zainicjowane w atmosferze przez promieniowanie gamma. Światło czerenkowskie jest zbierane na kamerze i konwertowane na impulsy elektryczne korzystając z fotopowielaczy, sygnał ten jest później próbkowany z częstotliwością rzędu GHz. W teleskopach LST system odczytu danych Dragon oparty jest na chipie DRS4 (Domino Ring Sampler 4), który wymaga szeregu korekcji dla optymalnego działania. W pracy przedstawiam korekcje m.in. na linię bazową każdego próbkującego kondensatora, korekcje zależności od czasu ostatniego odczytu danego kondensatora, przewidywanie pozycji oraz interpolacje niegaussowskiego szumu. Korekcje zostały przetestowane na danych testowych zbieranych w laboratorium w Hiszpanii, oraz na pierwszych danych z prototypu LST. 
+\end{abstract}
+
+\Large{\today}
+
+\end{center}
+\end{titlepage}}
+
+%\vfill
+
+
+
+
+
+
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\setcounter{page}{1}
+
+
+\section{Promieniowanie kosmiczne i astronomia gamma}
+Astronomia jest nauką umożliwiającą badanie zjawisk fizycznych poza naszą planetą. Do początku XX wieku astronomia zajmowała się badaniem zjawisk termicznej emisji źródeł charakteryzujących się widmem Plancka. To się zmieniło wraz z odkryciem promieniowania kosmicznego (ang. \textsl{Cosmic Rays}) przez Victora Hessa w 1912 roku poprzez pomiar wzrostu gęstości liczbowej zjonizowanych cząsteczek wraz z wysokością\cite{particle_de_angelis}. W promieniowaniu kosmicznym obserwuje się cząstki o energiach sięgających $10^{20}$\,eV \cite{particle_de_angelis}, procesy termiczne nie są w stanie nadać cząstkom taką energię, więc muszą być one produkowane w procesach nietermicznych, które zazwyczaj charakteryzują się widmem potęgowym. \\
+Promienie kosmiczne są cząstkami o największych znanych nam energiach, 
+dzięki nim możemy badać przyspieszanie cząstek w najbardziej ekstremalnych warunkach. Ich badanie pomaga nam także lepiej rozumieć skład i ewolucje Wszechświata. Jednakże są to cząstki naładowane elektrycznie, więc są odchylane w polach magnetycznym podczas propagacji, co utrudnia nam określenie źródła ich powstania. Kierunek ich nadejścia wydaje się być (prawie) izotropowy. Możliwe jest tylko określenie kierunku przyjścia cząstek naładowanych promieniowania kosmicznego o najwyższych energiach, czym zajmuje się obserwatorium \textsl{Pierre Auger} w Argentynie \cite{auger_web} oraz obserwatorium \textsl{Telescope Array} na półkuli północnej \cite{telescope_array_web}. Aby, określić źródła musimy badać cząstki neutralne takie jak: neutrina i fotony o najwyższych energiach, czyli promieniowanie gamma. Neutrina z uwagi na bardzo mały przekrój czynny są trudne do wykrycia. Więc tematem mojej pracy jest astronomia gamma bardzo wysokich energiach $>30$\,GeV. W tym rozdziale przedstawiam najważniejsze informacje o astronomii gamma, mechanizmy powstania fotonów $\gamma$ oraz techniki detekcji.
+
+\subsection{Astronomia gamma}
+Promieniowanie gamma o bardzo wysokich energiach $\geq$ 30\,GeV ang.(\textsl{very high energy, VHE}) według dzisiejszej wiedzy jest wynikiem interakcji populacji relatywistycznych cząstek o bardzo wysokich energiach z otaczającą materią lub z niskoenergetycznymi polami promieniowania. Badanie fotonów gamma umożliwia nam poszerzanie naszej wiedzy na temat procesów przyspieszania cząstek o największych energiach, testowanie teorii fizycznych w ekstremalnych warunkach: bardzo silnej grawitacji (czarne dziury), bardzo silnego pola magnetycznego (gwiazdy neutronowe). Astronomia gamma dostarcza nam wyjątkowe narzędzia do badania wielu astrofizycznych zjawisk: pozagalaktyczne promieniowanie tła (\textsl{ang. Extragalactic background light (EBL)}), poszukiwanie ciemnej materii \cite{Gamma-ray_article}. Do tej pory zostało odkryte ponad 200 obiektów, które są źródłem fotonów o najwyższych energiach \cite{TeVCat}. Większość tych źródeł została odkryta za pomocą teleskopów czerenkowskich (ang. \textsl{Imaging Atmospheric Cherenkov Telescopes, IACT}), które zostaną opisane w tym rozdziale.\\
+Początki astronomii gamma datuje się na lata 50. XX wieku.
+Pierwszym znaczącym przełomem było odkrycie emisji w zakresie TeV z mgławicy Craba w 1989 roku przez teleskop Whipple \cite{whipple}.
+
+Atmosfera ziemska absorbuje fotony gamma, więc bezpośrednim sposobem badania tych fotonów jest wysłanie misji kosmicznej. Jednakże strumień fotonów o najwyższych energiach jest bardzo mały, co wynika z mechanizmu produkcji tych fotonów. Na przykład mgławica Craba, jeden z najintensywniejszych obiektów będącym źródłem fotonów $\gamma$ wytwarza strumień jedynie $\sim$ 6 fotonów $\mathtt{m^{-2}}$ $\mathtt{rok^{-1}}$ na powierzchni ziemi o energii powyżej 1\,TeV \cite{IACT}. W celu badania kosmosu w tych zakresach energii potrzebna jest bardzo duża powierzchnia, na której można dokonywać detekcji, znacznie większa niż możliwa powierzchnia detektora w przestrzeni kosmicznej $\sim$ 1\,$\mathtt{m^{2}}$. Teleskopy czerenkowskie spełniają ten warunek poprzez detekcje promieniowania Czerenkowa powstającego poprzez oddziaływanie fotonu gamma z cząstkami atmosfery (głównie azotem). Ziemska atmosfera jest nieodłączną częścią procesu detekcji, spełnia rolę kalorymetru (czyli mierzy energię) oraz trackera (czyli mierzy kierunek przyjścia cząstki). \\
+\subsection{Mechanizmy produkcji promieniowania Gamma}
+Źródłami wysokoenergetycznego promieniowania kosmicznego oraz promieniowania gamma są pozostałości po supernowych, szybko rotujące obiekty takie jak pulsary i gwiazdy neutronowe, aktywne jądra galaktyk, układy podwójne ze zwartym obiektem (gwiazdą neutronową lub czarną dziurą). W tych obiektach promieniowanie gamma jest produkowane przez różne mechanizmy \cite{astro_particle}:
+\begin{itemize}
+\item {\bf{Promieniowanie synchrotronowe}}
+produkowane jest przez relatywistyczne naładowane cząstki (głównie elektrony) w polu magnetycznym w którym są hamowane, w wyniku czego produkują nietermiczne promieniowanie elektromagnetyczne. Moc promieniowania $P$ zależy do energii cząstki $E$ oraz natężenia pola magnetycznego $B$ w postaci $P \sim E^2 B^2$.
+\item {\bf{Bremsstrahlung} (Promieniowanie hamowania) }:
+kiedy naładowana cząstka jest hamowana w polu elektrycznym emituje fotony. Prawdopodobieństwo oddziaływania $\phi$ zależy od ładunku $z$, masy $m$ i energii $E$ uginanej cząstki oraz liczby atomowej $Z$ ośrodka: $\phi \sim \frac{z^2 Z^2 E}{m^2}$. Z powodu małej masy elektronów, głownie te cząstki biorą udział w procesie Bremsstrahlung. Widmo fotonów produkowanych w procesie jest ciągłe oraz maleje jak $1/E_{\gamma}$ dla wysokich energii.  
+\item {\bf{Odwrotny efekt Comptona}}:
+relatywistyczny elektron przyspieszany w źródle, oddziałuje z fotonami tła, w wyniku czego przekazuje im część energii.
+\item {\bf{Rozpad $\pi^0$}}: proton przyspieszany w źródle może wyprodukować naładowane oraz neutralne piony w procesach oddziaływania proton-proton oraz proton-jądro:
+\begin{equation}
+p + \mathtt{jadro} \rightarrow p' + \mathtt{jadro'} + \pi^+ + \pi^- + \pi^0
+\end{equation} 
+Czas życia naładowanych pionów to 26\,ns, po których rozpadają się na miony, natomiast neutralny pion prawie natychmiast rozpada się w dwa kwanty promieniowania gamma:
+\begin{equation}
+\pi^0 \rightarrow \gamma + \gamma
+\end{equation}
+Których energia w układzie środka masy wynosi 72.5\,MeV.
+\end{itemize}
+\subsection{Mechanizmy detekcji promieniowania Gamma}
+Procesy fizyce, na których opiera się detekcja fotonów $\gamma$ to \cite{astro_particle}:
+\begin{itemize}
+\item {\bf{Efekt fotoelektryczny}}, gdy $E_{\gamma} \leq 100$\,keV
+\begin{equation}
+\gamma + \mathtt{atom} \rightarrow \mathtt{atom^+} + \mathtt{e^-}
+\end{equation}
+\item {\bf{Efekt Comptona}}, gdy $E_{\gamma} \leq 1$\,MeV
+\begin{equation}
+\gamma + \mathtt{e^{-}_{w\,spoczynku}} \rightarrow \gamma' + \mathtt{e^{-}_{w\,ruchu}}
+\end{equation}
+\item {\bf{Produkcja par elektron-pozyton}}, gdy $E_{\gamma} >> 1$\,MeV
+\begin{equation}
+\gamma + \mathtt{jadro} \rightarrow \mathtt{e^+} + \mathtt{e^-} + \mathtt{jadro'}
+\end{equation}
+\end{itemize}
+Ten ostatni proces jest szczególnie ważny w opisie rozwoju kaskady wywołanej przez wysokoenergetyczny foton $\gamma$. Co zostanie opisane w następny punkcie.
+\subsection{Promieniowanie Czerenkowa i wielkie pęki atmosferyczne}
+Podstawą działania teleskopów czerenkowskich jest detekcja promieniowanie Czerenkowa powstającego w wielkim pęku atmosferycznym na skutek oddziaływania fotonu gamma z atomami tworzącymi atmosferę ziemską. 
+Foton gamma o bardzo wysokiej energii oddziałując z ziemską atmosferą tworzy parę elektron-pozyton. Następnie zachodzące naprzemiennie procesy Bremsstrahlung (promieniowanie hamowania) oraz produkcji par prowadzą do generacji {\bf{kaskady elektromagnetycznej}} w atmosferze. Długość radiacyjna $X_0$ dla wysokoenergetycznych fotonów w procesie Bremmstrahlung wynosi 37,15 $\mathtt{g} \cdot \mathtt{cm^{-2}}$ \cite{IACT}, co odpowiada 7/9 drogi swobodnej dla produkcji par $\mathtt{e^{\pm}}$. Te uproszenia są fundamentem dla łatwej analitycznej formuły opisania pęków atmosferycznych. Całkowita liczba elektronów, pozytonów i fotonów jest podwajana co $\ln(2) X_0$. Pierwotna energia fotonu gamma $E_0$ dzieli się równo między cząstki wtórne. Proces trwa, aż średnia energia elektronów produkowanych w kaskadzie osiągnie energią krytyczną $E_c = 84$\,MeV, a sam pęk na wysokości na jakiej to ma miejsce osiąga swoje maksimum. Dalej   dominują już straty jonizacyjne i kaskada powoli się wygasza \cite{IACT}. Maksymalna liczba cząstek wyprodukowanych w takiej kaskadzie dana jest zależnością $E_0 / E_c$. Schematyczny rozwój kaskady elektromagnetycznej przedstawiam na rysunku~\ref{fig:cas_em}. 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{rysunki/kaskada_em.png}
+\caption{Rozwój kaskady elektromagnetycznej.}
+\label{fig:cas_em}
+\end{figure}
+Wielkie pęki są wywoływane także przez promieniowanie kosmiczne (relatywistyczne protony lub jądra atomowe), nazywane {\bf{kaskadą hadronową}}. W tym przypadku rozwój kaskady jest bardziej skomplikowany, procesy hadronowe prowadzą do powstania wtórnych jąder atomowych wraz z neutralnymi i naładowanymi pionami z dużym pędem poprzecznym. Piony są cząstkami o krótkim czasie życia i nie docierają do powierzchni ziemi: neutralny pion rozpada się w dwa fotony $\gamma$, a naładowany pion w mion i neutrino:
+\begin{equation*}
+\pi^0 \rightarrow \gamma + \gamma 
+\end{equation*}
+\begin{equation*}
+\pi^+ \rightarrow \mu^+ + \nu_{\mu}
+\end{equation*}  
+\begin{equation*}
+\pi^- \rightarrow \mu^- + \bar{\nu}_{\mu}
+\end{equation*}
+Rożnice w morfologi pęku wraz z rekonstrukcją kierunku przyjścia pierwotnej cząstki, pozwalają na uzyskania wydajnego sposobu na odrzucenie obrazów produkowanych przez hadrony. Nawet dla silnych źródeł promieniowania gamma ilość kaskad hadronowych przewyższa o 3 rzędy wielkości ilość pęków zainicjowanych przez fotony gamma. Symulacje Monte Carlo wielkiego pęku kosmicznego zapoczątkowanego przez foton~\ref{fig:f1} oraz przez proton~\ref{fig:f2} pokazuje na rysunku poniżej.
+\begin{figure}[H]
+\label{mc_pek}
+  \begin{center}
+  \subfloat[Foton o energii 1\,TeV.]{\includegraphics[scale=0.15]{obrazy_teoria/foton_1TeV.png}\label{fig:f1}}
+  \hfill
+  \subfloat[Proton o energii 1\,TeV.]{\includegraphics[scale=0.15]{obrazy_teoria/proton_1TeV.png}\label{fig:f2}}
+  \caption{Symulacja Monte Carlo pęku kosmicznego za pomocą programu CORSIKA. Typ cząstki reprezentowany jest przez kolor śladu: czerwony = elektrony, pozytony, fotony gamma; zielony = miony, niebieski = hadrony. Parametry użyte do symulacji to: wysokość pierwszej interakcji = 30\,km, 
+zakres na osiach: Z(pionowa): 0 - 30.1\,km, X/Y: $\pm$ 5\,km wokół osi pęku, cięcia energii: 0.1\,MeV ($\mathtt{e^{-+}}$, fotony gamma) oraz 0.1\,GeV (miony i hadrony) \cite{monte_carlo}.}
+\end{center}
+\end{figure}
+Relatywistyczna cząstka poruszająca się w powietrzu szybciej niż prędkość światła w tyn ośrodku ($v > c/n_{air}$, gdzie $n_{air}$ jest współczynnikiem załamania dla powietrza) produkuje {\bf{promieniowanie Czerenkowa}}. Światło Czerenkowa ma swoje maksimum w zakresie UV (ciągnie się aż do zakresu optycznego) oraz jest produkowane przez cały czas rozwoju kaskady, maksimum emisji występuje, kiedy liczba wyprodukowanych cząstek w kaskadzie jest największa, na wysokość $\approx$ 10\,km dla fotonów gamma o pierwotnej energii od 100\,GeV do 1\,TeV \cite{IACT}. Każda cząstka produkuje światło Czerenkowa o stałym kącie $\theta_C$ do kierunku ruchu, co wyrażamy zależnością:
+\begin{equation}
+\cos (\theta_C) = \frac{c}{v n_{air}}
+\end{equation}
+Kąt Czerenkowa wynosi $\approx \ang{1.3}$ na poziomie morza. \\
+Światła Czerenkowa produkowanego w kaskadzie jest mało (w przybliżeniu ilość światła proporcjonalna jest do energii cząstki pierwotnej), dlatego trzeba używać dużych teleskopów oraz możliwie redukować szum w elektronice systemu odczytu danych do wydajnej jego obserwacji. \\
+%do tego momentu Julian sprawdzil tekst 
+Cząstki w kaskadzie elektromagnetycznej podlegają także wielokrotnemu rozpraszaniu wywołanego przez oddziaływanie Coulomba, co prowadzi do rozdzielenia ich kierunku propagacji w małym zakresie kątowym generując zasięg boczny pęku. W wyniku powstaje tzw. \textsl{light pool} o promieniu $\approx$ 130\,m oraz gęstości $\approx$ 100 fotonów $\mathtt{m^{-2}}$ dla fotonów gamma o energii 1\,TeV \cite{IACT}, co jest pokazane na rysunku \ref{fig:lightpool}.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.5]{obrazy_teoria/lightpool.png}
+\caption{Symulacje Monte Carlo rozkładu promieniowania Czerenkowa na powierzchni ziemi dla kaskady zainicjowanej przez foton gamma. Lewa strona: wykres zależności gęstości promieniowania Czerenkowa w funkcji odległości radialnej od rdzenia pęku dla różnych energii pierwotnych fotonów. Prawa strona: 2-wymiarowy rozkład gęstości fotonów na powierzchni ziemi dla pęku zainicjowanego przez foton o energii 300\,GeV. Wykres dzięki uprzejmości G. Maier \cite{IACT}.}
+\label{fig:lightpool}
+\end{figure}
+Wydajność produkcji światła Czerenkowa jest proporcjonalne do 1/$\lambda^2$ ($\lambda$ --- długość fali), dlatego spektrum powstałego promieniowania jest zdominowane przez emisje w zakresie niebieskim/UV, mające maksimum w okolicy 340\,nm. Krótsze długości fali są absorbowane (głównie przez ozon). Fotony Czerenkowskie z pęku przebywają jako krótkie pulsy światła o długości kilku nanosekund, co wymaga elektroniki która jest w stanie próbkować sygnały z takimi częstotliwościami.
+\subsection{Technika IACT (Imaging Atmospheric Cherenkov Telescope)}
+Do detekcji fotonów gamma o bardzo wysokich energiach najczęściej używana jest technika IACT, czyli teleskopy Czerenkowskie. Technika ta polega na zbieraniu światło Czerenkowa produkowanego w kaskadzie na dużym lustrze, które pod odbiciu jest rejestrowane przez kamerę. Kamera składa się z wielu fotopowielaczy, które zazwyczaj charakteryzują się sprawnością 30\% \cite{particle_de_angelis}. Średnica kamery to zazwyczaj 1\,m. Sygnał z kamery jest transmitowany w postaci analogowej do systemu wyzwalania (ang. \textsl{trigger systems}). Przypadki, które wyzwolą sygnał są wysyłane do systemu zbierania danych, który zazwyczaj operuje z częstotliwości kilkuset Hz. Typowa rozdzielczość czasu przyjścia impulsu do fotopowielacza jest mniejsza niż 1\,ns. Czas rejestracji kaskady to kilka nanosekund (2-3\,ns).
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.1]{obrazy_teoria/iact.pdf}
+\caption{Schemat działania teleskopu Czerenkowskiego.}
+\label{fig:kamera}
+\end{figure}
+Jak było już wspomniane wcześniej, tylko około 10 fotonów Czerenkowa na metr kwadratowy dociera do teleskopu z pęku wywołanego przez foton gamma o energii 100\,GeV. Typowa powierzchnia z której zbierane jest światło Czerenkowa to 100\,$\mathtt{m^2}$ na wysokości około 2000\,m.n.p.m \cite{particle_de_angelis}. Z powodu słabego sygnału, obserwacje są prowadzone w bezksiężycowe noce (ewentualnie przy słabym świetle księżyca), bez chmur. Z tego powodu całkowity czas obserwacji to około 1200\,h na rok.
+
+Jak było już wspomniane wcześniej, w zakresie energii GeV-TeV, tło od naładowanych cząstek jest o trzy rzędy wielkości większe niż sygnał od fotonów gamma. Kształt obrazu od kaskady hadronowej jest inny, dzięki czemu możemy odseparować kaskady wywołane przez fotony gamma od tych wywołanych przez hadrony. Obrazy jakie obserwuje w kamerze pokazuje na rysunku \ref{fig:kamera}.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.25]{obrazy_teoria/tlo.pdf}
+\caption{Obrazy w kamerze wywołany przez z lewej strony: foton gamma, z prawej strony: hadron.}
+\label{fig:kamera}
+\end{figure}
+Większość obecnej techniki identyfikacji kaskady polega na metodzie opracowanej przez Michaela Hillas w latach 80-tych XX wieku poprzez wyznaczenie tzw. parametrów Hillasa \cite{hilas}.
+
+Struktura czasowa przyjścia impulsów światła Czerenkowa również jest używana w odróżnieniu obrazów wyprodukowanych przez leptony i hadrony. 
+
+Do obserwacje pęków używany jest system kilku teleskopów Czerenkowski, co najmniej dwa teleskopy muszą obserwować pęk.  Zapewnia to lepszą możliwość odrzucanie tła, lepszą rozdzielczość kątową oraz lepszą rozdzielczość energetyczną niż jeden teleskop.
+
+W tym momencie istnieją trzy główne eksperymenty, które używają techniki IACT do detekcji fotonów bardzo wysokich energii, to H.E.S.S, MAGIC i VERITAS, pierwszy znajduje się na półkuli południowej, natomiast dwa ostatnie na półkuli północnej \cite{particle_de_angelis}. 
+\begin{itemize}
+\item {\bf{H.E.S.S}} znajduje się w Namibii, w skład obserwatorium wchodzą 4 teleskopy o średnicy 12\,m, pracujące od 2003 roku. Piąty teleskop o średnicy około 25\,m jest ulokowany w centrum od 2012 roku.
+\item {\bf{MAGIC}} znajduje się na wyspach Kanaryjskich na wyspie La Palma. Jest to system dwóch parabolicznych teleskopów, każdy o średnicy 17\,m oraz o powierzchni 236\,$\mathtt{m^2}$. Pracuje od 2004 roku.
+\item {\bf{VERITAS}} znajduje się w Stanach Zjednoczonych w Arizonie, składa się z czterech teleskopów o średnicy 12\,m. Działa od 2007 roku.
+\end{itemize}
+Typowa czułość teleskopów H.E.S.S MAGIC i VERITAS jest taka, że źródło o  strumieniu światła mniejszym niż 1\% emisji z mgławicy Crab będzie wykryte na poziomie znaczności statystycznej 5$\sigma$ podczas obserwacji trwającej 50 godzin \cite{particle_de_angelis}. 
+\subsection{CTA}
+Obserwatorium {\bf{Cherenkov Telescope Array}} jest następną generacją teleskopów do obserwacji promieniowania gamma bardzo wysokich energii. Oczekujemy, że czułość CTA będzie o rząd wielkości większa niż czułość obecnych teleskopów. 
+Zespół dziesiątek teleskopów będzie obserwował kaskady elektromagnetyczne zainicjowane przez promieniowanie gamma na dużej większej powierzchni niż obecnie, zwiększając efektywność oraz czułość teleskopów przez obserwacje kaskady przez większą ilość teleskopów. Dzięki temu poprawiona będzie rozdzielczość kątowa oraz poprawiona efektywność eliminacji tła od hadronów.
+
+Obserwatorium będzie znajdować się na dwóch półkulach w Hiszpanii i w Chile. W skład obserwatorium będą wchodzić trzy typy teleskopów o różnej średnicy $d$ lustra:
+\begin{itemize}
+\item {\bf{Mały} ang. \textsl{Small-Sized Telescope (SST)}} ma być ich 70, $d = 4$\,m przeznaczonych do detekcji pęków zapoczątkowanych przez fotony od 5\,TeV do 300\,TeV.
+\item {\bf{Średni} ang. \textsl{Medium-Sized Telescope (MST)}} $d = 11.5$\,m. Ma być ich 25 na półkuli południowej i 15 na półkuli północnej. Przewidywany zakres energii to 150\,GeV -- 5\,TeV.
+\item {\bf{Duży} ang. \textsl{Large-Sized Telescope (LST)}} mają być 4 zarówno na półkuli południowej jak i północnej, $d = 23\,m$. Inauguracja pierwszego teleskopu LST miała miejsce w październiku 2018 roku. 
+\end{itemize}
+Na półkuli południowej w Chile będą wszystkie 3 typy teleskopów,
+ aby pokryć cały zakres energii jaki będzie celem CTA, czyli od 20\,GeV do 300\,TeV \cite{cta_web}. Natomiast na półkuli północnej w Hiszpanii będą znajdować się twa typy teleskopów: duży i średni  
+
+\subsection{Analiza danych IACT}
+Celem analizy danych jest identyfikacja rodzaju cząstki wytwarzającej  kaskadę, której obraz rejestrujemy, wyznaczenie jej kierunku przyjścia oraz energii. Następnie ta informacja jest używana do obliczenie znaczności statystycznej badanego obszaru nieba (czy znajduje się tam źródło fotonów gamma), wyznaczenia :rozkładu sygnału na badanym obszarze, strumienia fotonów gamma oraz widma energetycznego. 
+
+Surowy sygnał z teleskopów czerenkowskich pochodzący z systemu akwizycji danych zawiera cyfrowo próbkowany ślad sygnału dla każdego fotopowielacza wchodzącego w skład kamery. Wzrost sygnału pochodzi od fotonów czerenkowa, co przybliżeniu jest czasem przyjścia impulsu jak pokazane jest na rysunku [RYSUNEK].
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.45]{obrazy_teoria/wykresy/sygnal_teoria.pdf}
+\caption{Schemat działania teleskopu Czerenkowskiego.}
+\label{fig:kamera}
+\end{figure}
+
+Pierwszym krokiem w analizie sygnału jest zmierzenie i odjęcie linii bazowej, czyli wartości sygnału podczas nieobecności światła Czerenkowa. W celu uzyskania sygnału od kaskady całkuje się obszar pod krzywa używając algorytmu "okno przesuwne" (ang. \textsl{sliding window}) poprzez poszukiwanie maksymalnej wartości sumy ustalonej liczby próbek sygnału.
+
+Praca ta koncentruje się głównie na tym pierwszym etapie analizy danych, których celem jest redukcja szumów w elektronice systemu odczytu danych teleskopu LST. 
+
+\newpage
+\section{System odczytu danych teleskopu LST}
+Teleskop LST  ma lustro o średnicy 23 metrów, a kamera LST składa się z 1855 fotopowielaczy (PMT). Ze względu na dużą powierzchnie lustra, fotony tła nocnego nieba (ang. \textsl{night sky background}, NSB) również są rejestrowane z częstotliwością kilkuset MHz na piksel. W celu redukcji zanieczyszczenia sygnału przez NSB oraz poprawy stosunku sygnału do szumu, konieczne jest próbkowanie  sygnału z szybkością $\sim$ 1 GHz i zmniejszenie czasu całkowania sygnału do kilku ns \cite{dragon_lst}.
+\subsection{Wprowadzenie}
+Kamera LST składa się z 265 modułów, a każdy moduł składa się z 7 pikseli, co daje nam w sumie 1855 pikseli (fotopowielaczy), które tworzą kamerę LST. Jeden moduł (pokazany na rysunku \ref{fig:drs4}) składa się m.in. z chipu DRS4 będącym sercem układu odczytu sygnału, przedwzmacniacza ASIC. 
+W każdym module, sygnał z przedwzmacniacza jest dzielony na trzy linie: linię wysokiego wzmocnienia, linię niskiego wzmocnienia
+i linię wyzwalania (ang. \textsl{trigger}). Sygnały o wysokim wzmocnieniu (ang. \textsl{high gain}) i niskim wzmocnieniu (ang. \textsl{low gain}) są próbkowane przez układ DRS4 z częstotliwością 1\,GHz. Gdy następuje wyzwolenie sygnału, przebieg sygnału (ang. \textsl{waveform}) jest digitalizowany przez zewnętrzy przetwornik analogowo-cyfrowy (ADC) z częstotliwością $\sim$ 33\,MHz. Sygnał w postaci cyfrowej jest przesyłany do bramek programowalnych (FPGA), następnie do serwera, gdzie dane są przechowywane przez złącze Ethernet \cite{dragon_lst}. 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.1]{rysunki/dragon.png}
+\caption{System odczytu danych teleskopu LST z zaznaczonym chipem DRS4. Zdjęcie T. Saito.}
+\label{fig:drs4}
+\end{figure}
+\subsection{Chip DRS4}
+%System odczytu danych jest częścią łańcucha przetwarzania danych, który digitalizuje i tymczasowo przechowuje sygnał analogowy z teleskopu (kamery). 
+Chip DRS4 (Domino Ring Sampler w wersji 4) został stworzony w Paul Scherrer Institute (PSI) w Szwajcarii do eksperymentu MEG \cite{meg_experiment}.
+Znajduje on także zastosowanie w eksperymentach w astronomii gamma, używają go eksperymenty MAGIC i FACT \cite{drs4_magic}.
+
+Układ DRS4 ma dziewięć kanałów wejściowych o szerokości pasma 950\,MHz, a każdy kanał ma 1024 kondensatorów pamięci, których przełączniki zapisu są obsługiwane przez pierścień zwany \textsl{domino wave circuit}. Prędkość próbkowania można zmieniać w zakresie 700\,MHz do 5\,GHz za pomocą zegara referencyjnego z FPGA. Osiem chipów DRS4 wchodzi w skład układ odczytu danych, a każdy chip jest podłączony do dwóch kanałów fotopowielacza (PMT). Możliwe jest kaskadowe połączenie do ośmiu kanałów DRS4 w celu uzyskania głębszego próbkowania sygnału. W systemie odczytu, używanym przez teleskop LST cztery kanały DRS4 są kaskadowane, co oznacza, że sygnał każdego wejścia jest próbkowany przez 4096 kondensatorów, co daje głębokość próbkowania $\sim 4 \mathtt{\mu}$s w przypadku próbkowania z częstotliwością 1\,GHz \cite{dragon_lst}.
+
+Zasada działania chipu DRS4 jest następująco: sygnał wychodzący z systemu odczytu jest sekwencyjne połączony z pierścieniem (układem) 1024 kondensatorów poprzez szybkie przełączniki zsynchronizowane z zegarem zewnętrznym. Na każdym z kondensatorów jest napięcie wytworzone przez sygnał analogowy z danego piksela w funkcji czasu, który jest proporcjonalny do okresu zegara sterującego przełącznikiem (tzw. fala Domino). Kondensatory są nadpisywane po 1024 cyklach zegara. Po wyzwoleniu sygnału fala Domino zatrzymuje się i ładunek zostaje zapisany na 1024 kondensatorach, następnie jest digitalizowany przez przetwornik analogowo-cyfrowy (ADC). Później tylko 40 
+kondensatorów(próbek) jest przechowywane przez system akwizycji danych (DAQ) \cite{drs4_psi}. 
+
+Chip DRS4 wymaga szeregu korekcji programowalnych w celu optymalnej pracy.
+\subsection{Procedury korekcji w DRS4}
+\subsubsection{Korekcja linii bazowej dla przypadków ze stałym czasem przyjścia}
+Każdy kondensator w chipie DRS4 ma swoją własną wartość szumów. Na rysunku pokazuje średnią wartość bazową (szumów) oraz jej RMS w funkcji absolutnej pozycji w pierścieniu domino \ref{fig:baseline_cap}. Rożna wartość bazowa danego kondensatora spowodowana jest fizyczną różnicą magazynowania ładunku w każdym kondensatorze, która jest większa niż jego RMS. Wyraźny skok na pozycji 512 spowodowany jest wewnętrzną konstrukcją chipu DRS4. Wartość bazowa każdego kondensatora musi być skalibrowany w celu osiągnięcia niskich wartości szumów elektroniki. W tym celu stosuje się prostą kalibracje polegającą na obliczeniu średniej wartości bazowej (szumu) w funkcji numeru kondensatora z danych pochodzących z pomiaru kalibracyjnego linii bazowej (ang. \textsl{pedestal run}). Ta obliczona średnia wartość bazowa może być następnie odjęta z sygnału dla danego kondensatora. 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.23]{wykresy/drs4/pedestal_teoria.pdf}
+\caption{Wartość bazowa 1024 kondensatorów jednego kanału chipu DRS4 w funkcji numeru kondensatora.}
+\label{fig:baseline_cap}
+\end{figure}
+\subsubsection{Korekcja czasowa linii bazowej dla przypadków z losowym czasem przyjścia}
+Nawet po zastosowaniu kalibracji opisanych w poprzedniej sekcji, linia bazowa nie jest w pełni stabilna dla wyzwalacza z losowym czasem przyjścia. Jest to spowodowane zależność linii bazowej od czasu odczytu danego kondensatora. Może się zdarzyć, że dany kondensator jest odczytywany w krótkim odstępie czasu, wtedy dochodzi do skoku sygnału na tym kondensatorze. Przykładowe przebiegi sygnału kiedy następuje skok sygnału przedstawiam na rysunku \ref{fig:dt_corr}. 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/dt_corr_teoria.pdf}
+\caption{Wartość bazowa 1024 kondensatorów jednego kanału chipu DRS4 w funkcji numeru kondensatora.}
+\label{fig:dt_corr}
+\end{figure}
+W celu korekcji sygnału używa się funkcji potęgowej w postaci:
+\begin{equation}
+y = A dt^B + C
+\end{equation}
+gdzie: $dt$ --- czas pomiędzy odczytem danego kondensatora; $A, B, C$ --- współczynniki wyznaczone eksperymentalnie. 
+Współczynniki te zależą głównie od temperatury w jakiej pracuje elektronika. Na rysunku \ref{fig:dt_corr_fit} pokazuje funkcje potęgową dopasowaną do danych w różnej temperaturze, dane pochodzą z testów Japonii. Jednym z moich zadań w tej pracy jest sprawdzenie jakie są współczynniki w układzie działającym w LST oraz czy są one różne dla różnych pikseli. 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.55]{wykresy/drs4/dtcurve.pdf}
+\caption{Wartość bazowa 1024 kondensatorów jednego kanału chipu DRS4 w funkcji numeru kondensatora.}
+\label{fig:dt_corr_fit}
+\end{figure}
+\subsubsection{Interpolacja szumów niegaussowskich}
+Szumy niegaussowskie spowodowane  są skokiem napięcia podczas odczytu kondensatorów, występują one kiedy pierścień domino, z którego odczytywane są dane, zatrzymana się w wybranych miejscach w następujących po sobie zdarzeniach (ang. \textsl{event}). Występują dwa typy szumów niegausowskich:
+\begin{itemize}
+\item {\bf{typu A}} jest to mniejszy skok sygnału $\sim 20$ jednostek ADC, o szerokości jednej próbki.
+\item {\bf{typu B}} jest to większy skok sygnału $\sim 50 - 80$ jednostek ADC, o szerokości dwóch próbek.
+\end{itemize}
+Na rysunku \ref{fig:spike_corr} pokazany jest przebieg sygnału, gdzie występuje szum niegaussowski typu A i B. W celu korekcji sygnału, używa się interpolacji sygnału w miejscu gdzie szum powstał. 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/spike_teoria.pdf}
+\caption{Przebieg sygnału w którym wystąpił szum niegausowski typu A (lewy) i B(prawy) u góry, na dole pokazany jest przebieg sygnału po dokonaniu interpolacji.}
+\label{fig:spike_corr}
+\end{figure}
+\subsubsection{Korekcja czasowa}
+Innym, ważnym rodzajem korekcji, które należy zastosować w DRS4 jest korekcja czasu przyjścia impulsu. W chipie DRS4 występuje opóźnienie typowe 1\,ns (do 4\,ns) zależne od absolutnej pozycji impulsu w pierścieniu domino. Rożnicę w czasie przyjścia mogą być skalibrowane za pomocą impulsów kalibracyjnych. W tym celu oblicza się średni czas przyjścia impulsu w funkcji pozycji impulsu w pierścieniu domino. Zależność ta jest różna dla różnych kanałów w chipie DRS4. Dla każdego kanału wykorzystywane jest rozwinięcie w szereg fouriera, aby uzyskać funkcje (współczynniki) korekcji. 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.45]{wykresy/drs4/time_corr.pdf}
+\caption{Przebieg sygnału w którym wystąpił szum niegausowski typu A (lewy) i B(prawy) u góry, na dole pokazany jest przebieg sygnału po dokonaniu interpolacji.}
+\label{fig:spike_corr}
+\end{figure}
+
+\subsection{Tworzenie pliku z wartościami szumu dla każdego kondensatora}
+Każdy kondensator ma własna wartość szumów, co pokazuje na rysunku \ref{fig:ped_lg} i \ref{fig:ped_lg}. 
+
+\begin{figure}[H]
+  \begin{center}
+  \subfloat[Wysokie wzmocnienie.]{\includegraphics[scale=0.35]{wykresy/drs4/pedestal_hg.pdf}\label{fig:ped_hg}}
+  \hfill
+  \subfloat[Niskie wzmocniene.]{\includegraphics[scale=0.35]{wykresy/drs4/pedestal_lg.pdf}\label{fig:ped_lg}}
+  \caption{Szum danego kondensatora wraz z policzonym RMS w funkcji jego id.}
+\end{center}
+\end{figure}
+
+Wartość błędu szumu możemy oszacować za pomocą policzenia RMS (ang. \textsl{Root Mean Square}). Wartość RMS zależy od wzmocnienia kanału, generalnie dla niskiego wzmocnienia sygnału (ang. \textsl{low gain} będzie ono mniejsze niż dla wysokiego wzmocnienia kanału (ang. \textsl{high gain}). Histogram wartości rms dla low i high gain pokazuje na rysunku \ref{fig:hist_rms}.
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/hist_rms.pdf}
+\caption{Histogram wartość błędu wartości szumu liczonego za pomocą RMS dla dwóch wzmocnień.}
+\label{fig:hist_rms}
+\end{figure}
+
+W celu uzyskanie wartości szumów dla każdego kondensatora wchodzącego w skład piksela, bierze się tzw. pedestal run, w którym zbiera się wartości sygnału/szumów na danym kondensatorze. 
+W ramach pracy napisałem program do tworzenia pliku z wartościami szumu, dostępny w bibliotece cta-lstchain, opartej na bibliotece ctapipe, będącej biblioteką do niskopoziomowych kalibracji teleskopów CTA. 
+
+Kiedy znamy wartość szumów każdego kondensatora, stosujemy pierwszą kalibracje polegającą na odjęciu tych szumów, czyli tzw. odjęciu pedestalu/linii bazowej. To jak wygląda sygnał po zastosowaniu tej korekcji pokazuje na rysunku \ref{fig:baseline_corr}.
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/waveform_baseline.pdf}
+\caption{Korekcja linii bazowej.}
+\label{fig:baseline_corr}
+\end{figure}
+
+\newpage
+\begin{thebibliography}{9}
+\bibitem{particle_de_angelis}
+A. De Angelis, M. J. M. Pimenta.
+\textit{Introduction to Particle and Astroparticle Physics} Springer 2015
+
+\bibitem{auger_web}
+\url{https://www.auger.org/}
+
+\bibitem{telescope_array_web}
+\url{http://www.telescopearray.org/}
+
+\bibitem{Gamma-ray_article}
+A. De Angelis, M. Mallamaci.
+\textit{Gamma-Ray Astrophysics} 
+\url{https://arxiv.org/abs/1805.05642}
+
+\bibitem{TeVCat}
+\url{tevcat.uchicago.edu}
+Stan na 22.03.2019
+\bibitem{IACT}
+J. Holder
+\textit{Atmospheric Cherenkov Gamma-ray Telescopes}
+\url{https://arxiv.org/abs/1510.05675}
+
+\bibitem{whipple}
+T. C. Weekes et al.
+\textit{ApJ. 342, 379–395, (1989).}
+
+\bibitem{astro_particle}
+Claus Grupen
+\textit{Astroparticle Physics} Springer 2005
+
+\bibitem{monte_carlo}
+F. Schmidt, J. Knapp
+\textit{"CORSIKA Shower Images", 2005}
+\url{https://www-zeuthen.desy.de/~jknapp/fs/showerimages.html}
+
+\bibitem{hilas}
+A. Hillas, 
+\textit{Cerenkov light images of EAS produced by primary gamma},
+Proc. 19nd I.C.R.C. (La Jolla), Vol 3, 445 (1985)
+
+\bibitem{cta_web}
+\url{https://www.cta-observatory.org/}
+
+\bibitem{dragon_lst}
+S. Masuda, et al., 
+\textit{Development of the photomultiplier tube readout
+system for the first Large-Sized Telescope of the
+Cherenkov Telescope Array}
+\url{arXiv:1509.00548}
+
+\bibitem{meg_experiment}
+J. Adam, et al.,
+\textit{The MEG detector for $\mu$ + $\rightarrow$ e + $\gamma$ decay search}, Euro. Phys. J. C 73 (2013), no. 4
+\url{arXiv:1303.2348}
+
+\bibitem{drs4_magic}
+Sitarek, J., Gaug, M., Mazin, D., Paoletti, R., Tescaro, D., \textit{Analysis techniques and performance of the Domino Ring Sampler version 4 based readout for the MAGIC
+telescopes}, Nuclear Instruments and Methods in Physics Research A, 723, 109, (2013)
+
+\bibitem{drs4_psi}
+DRS4 datasheet rev. 0.9
+\url{https://www.psi.ch/sites/default/files/import/drs/DocumentationEN/DRS4_rev09.pdf}
+\end{thebibliography}
+\end{document}
