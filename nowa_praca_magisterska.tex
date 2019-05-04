@@ -313,39 +313,50 @@ Innym, ważnym rodzajem korekcji, które należy zastosować w DRS4 jest korekcj
 \subsubsection{Implementacja korekcji}
 W ramach pracy zaimplementowane wyżej opisane korekcje w bibliotece cta-lstchian. Bibliotek cta-lstchain \cite{lstchain_url} jest biblioteką napisaną w języku Python do analizy danych z teleskopu LST. Biblioteka ta jest oparta o bibliotekę ctapipe \cite{ctapipe_url}, będącą podstawowym narzędziem do niskopoziomowej analizy danych z teleskopów CTA.
 \newpage
-\subsection{Tworzenie pliku z wartościami szumu dla każdego kondensatora}
-Każdy kondensator ma własna wartość szumów, co pokazuje na rysunku \ref{fig:ped_lg} i \ref{fig:ped_lg}. 
-
-\begin{figure}[H]
-  \begin{center}
-  \subfloat[Wysokie wzmocnienie.]{\includegraphics[scale=0.35]{wykresy/drs4/pedestal_hg.pdf}\label{fig:ped_hg}}
-  \hfill
-  \subfloat[Niskie wzmocniene.]{\includegraphics[scale=0.35]{wykresy/drs4/pedestal_lg.pdf}\label{fig:ped_lg}}
-  \caption{Szum danego kondensatora wraz z policzonym RMS w funkcji jego id.}
-\end{center}
-\end{figure}
-
-Wartość błędu szumu możemy oszacować za pomocą policzenia RMS (ang. \textsl{Root Mean Square}). Wartość RMS zależy od wzmocnienia kanału, generalnie dla niskiego wzmocnienia sygnału (ang. \textsl{low gain} będzie ono mniejsze niż dla wysokiego wzmocnienia kanału (ang. \textsl{high gain}). Histogram wartości rms dla low i high gain pokazuje na rysunku \ref{fig:hist_rms}.
-
+\section{Zastosowanie korekcji}
+W tym rozdziale pokaże zastosowanie korekcji w praktyce do danych testowych zbieranych w obserwatorium Roque de los Muchachos w Hiszpanii, gdzie znajduje się teleskop LST. Dane były zbierane w okresie listopad 2018 -- marzec 2019. Ich celem było przetestowanie jak działa elektronika, system akwizycji danych, jak działają korekcje. Pokaże rozkłady sygnału przed i po dokonaniu korekcji, pokaże jak poszczególne korekcji zmniejszają szum sygnału. Jest to niezbędne w celu wydobycia użytecznego sygnału z danych, co będzie pokazane w dalszych rozdziałach.
+\subsection{Korekcja linii bazowej}
+Aby zastosować korekcje linii bazowej, potrzebujemy wartość bazową(szumów) każdego kondensatora. W ramach pracy napisałem skrypt do tworzenia pliku, który zawiera te wartości dla każdego kondensatora wchodzącego w układ systemu odczytu danych. Wielkość tego pliku to $\sim 30$\,MB, zawarte w nim jest wartość dla 1855 pikseli, każdy piksel ma dwa wzmocnień i składa się z 4096 kondensatorów. Plik jest tworzony na podstawie specjalnego pomiaru tzw. \textsl{pedestal run}. Na rysunku \ref{fig:ped_4096} pokazuje średnią wartość bazową w funkcji absolutnej pozycji w pierścieniu domino dla jednego piksela. Skok co 512 kondensatorów wynika z wewnętrznej konstrukcji chipu DRS4, co było wspomniane już w rozdziale 2.
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.35]{wykresy/drs4/hist_rms.pdf}
+\includegraphics[scale=0.4]{wykresy/drs4/ped_hg.pdf}
+\caption{Średnia wartość bazowa w funkcji absolutnej pozycji dla jednego piksela wraz z obliczoną wartość RMS.}
+\label{fig:ped_4096}
+\end{figure}
+\newpage
+Wartość błędu wartość bazowej każdego kondensatora możemy oszacować za pomocą policzenia RMS (ang. \textsl{Root Mean Square}). Wartość RMS zależy od wzmocnienia kanału, generalnie dla niskiego wzmocnienia sygnału (ang. \textsl{low gain} będzie ono mniejsze niż dla wysokiego wzmocnienia kanału (ang. \textsl{high gain}). Histogram wartości rms dla low i high gain dla jednego piksela pokazuje na rysunku \ref{fig:hist_rms}.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{wykresy/drs4/hist_rms.pdf}
 \caption{Histogram wartość błędu wartości szumu liczonego za pomocą RMS dla dwóch wzmocnień.}
 \label{fig:hist_rms}
 \end{figure}
-
-W celu uzyskanie wartości szumów dla każdego kondensatora wchodzącego w skład piksela, bierze się tzw. pedestal run, w którym zbiera się wartości sygnału/szumów na danym kondensatorze. 
-W ramach pracy napisałem program do tworzenia pliku z wartościami szumu, dostępny w bibliotece cta-lstchain, opartej na bibliotece ctapipe, będącej biblioteką do niskopoziomowych kalibracji teleskopów CTA. 
-
-Kiedy znamy wartość szumów każdego kondensatora, stosujemy pierwszą kalibracje polegającą na odjęciu tych szumów, czyli tzw. odjęciu pedestalu/linii bazowej. To jak wygląda sygnał po zastosowaniu tej korekcji pokazuje na rysunku \ref{fig:baseline_corr}.
-
+%W celu uzyskanie wartości szumów dla każdego kondensatora wchodzącego w skład piksela, bierze się tzw. pedestal run, w którym zbiera się wartości sygnału/szumów na danym kondensatorze. 
+%W ramach pracy napisałem program do tworzenia pliku z wartościami szumu, dostępny w bibliotece cta-lstchain, opartej na bibliotece ctapipe, będącej biblioteką do niskopoziomowych kalibracji teleskopów CTA. 
+Kiedy znamy wartość bazową każdego kondensatora, stosujemy pierwszą kalibracje polegającą na odjęciu tej wartość dla danego kondensatora w odczytanym sygnale. Przebieg sygnału po zastosowaniu tej korekcji pokazuje na rysunku \ref{fig:baseline_corr}. W celu unikania negatywnych wartości, po odjęciu przesuwam sygnał o wartość 400. Na rysunku \ref{fig:baseline_corr_hist} pokazuje rozkład sygnału dla wszystkich pikseli po zastosowaniu odjęciu linii bazowej.
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.35]{wykresy/drs4/waveform_baseline.pdf}
-\caption{Korekcja linii bazowej.}
+\includegraphics[scale=0.4]{wykresy/drs4/baseline_corr.pdf}
+\caption{Korekcja linii bazowej. Przebieg sygnału dla dwóch wzmocnień.}
 \label{fig:baseline_corr}
 \end{figure}
 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.4]{wykresy/drs4/baseline_corr_hist.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:baseline_corr_hist}
+\end{figure}
+
+\begin{figure}[H]
+\label{mc_pek}
+  \begin{center}
+  \subfloat[Przed kalibracją linii bazowej.]{\includegraphics[scale=0.25]{wykresy/drs4/map_cam_hg_raw.pdf}\label{fig:f1}}
+  \hfill
+  \subfloat[Po kalibracji linii bazowej.]{\includegraphics[scale=0.25]{wykresy/drs4/map_cam_hg_baseline_corr.pdf}\label{fig:f2}}
+  \caption{Odchylenie standardowe sygnału dla wszystkich pikseli.}
+\end{center}
+\end{figure}
 \newpage
 \begin{thebibliography}{9}
 \bibitem{particle_de_angelis}
