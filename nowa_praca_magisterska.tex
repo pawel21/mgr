@@ -272,12 +272,13 @@ Każdy kondensator w chipie DRS4 ma swoją własną wartość szumów. Na rysunk
 Nawet po zastosowaniu kalibracji opisanych w poprzedniej sekcji, linia bazowa nie jest w pełni stabilna dla wyzwalacza z losowym czasem przyjścia. Jest to spowodowane zależność linii bazowej od czasu odczytu danego kondensatora. Może się zdarzyć, że dany kondensator jest odczytywany w krótkim odstępie czasu, wtedy dochodzi do skoku sygnału na tym kondensatorze \cite{drs4_magic}. Przykładowe przebiegi sygnału kiedy następuje skok sygnału przedstawiony jest na rysunku \ref{fig:dt_corr}. 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.4]{wykresy/drs4/dt_corr_teoria.pdf}
+\includegraphics[scale=0.55]{wykresy/drs4/dt_corr_waveform.pdf}
 \caption{Przykładowe przebiegi sygnału w których wystąpił skok sygnału spowodowany krótkim czasem odczytu danego kondensatora.}
 \label{fig:dt_corr}
 \end{figure}
 W celu korekcji sygnału używa się funkcji potęgowej w postaci:
 \begin{equation}
+\label{eqn:power_law}
 y = A \cdot dt^B + C
 \end{equation}
 gdzie: $dt$ --- czas pomiędzy odczytem danego kondensatora; $A, B, C$ --- współczynniki wyznaczone eksperymentalnie. 
@@ -311,7 +312,7 @@ Innym, ważnym rodzajem korekcji, które należy zastosować w DRS4 jest korekcj
 \label{fig:spike_corr}
 \end{figure}
 \subsubsection{Implementacja korekcji}
-W ramach pracy zaimplementowane wyżej opisane korekcje w bibliotece cta-lstchian. Bibliotek cta-lstchain \cite{lstchain_url} jest biblioteką napisaną w języku Python do analizy danych z teleskopu LST. Biblioteka ta jest oparta o bibliotekę ctapipe \cite{ctapipe_url}, będącą podstawowym narzędziem do niskopoziomowej analizy danych z teleskopów CTA.
+W ramach pracy zaimplementowane wyżej opisane korekcje w bibliotece cta-lstchain. Bibliotek cta-lstchain \cite{lstchain_url} jest biblioteką napisaną w języku Python do analizy danych z teleskopu LST. Biblioteka ta jest oparta o bibliotekę ctapipe \cite{ctapipe_url}, będącą podstawowym narzędziem do niskopoziomowej analizy danych z teleskopów CTA.
 \newpage
 \section{Zastosowanie korekcji}
 W tym rozdziale pokaże zastosowanie korekcji w praktyce do danych testowych zbieranych w obserwatorium Roque de los Muchachos w Hiszpanii, gdzie znajduje się teleskop LST. Dane były zbierane w okresie listopad 2018 -- marzec 2019. Ich celem było przetestowanie jak działa elektronika, system akwizycji danych, jak działają korekcje. Pokaże rozkłady sygnału przed i po dokonaniu korekcji, pokaże jak poszczególne korekcji zmniejszają szum sygnału. Jest to niezbędne w celu wydobycia użytecznego sygnału z danych, co będzie pokazane w dalszych rozdziałach.
@@ -358,6 +359,37 @@ a
 \end{center}
 \end{figure}
 \newpage
+\subsection{Korekcja czasowa linii bazowej}
+Na rysunku \ref{fig:dt_corr_Waveform} pokazuje przebieg sygnału, gdzie występuje skok sygnału spowodowany małym odstępem czasu odczytu danego kondensatora. W celu korekcji sygnału używał funkcji potęgowej, której argumentem jest czas, który upłynął od ostatniego odczytu tego kondensatora.  
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.45]{wykresy/drs4/dt_corr_teoria.pdf}
+\caption{Przykładowe przebiegi sygnału w których wystąpił skok sygnału spowodowany krótkim czasem odczytu danego kondensatora.}
+\label{fig:dt_corr_Waveform}
+\end{figure}
+\subsubsection{Funkcja potęgowa do kalibracji}
+Jak było napisane w poprzednim rozdziale do kalibracji wykorzystuje się funkcje potęgową \ref{eqn:power_law}, której współczynniki zależą od temperatury. Z testów w Japonii zdane są współczynniki przy temperaturach: 10, 20, 30, 40 i 50 $^\circ$C. W ramach swojej pracy sprawdziłem, które współczynniki należy użyć dla systemu odczytu działającego w teleskopie LST. 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.37]{wykresy/drs4/dt_curve_fit.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:baseline_corr_hist}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.33]{wykresy/drs4/dt_curve_at_point_hist.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:baseline_corr_hist}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/dt_hist2d.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:baseline_corr_hist}
+\end{figure}
+
 \begin{thebibliography}{9}
 \bibitem{particle_de_angelis}
 A. De Angelis, M. J. M. Pimenta.
