@@ -293,14 +293,14 @@ Współczynniki te zależą głównie od temperatury w jakiej pracuje elektronik
 \subsubsection{Interpolacja szumów niegaussowskich}
 Szumy niegaussowskie spowodowane  są skokiem napięcia podczas odczytu kondensatorów, występują one kiedy pierścień domino, z którego odczytywane są dane, zatrzymana się w wybranych miejscach w następujących po sobie zdarzeniach (ang. \textsl{event}). Występują dwa typy szumów niegaussowskich:
 \begin{itemize}
-\item {\bf{typu A}} jest to mniejszy skok sygnału $\sim 20$ jednostek ADC, o szerokości jednej próbki.
-\item {\bf{typu B}} jest to większy skok sygnału $\sim 50 - 80$ jednostek ADC, o szerokości dwóch próbek.
+\item {\bf{typu A}} jest to większy skok sygnału $\sim 50 - 80$ jednostek ADC, o szerokości dwóch próbek.
+\item {\bf{typu B}} jest to mniejszy skok sygnału $\sim 20$ jednostek ADC, o szerokości jednej próbki.
 \end{itemize}
-Na rysunku \ref{fig:spike_corr} pokazany jest przebieg sygnału, gdzie występuje szum niegaussowski typu A i B. W celu korekcji sygnału, używa się interpolacji sygnału w miejscu gdzie skok powstał. 
+Na rysunku \ref{fig:spike_corr} pokazany jest przebieg sygnału, gdzie występuje szum niegaussowski typu A i B. 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.35]{wykresy/drs4/spike_teoria.pdf}
-\caption{Przebieg sygnału w którym wystąpił szum niegausowski typu A (lewy) i B(prawy) u góry, na dole pokazany jest przebieg sygnału po dokonaniu interpolacji.}
+\includegraphics[scale=0.55]{wykresy/drs4/spikes_teoria.pdf}
+\caption{Przebieg sygnału w którym wystąpił szum niegausowski typu A (lewy) i B(prawy).}
 \label{fig:spike_corr}
 \end{figure}
 \subsubsection{Korekcja czasowa}
@@ -315,7 +315,7 @@ Innym, ważnym rodzajem korekcji, które należy zastosować w DRS4 jest korekcj
 W ramach pracy zaimplementowane wyżej opisane korekcje w bibliotece cta-lstchain. Bibliotek cta-lstchain \cite{lstchain_url} jest biblioteką napisaną w języku Python do analizy danych z teleskopu LST. Biblioteka ta jest oparta o bibliotekę ctapipe \cite{ctapipe_url}, będącą podstawowym narzędziem do niskopoziomowej analizy danych z teleskopów CTA.
 \newpage
 \section{Zastosowanie korekcji}
-W tym rozdziale pokaże zastosowanie korekcji w praktyce do danych testowych zbieranych w obserwatorium Roque de los Muchachos w Hiszpanii, gdzie znajduje się teleskop LST. Dane były zbierane w okresie listopad 2018 -- marzec 2019. Ich celem było przetestowanie jak działa elektronika, system akwizycji danych, jak działają korekcje. Pokaże rozkłady sygnału przed i po dokonaniu korekcji, pokaże jak poszczególne korekcji zmniejszają szum sygnału. Jest to niezbędne w celu wydobycia użytecznego sygnału z danych, co będzie pokazane w dalszych rozdziałach.
+W tym rozdziale pokaże zastosowanie korekcji w praktyce do danych testowych zbieranych w obserwatorium Roque de los Muchachos w Hiszpanii, gdzie znajduje się teleskop LST. Dane były zbierane w okresie listopad 2018 -- marzec 2019. Ich celem było przetestowanie jak działa elektronika, system akwizycji danych, jak działają korekcje. Pokaże rozkłady sygnału przed i po dokonaniu korekcji, pokaże jak poszczególne korekcji zmniejszają szum sygnału. Jest to niezbędne w celu wydobycia użytecznego sygnału z danych, co będzie pokazane w dalszych rozdziałach. W tym rozdziałek pokazuje zastosowanie korekcji do danych testowych: Run00097, był to pomiar z zamkniętą kamerą z losowym wyzwalaczem (triggerem), którego celem był pomiar szumów elektroniki. 
 \subsection{Korekcja linii bazowej}
 Aby zastosować korekcje linii bazowej, potrzebujemy wartość bazową(szumów) każdego kondensatora. W ramach pracy napisałem skrypt do tworzenia pliku, który zawiera te wartości dla każdego kondensatora wchodzącego w układ systemu odczytu danych. Wielkość tego pliku to $\sim 30$\,MB, zawarte w nim jest wartość dla 1855 pikseli, każdy piksel ma dwa wzmocnień i składa się z 4096 kondensatorów. Plik jest tworzony na podstawie specjalnego pomiaru tzw. \textsl{pedestal run}. Na rysunku \ref{fig:ped_4096} pokazuje średnią wartość bazową w funkcji absolutnej pozycji w pierścieniu domino dla jednego piksela. Skok co 512 kondensatorów wynika z wewnętrznej konstrukcji chipu DRS4, co było wspomniane już w rozdziale 2.
 \begin{figure}[H] 
@@ -348,16 +348,7 @@ Kiedy znamy wartość bazową każdego kondensatora, stosujemy pierwszą kalibra
 \caption{Korekcja linii bazowej histogram, wszystkie piksele.}
 \label{fig:baseline_corr_hist}
 \end{figure}
-a
-\begin{figure}[H]
-\label{mc_pek}
-  \begin{center}
-  \subfloat[Przed kalibracją linii bazowej.]{\includegraphics[scale=0.25]{wykresy/drs4/map_cam_hg_raw.pdf}\label{fig:f1}}
-  \hfill
-  \subfloat[Po kalibracji linii bazowej.]{\includegraphics[scale=0.25]{wykresy/drs4/map_cam_hg_baseline_corr.pdf}\label{fig:f2}}
-  \caption{Odchylenie standardowe sygnału dla wszystkich pikseli.}
-\end{center}
-\end{figure}
+
 \newpage
 \subsection{Korekcja czasowa linii bazowej}
 Na rysunku \ref{fig:dt_corr_Waveform} pokazuje przebieg sygnału, gdzie występuje skok sygnału spowodowany małym odstępem czasu odczytu danego kondensatora. W celu korekcji sygnału używał funkcji potęgowej, której argumentem jest czas, który upłynął od ostatniego odczytu tego kondensatora.  
@@ -368,28 +359,70 @@ Na rysunku \ref{fig:dt_corr_Waveform} pokazuje przebieg sygnału, gdzie występu
 \label{fig:dt_corr_Waveform}
 \end{figure}
 \subsubsection{Funkcja potęgowa do kalibracji}
-Jak było napisane w poprzednim rozdziale do kalibracji wykorzystuje się funkcje potęgową \ref{eqn:power_law}, której współczynniki zależą od temperatury. Z testów w Japonii zdane są współczynniki przy temperaturach: 10, 20, 30, 40 i 50 $^\circ$C. W ramach swojej pracy sprawdziłem, które współczynniki należy użyć dla systemu odczytu działającego w teleskopie LST. 
+Jak było napisane w poprzednim rozdziale do kalibracji wykorzystuje się funkcje potęgową \ref{eqn:power_law}, której współczynniki zależą od temperatury. Z testów w Japonii zdane są współczynniki przy temperaturach: 10, 20, 30, 40 i 50 $^\circ$C. W ramach swojej pracy wyznaczyłem  współczynniki dla wszystkich pikseli wchodzących w skład systemu odczytu danych działającego w teleskopie LST. Na wykresie \ref{fig:dt_curve_fit_all_temp} pokazuje krzywą korekcji czasowej dopasowaną do danych testowych (Run 00097) dla jednego piksela, wykreśliłem także funkcje potęgową używaną do korekcji dla różnych temperatur. Jak widzimy na rysunku, najlepiej pasuje ta ze współczynnikami dla temperatury 30$^{\circ}$. Na wykresie na rysunku \ref{fig:dt_curve_fit_few_pixels} pokazuje dopasowaną funkcje potęgową dla kilku pikseli, wraz z wykreśloną funkcją potęgową dla temperatur: 10, 20, 30 $^{\circ}$, także widzimy, że funkcje dla 30$^{\circ}$ pasuje najlepiej. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.37]{wykresy/drs4/dt_curve_fit.pdf}
 \caption{Korekcja linii bazowej histogram, wszystkie piksele.}
-\label{fig:baseline_corr_hist}
+\label{fig:dt_curve_fit_all_temp}
 \end{figure}
 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.33]{wykresy/drs4/dt_curve_at_point_hist.pdf}
 \caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:dt_curve_fit_few_pixels}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{wykresy/drs4/dt_hist2d.pdf}
+\caption{Korekcja czasowa linii bazowej. Histogram 2d dla jednego piksela z używaną funkcją potęgową do korekcji. Na górze przed korekcją, na dole po dokonaniu korekcji.}
 \label{fig:baseline_corr_hist}
 \end{figure}
 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.35]{wykresy/drs4/dt_hist2d.pdf}
-\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\includegraphics[scale=0.3]{wykresy/drs4/dt_corr_hist.pdf}
+\caption{Korekcja linii bazowej histogram sygnału po korekcji czasowej linii bazowej (zielona ciągła linia), po zwykłej korekcji linii bazowej (przerywana pomarańczowa). Po lewej stronie: histogram dla wszystkich pikseli, po prawej stronie: histogram dla jednego piksela.}
 \label{fig:baseline_corr_hist}
 \end{figure}
 
+\subsection{Interpolacja szumów niegaussowskich}
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/spike_teoria.pdf}
+\caption{Przebieg sygnału w którym wystąpił szum niegausowski typu A (lewy) i B(prawy) u góry, na dole pokazany jest przebieg sygnału po dokonaniu interpolacji.}
+\label{fig:spike_corr}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{wykresy/drs4/spike_corr_hist.pdf}
+\caption{Korekcja linii bazowej histogram sygnału po korekcji czasowej linii bazowej (zielona ciągła linia), po zwykłej korekcji linii bazowej (przerywana pomarańczowa). Po lewej stronie: histogram dla wszystkich pikseli, po prawej stronie: histogram dla jednego piksela.}
+\label{fig:baseline_corr_hist}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/map_cam_hg_raw.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:dt_curve_fit_few_pixels}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/map_cam_hg_baseline_corr.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:dt_curve_fit_few_pixels}
+\end{figure}
+\section{Zastosowanie korekcji do analizy obrazów pęków}
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/muon_image.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:dt_curve_fit_few_pixels}
+\end{figure}
 \begin{thebibliography}{9}
 \bibitem{particle_de_angelis}
 A. De Angelis, M. J. M. Pimenta.
