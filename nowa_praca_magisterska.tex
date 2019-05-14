@@ -237,7 +237,7 @@ Pierwszym krokiem w analizie sygnału jest zmierzenie i odjęcie linii bazowej, 
 Praca ta koncentruje się głównie na tym pierwszym etapie analizy danych, których celem jest redukcja szumów w elektronice systemu odczytu danych teleskopu LST. 
 
 \newpage
-\section{System odczytu danych teleskopu LST}
+\section{System odczytu sygnału teleskopu LST}
 Teleskop LST  ma lustro o średnicy 23 metrów, a kamera LST składa się z 1855 fotopowielaczy (PMT). Ze względu na dużą powierzchnie lustra, fotony tła nocnego nieba (ang. \textsl{night sky background}, NSB) również są rejestrowane z częstotliwością kilkuset MHz na piksel. W celu redukcji zanieczyszczenia sygnału przez NSB oraz poprawy stosunku sygnału do szumu, konieczne jest próbkowanie  sygnału z szybkością $\sim$ 1 GHz i zmniejszenie czasu całkowania sygnału do kilku ns \cite{dragon_lst}.
 \subsection{Wprowadzenie}
 Kamera LST składa się z 265 modułów, a każdy moduł składa się z 7 pikseli, co daje nam w sumie 1855 pikseli (fotopowielaczy), które tworzą kamerę LST. Jeden moduł (pokazany na rysunku \ref{fig:drs4}) składa się m.in. z chipu DRS4 będącym sercem układu odczytu sygnału, 7 fotopowielaczy(PMT), przedwzmacniacza.
@@ -317,15 +317,15 @@ W ramach pracy zaimplementowane wyżej opisane korekcje w bibliotece cta-lstchai
 
 \newpage
 \section{Zastosowanie korekcji}
-W tym rozdziale pokaże zastosowanie korekcji w praktyce do danych testowych zbieranych w obserwatorium Roque de los Muchachos w Hiszpanii, gdzie znajduje się teleskop LST. Dane były zbierane w okresie listopad 2018 -- marzec 2019. Ich celem było przetestowanie jak działa elektronika, system akwizycji danych, jak działają korekcje. Pokaże rozkłady sygnału przed i po dokonaniu korekcji, pokaże jak poszczególne korekcji zmniejszają szum sygnału. Jest to niezbędne w celu wydobycia użytecznego sygnału z danych, co będzie pokazane w dalszych rozdziałach. W tym rozdziałek pokazuje zastosowanie korekcji do danych testowych: Run00097, był to pomiar z zamkniętą kamerą z losowym wyzwalaczem (triggerem), którego celem był pomiar szumów elektroniki. Na rysunku \ref{fig:data_hist} pokazuje histogram czasu między zdarzeniami (ang. \textsl{events}) oraz pokrycie pierwszego kondensatora. Z przedstawionych histogramów wynika, że wszystkie kondensatory były pokryte w tym pomiarze oraz że zdarzenia przychodziły z losowym czasem.
+W tym rozdziale pokaże zastosowanie korekcji w praktyce do danych testowych zbieranych w obserwatorium Roque de los Muchachos w Hiszpanii, gdzie znajduje się teleskop LST. Dane były zbierane w okresie listopad 2018 -- marzec 2019. Ich celem było przetestowanie jak działa elektronika, system akwizycji danych, jak działają korekcje. Pokaże rozkłady sygnału przed i po dokonaniu korekcji, pokaże jak poszczególne korekcji zmniejszają szum sygnału. Korekcje są niezbędne w celu wydobycia użytecznego sygnału z danych, co będzie pokazane w dalszych rozdziałach. W tym rozdziale pokazuje zastosowanie korekcji do danych testowych: \textsl{Run00097}, których celem był pomiar szumów elektroniki. Na rysunku \ref{fig:data_hist} pokazuje histogram czasu między zdarzeniami (ang. \textsl{events}) oraz pokrycie pierwszego kondensatora. Z przedstawionych histogramów wynika, że wszystkie kondensatory były pokryte w tym pomiarze oraz że zdarzenia przychodziły z losowym czasem, czyli wyzwalacz (ang. \textsl{trigger}) był losowy. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.36]{wykresy/drs4/hist_fc_arrival_time.pdf}
-\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\caption{Histogram pokrycia kondensatorów oraz czasu przyjścia zdarzeń. Run 00097, wszystkie piksele.}
 \label{fig:data_hist}
 \end{figure}
 \subsection{Korekcja linii bazowej}
-Aby zastosować korekcje linii bazowej, potrzebujemy wartość bazową(szumów) każdego kondensatora. W ramach pracy napisałem skrypt do tworzenia pliku, który zawiera te wartości dla każdego kondensatora wchodzącego w układ systemu odczytu danych. Wielkość tego pliku to $\sim 30$\,MB, zawarte w nim jest wartość dla 1855 pikseli, każdy piksel ma dwa wzmocnień i składa się z 4096 kondensatorów. Plik jest tworzony na podstawie specjalnego pomiaru tzw. \textsl{pedestal run}. Na rysunku \ref{fig:ped_4096} pokazuje średnią wartość bazową w funkcji absolutnej pozycji w pierścieniu domino dla jednego piksela. Skok co 512 kondensatorów wynika z wewnętrznej konstrukcji chipu DRS4, co było wspomniane już w rozdziale 2.
+Aby zastosować korekcje linii bazowej, potrzebujemy znać średnią wartość bazową każdego kondensatora. W ramach pracy napisałem skrypt do tworzenia pliku, który zawiera te wartości dla każdego kondensatora wchodzącego w układ systemu odczytu sygnału. Wielkość tego pliku to $\sim 30$\,MB, zawarte w nim są wartość dla 1855 pikseli, każdy piksel ma dwa wzmocnień i składa się z 4096 kondensatorów. Plik jest tworzony na podstawie specjalnego pomiaru tzw.\textsl{pedestal run}. Na rysunku \ref{fig:ped_4096} pokazuje średnią wartość bazową w funkcji absolutnej pozycji w pierścieniu domino dla jednego piksela. Skok co 512 kondensatorów wynika z wewnętrznej konstrukcji chipu DRS4, co było wspomniane już w rozdziale 2.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{wykresy/drs4/ped_hg.pdf}
@@ -334,10 +334,10 @@ Aby zastosować korekcje linii bazowej, potrzebujemy wartość bazową(szumów) 
 \end{figure}
 Wartość błędu wartość bazowej każdego kondensatora możemy oszacować za pomocą policzenia RMS (ang. \textsl{Root Mean Square}). RMS rozumiem jako:
 \begin{equation}
-RMS = \sqrt{ \frac{1}{N} \sum_{n=1}^{N} x^2 - \mu^2}
+RMS = \sqrt{ \frac{1}{N} \sum_{i=1}^{N} x_{i}^2 - \mu^2}
 \end{equation}
-,gdzie x --- dana wartość, $\mu$ --- średnia.
-Wartość RMS zależy od wzmocnienia kanału, generalnie dla niskiego wzmocnienia sygnału (ang. \textsl{low gain} będzie ono mniejsze niż dla wysokiego wzmocnienia kanału (ang. \textsl{high gain}). Histogram wartości rms dla low i high gain dla jednego piksela pokazuje na rysunku \ref{fig:hist_rms}.
+,gdzie $x_{i}$ --- dana wartość, $\mu$ --- średnia.
+Wartość RMS zależy od wzmocnienia kanału, generalnie dla niskiego wzmocnienia sygnału (ang. \textsl{low gain}) będzie ono mniejsze niż dla wysokiego wzmocnienia kanału (ang. \textsl{high gain}). Histogram wartości RMS dla low i high gain dla jednego piksela pokazuje na rysunku \ref{fig:hist_rms}.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.2]{wykresy/drs4/hist_rms.pdf}
@@ -347,7 +347,7 @@ Wartość RMS zależy od wzmocnienia kanału, generalnie dla niskiego wzmocnieni
 %W celu uzyskanie wartości szumów dla każdego kondensatora wchodzącego w skład piksela, bierze się tzw. pedestal run, w którym zbiera się wartości sygnału/szumów na danym kondensatorze. 
 %W ramach pracy napisałem program do tworzenia pliku z wartościami szumu, dostępny w bibliotece cta-lstchain, opartej na bibliotece ctapipe, będącej biblioteką do niskopoziomowych kalibracji teleskopów CTA. 
 \newpage
-Kiedy znamy wartość bazową każdego kondensatora, stosujemy pierwszą kalibracje polegającą na odjęciu tej wartość dla danego kondensatora w odczytanym sygnale. Przebieg sygnału po zastosowaniu tej korekcji pokazuje na rysunku \ref{fig:baseline_corr}. W celu unikania negatywnych wartości, po odjęciu przesuwam sygnał o wartość 300. Na rysunku \ref{fig:baseline_corr_hist} pokazuje rozkład sygnału dla wszystkich pikseli po zastosowaniu odjęciu linii bazowej. Jako miarę sygnału używam odchylenie standardowe $\sigma$ sygnału liczone za pomocą funkcji $\mathtt{numpy.sqrt}$.
+Kiedy znamy średnią wartość bazową każdego kondensatora, stosujemy pierwszą kalibracje polegającą na odjęciu tej wartość dla danego kondensatora w odczytanym sygnale. Przebieg sygnału po zastosowaniu tej korekcji pokazuje na rysunku \ref{fig:baseline_corr}. W celu unikania negatywnych wartości dodaje do sygnału wartość 300. Na rysunku \ref{fig:baseline_corr_hist} pokazuje rozkład sygnału dla wszystkich pikseli po odjęciu średniej wartości bazowej. Jako miarę sygnału używam odchylenie standardowe $\sigma$ sygnału liczone za pomocą funkcji $\mathtt{numpy.sqrt}$.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{wykresy/drs4/baseline_corr.pdf}
@@ -358,21 +358,21 @@ Kiedy znamy wartość bazową każdego kondensatora, stosujemy pierwszą kalibra
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.35]{wykresy/drs4/baseline_corr_hist.pdf}
-\caption{Korekcja linii bazowej histogram sygnału dla dwóch wzmocnień, wszystkie piksele. Jako miarę sygnału obliczyłem odchylenie standardowe sygnału $\sigma$.}
+\caption{Korekcja linii bazowej histogram sygnału dla dwóch wzmocnień, wszystkie piksele. Jako miarę sygnału używam odchylenie standardowe sygnału $\sigma$.}
 \label{fig:baseline_corr_hist}
 \end{figure}
 
 \newpage
 \subsection{Korekcja czasowa linii bazowej}
-Na rysunku \ref{fig:dt_corr_Waveform} pokazuje przebieg sygnału, gdzie występuje skok sygnału spowodowany małym odstępem czasu odczytu danego kondensatora. W celu korekcji sygnału używał funkcji potęgowej, której argumentem jest czas, który upłynął od ostatniego odczytu tego kondensatora.  
+Na rysunku \ref{fig:dt_corr_Waveform} pokazuje przebieg sygnału, gdzie występuje skok sygnału spowodowany małym odstępem czasu odczytu danego kondensatora. W celu korekcji sygnału używał funkcji potęgowej, której argumentem jest czas, który upłynął od ostatniego odczytu tego samego kondensatora.  
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.35]{wykresy/drs4/dt_corr_teoria.pdf}
-\caption{Przykładowe przebiegi sygnału w których wystąpił skok sygnału spowodowany krótkim czasem odczytu danego kondensatora.}
+\caption{Przykładowe przebiegi sygnału w których wystąpił skok sygnału spowodowany krótkim czasem odczytu tego kondensatora.}
 \label{fig:dt_corr_Waveform}
 \end{figure}
 \subsubsection{Funkcja potęgowa do kalibracji}
-Jak było napisane w poprzednim rozdziale do kalibracji wykorzystuje się funkcje potęgową \ref{eqn:power_law}, której współczynniki zależą od temperatury. Z testów w Japonii zdane są współczynniki przy temperaturach: 10, 20, 30, 40 i 50 $^\circ$C. W ramach swojej pracy wyznaczyłem  współczynniki dla wszystkich pikseli wchodzących w skład systemu odczytu danych działającego w teleskopie LST. Na wykresie \ref{fig:dt_curve_fit_all_temp} pokazuje krzywą korekcji czasowej dopasowaną do danych testowych dla jednego piksela, wykreśliłem także funkcje potęgową używaną do korekcji dla różnych temperatur. Jak widzimy na rysunku, najlepiej pasuje ta ze współczynnikami dla temperatury 30$^{\circ}$. 
+Jak było napisane w poprzednim rozdziale do kalibracji wykorzystuje się funkcje potęgową \ref{eqn:power_law}, której współczynniki zależą od temperatury. Z testów w Japonii zdane są współczynniki przy temperaturach: 10, 20, 30, 40 i 50 $^\circ$C. W ramach swojej pracy wyznaczyłem  współczynniki dla wszystkich pikseli wchodzących w skład systemu odczytu sygnału działającego w teleskopie LST. Na wykresie \ref{fig:dt_curve_fit_all_temp} pokazuje krzywą korekcji czasowej dopasowaną do danych testowych dla jednego piksela, wykreśliłem także funkcje potęgową używaną do korekcji dla różnych temperatur. Jak widzimy na rysunku, najlepiej pasuje ta ze współczynnikami dla temperatury 30$^{\circ}$. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.45]{wykresy/drs4/dt_curve_fit.pdf}
@@ -382,59 +382,59 @@ Jak było napisane w poprzednim rozdziale do kalibracji wykorzystuje się funkcj
 Na wykresie na rysunku \ref{fig:dt_curve_fit_few_pixels} pokazuje dopasowaną funkcje potęgową dla kilku pikseli, wraz z wykreśloną funkcją potęgową dla temperatur: 10, 20, 30 $^{\circ}$, także widzimy, że funkcje dla temperatury 30$^{\circ}$ pasuje najlepiej.
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.4]{wykresy/drs4/dt_curve_fit_diff.pdf}
-\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\includegraphics[scale=0.35]{wykresy/drs4/dt_curve_fit_diff.pdf}
+\caption{Funkcja potęgowa dopasowana dla kilku pikseli wraz z funkcjami potęgowymi dla temperatur 20, 30, 40$^{\circ}$.}
 \label{fig:dt_curve_fit_few_pixels}
 \end{figure}
-Aby sprawdzić dla wszystkich pikseli jak dopasowane funkcje mają się do funkcji potęgowej dla różnych temperatury, policzyłem różnice w dwóch punktach: 0.05\,ms i 0.45\,ms i sporządziłem histogramy pokazane na rysunku \ref{fig:dt_curve_hist}.
+Aby sprawdzić dla wszystkich pikseli jak dopasowane funkcje mają się do funkcji potęgowej dla różnych temperatury, policzyłem różnice w dwóch punktach: 0.05\,ms i 0.45\,ms i sporządziłem histogramy pokazane na rysunku \ref{fig:dt_curve_hist}. Z histogramów jasno wynika, że najlepiej pasuje funkcja potęgowa dla temperatury 30$^{\circ}$.
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.3]{wykresy/drs4/dt_curve_fit_diff_hist.pdf}
-\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\includegraphics[scale=0.25]{wykresy/drs4/dt_curve_fit_diff_hist.pdf}
+\caption{Histogram różnicy wartości funkcji potęgowej dopasowanej dla danego piksela, a funkcją potęgowa dla danej temperatury policzona w dwóch punktach.}
 \label{fig:dt_curve_hist}
 \end{figure}
 \subsubsection{Korekcja}
-Na rysunku \ref{fig:dt_corr_hist2d} pokazuje histogram 2-d dla jednego piksela, gdzie przedstawiony jest sygnał w funkcji różnicy czasu ostatniego odczytu kondensatora z używaną funkcją potęgową dla temperatury: 30 $^{\circ}$C. 
+Na rysunku \ref{fig:dt_corr_hist2d} pokazuje histogram 2-d dla jednego piksela, gdzie przedstawiony jest sygnał w funkcji różnicy czasu ostatniego odczytu tego samego kondensatora z używaną funkcją potęgową dla temperatury: 30 $^{\circ}$C. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{wykresy/drs4/dt_hist2d.pdf}
 \caption{Korekcja czasowa linii bazowej. Histogram 2-d dla jednego piksela z używaną funkcją potęgową do korekcji. Na górze przed korekcją, na dole po dokonaniu korekcji.}
 \label{fig:dt_corr_hist2d}
 \end{figure}
-Na rysunku \ref{fig:baseline_corr_hist} pokazuje histogram rozkładu sygnału po dokonaniu korekcji czasowej linii bazowej w porównaniu do rozkładu sygnału po pierwszej korekcji linii bazowej. Histogramy zrobiłem dla wszystkich pikseli oraz dla jednego piksela dla wysokiego wzmocnienia (dla niskiego wzmocnienia histogram by wyglądał podobnie). Jak widzimy na histogramach, po korekcji czasowej rozkład staje się bardziej wąski, ale wciąż zostają ogony.  
+Na rysunku \ref{fig:dt_corr_hist} pokazuje histogram rozkładu sygnału po dokonaniu korekcji czasowej linii bazowej w porównaniu do rozkładu sygnału po pierwszej korekcji linii bazowej. Histogramy zrobiłem dla wszystkich pikseli oraz dla jednego piksela dla wysokiego wzmocnienia (dla niskiego wzmocnienia histogram by wyglądał podobnie). Jak widzimy na histogramach, po korekcji czasowej rozkład staje się bardziej wąski, ale wciąż zostają ogony.  
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{wykresy/drs4/dt_corr_hist.pdf}
 \caption{Korekcja linii bazowej histogram sygnału po korekcji czasowej linii bazowej (zielona ciągła linia), po zwykłej korekcji linii bazowej (przerywana pomarańczowa). Po lewej stronie: histogram dla wszystkich pikseli, po prawej stronie: histogram dla jednego piksela. Jako miarę sygnału liczę odchylenie standardowe sygnału $\sigma$: dla wszystkich pikseli: przed korekcją czasową $\sigma = 8.44$, po korekcji czasowej $\sigma = 6.41$. Dla jednego piksela: przed korekcją czasową $\sigma = 8.90$, po korekcji czasowej $\sigma = 6.88$. }
-\label{fig:baseline_corr_hist}
+\label{fig:dt_corr_hist}
 \end{figure}
 \newpage
 \subsection{Interpolacja szumów niegaussowskich}
 Na rysunku \ref{fig:spike_corr} pokazany jest przebieg sygnału, gdzie występuje szum niegaussowski typu A i B. W celu korekcji sygnału, używa się interpolacji sygnału w miejscu gdzie skok powstał.
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.3]{wykresy/drs4/spike_teoria.pdf}
-\caption{Przebieg sygnału w którym wystąpił szum niegausowski typu A (lewy) i B(prawy) u góry, na dole pokazany jest przebieg sygnału po dokonaniu interpolacji.}
+\includegraphics[scale=0.4]{wykresy/drs4/spike_inter.pdf}
+\caption{Przebieg sygnału w którym wystąpił szum niegausowski typu A (lewy) i B(prawy). Czerwona przerywana linia przed interpolacją, zielona ciągła linia po.}
 \label{fig:spike_corr}
 \end{figure}
 Na rysunku \ref{fig:spike_hist} przedstawiam histogram po interpolacji szumów niegaussowskich. Jak widzimy na histogramie, ogony po tej korekcji znikają i rozkład przypomina rozkład Gaussa, co jest oczekiwane.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.25]{wykresy/drs4/spike_corr_hist.pdf}
-\caption{Korekcja linii bazowej histogram sygnału po korekcji czasowej linii bazowej (zielona ciągła linia), po zwykłej korekcji linii bazowej (przerywana pomarańczowa). Po lewej stronie: histogram dla wszystkich pikseli, po prawej stronie: histogram dla jednego piksela.
-Jako miarę sygnału liczę odchylenie standardowe sygnału $\sigma$: dla wszystkich pikseli: po korekcji czasowej $\sigma = 6.41$, po interpolacji szumów niegaussowskich (NG) $\sigma = 6.21$. Dla jednego piksela: po korekcji czasowej $\sigma = 6.88$, po interpolacji szumów NG $\sigma = 6.72$.}
+\caption{Histogram sygnału: po interpolacji szumów niegaussowskich(NG) (czerwona ciągła linia), po zwykłej i czasowej korekcji linii bazowej (zielona przerywana). Po lewej stronie: histogram dla wszystkich pikseli, po prawej stronie: histogram dla jednego piksela.
+Jako miarę sygnału liczę odchylenie standardowe sygnału $\sigma$: dla wszystkich pikseli: po korekcji zwykłej i czasowej linii bazowej $\sigma = 6.41$, po interpolacji szumów (NG) $\sigma = 6.21$. Dla jednego piksela: po korekcji zwykłej i czasowej linii bazowej $\sigma = 6.88$, po interpolacji szumów NG $\sigma = 6.72$.}
 \label{fig:spike_hist}
 \end{figure}
 \subsection{Mapa rozkładu sygnału na całej kamerze}
-Po opisaniu poszczególnych korekcji, teraz pokaże jaki jest efekt zastosowania tych 3 korekcji opisanych wcześniej na całej kamerze. W tym celu obliczyłem średnie odchylenie sygnału $\sigma$ przed korekcją i po korekcji używając 350 zdarzeń, ilustrując to na całej kamerze, dla  wysokiego wzmocnienia (High Gain), co przedstawiam na rysunku \ref{fig:map_cam_corr}. Na histogramie widzimy, że przed korekcją $\sigma$ wynosi około $\sim$ 30, natomiast po zastosowaniu korekcji $\sigma$ wynosi $\sim$ 6.
+Po opisaniu poszczególnych korekcji, teraz pokaże jaki korekcje wpływają na sygnał na całej kamerze. W tym celu obliczyłem średnie odchylenie sygnału $\sigma$ przed korekcją i po korekcji używając 350 zdarzeń, ilustrując to na całej kamerze, dla  wysokiego wzmocnienia (High Gain), co przedstawiam na rysunku \ref{fig:map_cam_corr}. Na histogramie widzimy, że przed korekcją $\sigma$ wynosi około $\sim$ 30, natomiast po zastosowaniu korekcji $\sigma$ wynosi $\sim$ 6 i ta wartość jest dużo bardziej jednolita na całej kamerze.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.35]{wykresy/drs4/map_corr2.pdf}
-\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\caption{Odchylenie standardowe sygnału na całej kamerze przed i po zastosowaniu korekcji.}
 \label{fig:map_cam_corr}
 \end{figure}
 \subsection{Korekcje w cta-lstchain}
-W bibliotece cta-lstchain w module calib/camera/r0.py znajduje się klasa $\mathtt{LSTR0Corrections}$ napisana w ramach pracy. Klasa ta ma trzy metody do korekcji:
+W bibliotece {\bf{cta-lstchain}} w module {\bf{calib/camera/r0.py}} znajduje się klasa $\mathtt{LSTR0Corrections}$ napisana w ramach pracy. Klasa ta ma trzy metody do korekcji:
 \begin{itemize}
 \item linii bazowej $\mathtt{subtract\_pedestal(event)}$
 \item czasowej linii bazowej $\mathtt{time\_lapse\_corr(event)}$
@@ -446,9 +446,31 @@ oraz skrypt $\mathtt{create\_pedestal\_file.py}$ do tworzenia pliku z wartościa
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.35]{wykresy/drs4/fourier_fit.pdf}
-\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\caption{Piksel 180. 32 harmoniczne}
 \label{fig:fourier_fit}
 \end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.22]{wykresy/drs4/fourier_fit_3pixels.pdf}
+\caption{Piksel 180. 32 harmoniczne}
+\label{fig:fourier_fit}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.25]{wykresy/drs4/time_corr_hist_3pixels.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:muon_image}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/time_corr_hist_all.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:muon_image}
+\end{figure}
+
 \newpage
 \section{Zastosowanie korekcji do analizy obrazów pęków}
 \begin{figure}[H] 
@@ -457,6 +479,7 @@ oraz skrypt $\mathtt{create\_pedestal\_file.py}$ do tworzenia pliku z wartościa
 \caption{Korekcja linii bazowej histogram, wszystkie piksele.}
 \label{fig:muon_image}
 \end{figure}
+
 
 \newpage
 \begin{thebibliography}{9}
