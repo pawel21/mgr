@@ -321,7 +321,7 @@ W tym rozdziale pokaże zastosowanie korekcji w praktyce do danych testowych zbi
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.36]{wykresy/drs4/hist_fc_arrival_time.pdf}
-\caption{Histogram pokrycia kondensatorów oraz czasu przyjścia zdarzeń. Run 00097, wszystkie piksele.}
+\caption{Histogram pokrycia kondensatorów oraz czasu przyjścia zdarzeń z dopasowaną funkcją eksponencjalną. Run 00097, wszystkie piksele.}
 \label{fig:data_hist}
 \end{figure}
 \subsection{Korekcja linii bazowej}
@@ -357,7 +357,7 @@ Kiedy znamy średnią wartość bazową każdego kondensatora, stosujemy pierwsz
 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.35]{wykresy/drs4/baseline_corr_hist.pdf}
+\includegraphics[scale=0.45]{wykresy/drs4/baseline_corr_hist2.pdf}
 \caption{Korekcja linii bazowej histogram sygnału dla dwóch wzmocnień, wszystkie piksele. Jako miarę sygnału używam odchylenie standardowe sygnału $\sigma$.}
 \label{fig:baseline_corr_hist}
 \end{figure}
@@ -397,14 +397,29 @@ Aby sprawdzić dla wszystkich pikseli jak dopasowane funkcje mają się do funkc
 Na rysunku \ref{fig:dt_corr_hist2d} pokazuje histogram 2-d dla jednego piksela, gdzie przedstawiony jest sygnał w funkcji różnicy czasu ostatniego odczytu tego samego kondensatora z używaną funkcją potęgową dla temperatury: 30 $^{\circ}$C. 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.3]{wykresy/drs4/dt_hist2d.pdf}
-\caption{Korekcja czasowa linii bazowej. Histogram 2-d dla jednego piksela z używaną funkcją potęgową do korekcji. Na górze przed korekcją, na dole po dokonaniu korekcji.}
+\includegraphics[scale=0.25]{wykresy/drs4/dt_hist2d.pdf}
+\caption{Korekcja czasowa linii bazowej. Histogram 2-d dla jednego piksela (15 000 zdarzeń) z używaną funkcją potęgową do korekcji. Na górze przed korekcją, na dole po dokonaniu korekcji.}
 \label{fig:dt_corr_hist2d}
 \end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/dt_corr_hist2d.pdf}
+\caption{Korekcja czasowa linii bazowej. Histogram 2-d dla wszystkich pikseli dla High gain (15000 zdarzeń) z używaną funkcją potęgową do korekcji. Na górze przed korekcją, na dole po dokonaniu korekcji.}
+\label{fig:dt_corr_hist2d_all}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/dt_corr_lg_hist2d.pdf}
+\caption{Korekcja czasowa linii bazowej. Histogram 2-d dla wszystkich pikseli dla Low gain (15000 zdarzeń) z używaną funkcją potęgową do korekcji. Na górze przed korekcją, na dole po dokonaniu korekcji.}
+\label{fig:dt_corr_hist2d_all}
+\end{figure}
+
 Na rysunku \ref{fig:dt_corr_hist} pokazuje histogram rozkładu sygnału po dokonaniu korekcji czasowej linii bazowej w porównaniu do rozkładu sygnału po pierwszej korekcji linii bazowej. Histogramy zrobiłem dla wszystkich pikseli oraz dla jednego piksela dla wysokiego wzmocnienia (dla niskiego wzmocnienia histogram by wyglądał podobnie). Jak widzimy na histogramach, po korekcji czasowej rozkład staje się bardziej wąski, ale wciąż zostają ogony.  
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.3]{wykresy/drs4/dt_corr_hist.pdf}
+\includegraphics[scale=0.45]{wykresy/drs4/dt_corr_hist2.pdf}
 \caption{Korekcja linii bazowej histogram sygnału po korekcji czasowej linii bazowej (zielona ciągła linia), po zwykłej korekcji linii bazowej (przerywana pomarańczowa). Po lewej stronie: histogram dla wszystkich pikseli, po prawej stronie: histogram dla jednego piksela. Jako miarę sygnału liczę odchylenie standardowe sygnału $\sigma$: dla wszystkich pikseli: przed korekcją czasową $\sigma = 8.44$, po korekcji czasowej $\sigma = 6.41$. Dla jednego piksela: przed korekcją czasową $\sigma = 8.90$, po korekcji czasowej $\sigma = 6.88$. }
 \label{fig:dt_corr_hist}
 \end{figure}
@@ -420,7 +435,7 @@ Na rysunku \ref{fig:spike_corr} pokazany jest przebieg sygnału, gdzie występuj
 Na rysunku \ref{fig:spike_hist} przedstawiam histogram po interpolacji szumów niegaussowskich. Jak widzimy na histogramie, ogony po tej korekcji znikają i rozkład przypomina rozkład Gaussa, co jest oczekiwane.
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.25]{wykresy/drs4/spike_corr_hist.pdf}
+\includegraphics[scale=0.45]{wykresy/drs4/spike_corr_hist2.pdf}
 \caption{Histogram sygnału: po interpolacji szumów niegaussowskich(NG) (czerwona ciągła linia), po zwykłej i czasowej korekcji linii bazowej (zielona przerywana). Po lewej stronie: histogram dla wszystkich pikseli, po prawej stronie: histogram dla jednego piksela.
 Jako miarę sygnału liczę odchylenie standardowe sygnału $\sigma$: dla wszystkich pikseli: po korekcji zwykłej i czasowej linii bazowej $\sigma = 6.41$, po interpolacji szumów (NG) $\sigma = 6.21$. Dla jednego piksela: po korekcji zwykłej i czasowej linii bazowej $\sigma = 6.88$, po interpolacji szumów NG $\sigma = 6.72$.}
 \label{fig:spike_hist}
@@ -443,19 +458,61 @@ W bibliotece {\bf{cta-lstchain}} w module {\bf{calib/camera/r0.py}} znajduje si�
 oraz skrypt $\mathtt{create\_pedestal\_file.py}$ do tworzenia pliku z wartościami bazowymi każdego kondensatora (wielkość pliku $\sim$30\,MB).
 \newpage
 \section{Korekcja czasowa}
+W tym rozdziale opisuje korekcje dla czasu przyjścia impulsu. Jest ona ważna do wyznaczenie ewolucji czasowej rozwoju pęku, co może być następnie użyte m.in. do separacji obrazów wytworzonych przez fotony gamma/leptony a hadrony. 
+W celu dokonania kalibracji czasowej zbiera się dedykowane pomiary kalibracyjne polegające na wstrzykiwaniu impulsów z lasera. Na rysunku \ref{fig:calib_waveform_hg} przedstawiam przebiegu sygnału z impulsem kalibracyjnym.  Na podstawie tych danych tworzy się/oblicza współczynniki kalibracyjny. W ramach pracy napisałem kod do wyznaczanie czasu przyjścia impulsu, tworzenie pliku ze współczynnikami do kalibracji, kalibracji czasu przyjścia impulsu. Wyniki, które tutaj przestawiam oparte są na danych z tzw. \textsl{calibration box}, które były zbierane 12 marca 2019 roku jest to \textsl{run 250 i 252}. Na podstawie danych z \textsl{run 250} obliczyłem współczynniki kalibracyjne, a na danych z \textsl{run 252} zastosowałem te korekcje. 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/calib_pulse_waveform_hg.pdf}
+\caption{Przebieg sygnału z impulsem kalibracyjnym dla dwóch pikseli dla wysokiego wzmocnienia.}
+\label{fig:calib_waveform_hg}
+\end{figure}
+Na rysunku \ref{fig:signal_map} pokazuje średni sygnał (który jest sumą 7 próbek czasu w oku punktu wyznaczonego jako czas przyjścia impulsu) na całej kamerze dla danych z pomiarów \textsl{run 250 i 252}. Widoczny wzór na kamerze, gdzie sygnał jest bardzo mały spowodowany jest cieniem systemu do kalibracji.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{wykresy/drs4/mapka_sygnal_time_corr.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:signal_map}
+\end{figure}
+
+Na rysunku \ref{fig:fourier_fit_4096} przedstawiam zależność czasu przyjścia impulsu od pozycji w pierścieniu DRS4 dla 4096 kondensatorów.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.35]{wykresy/drs4/fourier_fit.pdf}
-\caption{Piksel 180. 32 harmoniczne}
-\label{fig:fourier_fit}
+\caption{Zależność czasu przyjścia impulsu od pozycji w pierścieniu DRS4 dla 4096 kondensatorów z funkcją dopasowaną przez rozwinięcie w szereg Fouriera przy wykorzystaniu 32 harmonicznych.}
+\label{fig:fourier_fit_4096}
 \end{figure}
+ Ze względu, że w systemie odczytu sygnału używany przez LST jeden pixel jest obsługiwany przez 4 kanały tego samego chipu DRS4, a wszystkie kanały mają taką samą krzywą opóźnienia impulsów to wystarczył to wszystko liczyć jako modulo 1024 oraz jeden punkt to 8 kondensatorów, co zwiększa statystykę
+Aby wyznaczyć krzywą opóźnienie stosuje rozwinięcia w szereg fouriera (niezupełnie) wtedy
+średnią wartość przyjścia impulsu od pozycji w pierścieniu DRS4 zapisujemy jako sumę sinusów i cosinusów
+\begin{equation}
+y = \sum_{i=1}^{N} A_n \sin \left( \frac{FC}{1024} \right) + B_n \cos \left( \frac{FC}{1024} \right)
+\end{equation}
+%Na rysunku \ref{fig:fourier_fit_4096} przedstawiam zależność czasu przyjścia impulsu od pozycji w pierścieniu DRS4 dla 4096 kondensatorów. 
+%Widzimy, że kształt krzywej zależności się powtarza co 1024 kondensatory. 
+%Więc wykorzystując ten fakt podczas kalibracji wartość kondensatora biorę jako modulo 1024 i tak samo krzywe opóźnienie wykreślam dla 1024 kondensatorów. 
 
+Na rysunku \ref{fig:fourier_fit_harm} przedstawiam zależność czasu przyjścia od położenie w pierścieniu DRS4 dla dwóch pikseli, z dopasowanymi krzywymi używając 8 i 16 harmonicznych. Jak widzimy na wykresach jedna i druga krzywa dość dobrze pasuje, lecz lepiej pasuje ta tworzona za pomocą 16 harmonicznych (przy czym czas obliczania tych współczynników jest dość krótki) i z tego powodu w dalszej części pracy będę używał 16 harmonicznych.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/fourier_fit_harm.pdf}
+\caption{Piksel 180. 32 harmoniczne}
+\label{fig:fourier_fit_harm}
+\end{figure}
+Na rysunku \ref{fig:fourier_fit_3} przedstawiam krzywe opóźnienia dla 3 pikseli, jak widać na rysunkach widzimy, że te krzywe są różne dla różnych pikseli. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.22]{wykresy/drs4/fourier_fit_3pixels.pdf}
-\caption{Piksel 180. 32 harmoniczne}
-\label{fig:fourier_fit}
+\caption{Krzywe opóźnienia dla 3 piksel, dopasowana krzywa (ciągła czerwona linia) powstała przez rozwinięcie w szereg Fouriera przy użyciu 16 harmonicznych.}
+\label{fig:fourier_fit_3}
 \end{figure}
+Mając wyznaczone krzywe opóźnienia oraz wyciągając z danych wartość pierwszego kondensatora w pierścieniu DRS4, który został , stosuje korekcje czasową dwie korekcje czasowe:
+\begin{itemize}
+\item {\bf{względna}} polegająca na odjęciu  czasu z tej krzywej od czasu wyznaczonego czasu przyjścia impulsu.
+\item {\bf{bezwzględna}} polegająca na odjęciu czasu z tej krzywej od czasu wyznaczonego z uwzględnieniem średniego czasu przyjścia impulsu we wszystkich pikselach, który sygnał jest powyżej progu.
+\end{itemize} 
+
+
+
 
 \begin{figure}[H] 
 \centering
@@ -471,16 +528,85 @@ oraz skrypt $\mathtt{create\_pedestal\_file.py}$ do tworzenia pliku z wartościa
 \label{fig:muon_image}
 \end{figure}
 
-\newpage
-\section{Zastosowanie korekcji do analizy obrazów pęków}
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.35]{wykresy/drs4/muon_image.pdf}
+\includegraphics[scale=0.35]{wykresy/drs4/std_arrival_time_hist.pdf}
 \caption{Korekcja linii bazowej histogram, wszystkie piksele.}
 \label{fig:muon_image}
 \end{figure}
 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/std_arrival_time_map.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:muon_image}
+\end{figure}
+\newpage
+\section{Zastosowanie korekcji do analizy obrazów pęków}
+W tym rozdziale prezentuje zastosowanie korekcji opisanych w dwóch poprzednich rozdziałach do analizy obrazów pęków. Pokazuje jak korekcje linii bazowej oraz interpolacja szumów niegaussowskich obniża szum sygnału, w wyniku czego użyteczny sygnał jest dostawany, oraz jak korekcja czasowa pozwala lepiej wyznaczyć rozwój pęku w czasie.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{wykresy/drs4/shower_id_27.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:muon_image}
+\end{figure}
 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{wykresy/drs4/waveform_HG_id_27.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:muon_image}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{wykresy/drs4/waveform_LG_id_27.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:muon_image}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.5]{wykresy/drs4/time_corr_image_id_27_clean.png}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:muon_image}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/shower_id_85.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:muon_image}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{wykresy/drs4/waveform_HG_id_85.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:muon_image}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{wykresy/drs4/waveform_LG_id_85.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:muon_image}
+\end{figure}
+
+\subsection{Poszukiwanie mionów}
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{wykresy/drs4/shower_id_184.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:muon_image}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{wykresy/drs4/shower_id_12.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:muon_image}
+\end{figure}
 \newpage
 \begin{thebibliography}{9}
 \bibitem{particle_de_angelis}
