@@ -459,7 +459,7 @@ oraz skrypt $\mathtt{create\_pedestal\_file.py}$ do tworzenia pliku z wartościa
 \newpage
 \section{Korekcja czasowa}
 W tym rozdziale opisuje korekcje dla czasu przyjścia impulsu. Jest ona ważna do wyznaczenie ewolucji czasowej rozwoju pęku, co może być następnie użyte m.in. do separacji obrazów wytworzonych przez fotony gamma/leptony a hadrony. 
-W celu dokonania kalibracji czasowej zbiera się dedykowane pomiary kalibracyjne polegające na wstrzykiwaniu impulsów z lasera. Na rysunku \ref{fig:calib_waveform_hg} przedstawiam przebiegu sygnału z impulsem kalibracyjnym.  Na podstawie tych danych tworzy się/oblicza współczynniki kalibracyjny. W ramach pracy napisałem kod do wyznaczanie czasu przyjścia impulsu, tworzenie pliku ze współczynnikami do kalibracji, kalibracji czasu przyjścia impulsu. Wyniki, które tutaj przestawiam oparte są na danych z tzw. \textsl{calibration box}, które były zbierane 12 marca 2019 roku jest to \textsl{run 250 i 252}. Na podstawie danych z \textsl{run 250} obliczyłem współczynniki kalibracyjne, a na danych z \textsl{run 252} zastosowałem te korekcje. 
+W celu dokonania kalibracji czasowej zbiera się dedykowane pomiary kalibracyjne polegające na wstrzykiwaniu impulsów z lasera. Na rysunku \ref{fig:calib_waveform_hg} przedstawiam przebiegu sygnału z impulsem kalibracyjnym dla wysokiego wzmocnienia. Wyniki prezentowane w tym rozdziale są dla wysokiego wzmocnienia, spowodowane to jest, faktem, że impulsy dla niskiego wzmocnienia były słabe i wykonaniem tej kalibracji.  Na podstawie tych danych tworzy się/oblicza współczynniki kalibracyjny. W ramach pracy napisałem kod do wyznaczanie czasu przyjścia impulsu, tworzenie pliku ze współczynnikami do kalibracji, kalibracji czasu przyjścia impulsu. Wyniki, które tutaj przestawiam oparte są na danych z tzw. \textsl{calibration box}, które były zbierane 12 marca 2019 roku jest to \textsl{run 250 i 252}. Na podstawie danych z \textsl{run 250} (11 500 zdarzeń) obliczyłem współczynniki kalibracyjne, a na danych z \textsl{run 252} (1500 zdarzeń) zastosowałem te korekcje. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.35]{wykresy/drs4/calib_pulse_waveform_hg.pdf}
@@ -481,7 +481,7 @@ Na rysunku \ref{fig:fourier_fit_4096} przedstawiam zależność czasu przyjścia
 \caption{Zależność czasu przyjścia impulsu od pozycji w pierścieniu DRS4 dla 4096 kondensatorów z funkcją dopasowaną przez rozwinięcie w szereg Fouriera przy wykorzystaniu 32 harmonicznych.}
 \label{fig:fourier_fit_4096}
 \end{figure}
- Ze względu, że w systemie odczytu sygnału używany przez LST jeden pixel jest obsługiwany przez 4 kanały tego samego chipu DRS4, a wszystkie kanały mają taką samą krzywą opóźnienia impulsów to wystarczył to wszystko liczyć jako modulo 1024 oraz jeden punkt to 8 kondensatorów, co zwiększa statystykę
+ Ze względu, że w systemie odczytu sygnału używany przez LST jeden piksel jest obsługiwany przez 4 kanały tego samego chipu DRS4, a wszystkie kanały mają taką samą krzywą opóźnienia impulsów to wystarczył to wszystko liczyć jako modulo 1024 oraz jeden punkt to 8 kondensatorów, co zwiększa statystykę
 Aby wyznaczyć krzywą opóźnienie stosuje rozwinięcia w szereg fouriera (niezupełnie) wtedy
 średnią wartość przyjścia impulsu od pozycji w pierścieniu DRS4 zapisujemy jako sumę sinusów i cosinusów
 \begin{equation}
@@ -495,7 +495,7 @@ Na rysunku \ref{fig:fourier_fit_harm} przedstawiam zależność czasu przyjścia
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.35]{wykresy/drs4/fourier_fit_harm.pdf}
-\caption{Piksel 180. 32 harmoniczne}
+\caption{Zależność czasu przyjścia impulsu od pozycji w pierścieniu DRS4 dla 1024 kondensatorów z funkcją dopasowaną przez rozwinięcie w szereg Fouriera przy wykorzystaniu 8 i 16 harmonicznych.}
 \label{fig:fourier_fit_harm}
 \end{figure}
 Na rysunku \ref{fig:fourier_fit_3} przedstawiam krzywe opóźnienia dla 3 pikseli, jak widać na rysunkach widzimy, że te krzywe są różne dla różnych pikseli. 
@@ -510,36 +510,47 @@ Mając wyznaczone krzywe opóźnienia oraz wyciągając z danych wartość pierw
 \item {\bf{względna}} polegająca na odjęciu  czasu z tej krzywej od czasu wyznaczonego czasu przyjścia impulsu.
 \item {\bf{bezwzględna}} polegająca na odjęciu czasu z tej krzywej od czasu wyznaczonego z uwzględnieniem średniego czasu przyjścia impulsu we wszystkich pikselach, który sygnał jest powyżej progu.
 \end{itemize} 
-
-
-
+Na rysunku \ref{fig:time_corr_hist3} pokazuje histogram czasu przyjścia impulsu prze korekcją, po korekcji względnej i po korekcji bezwzględnej dla trzech pikseli, a na rysunku \ref{fig:time_corr_hist_all} histogram czasu przyjścia dla wszystkich pikseli. Rozkład nieskalibrowanych czasów przyjścia pokazuje wiele pików z powodu dyskretnych wartości, przyjmowanych przez impulsy podczas wyznaczania czasu przyjścia
+granice integracji mogą zająć. Ta struktura  znika już po dokonaniu  względnej kalibracji czasu i odchylenie czasu przyjścia impulsu zmniejsza się z $\sim$1.7\,ns do $\sim$1\,ns, a po uwzględnieniu też średniego czasu przyjścia impulsu dla wszystkich pikseli w danym zdarzeniu, zmniejsza się ono do $\sim$0.4\,ns
 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.25]{wykresy/drs4/time_corr_hist_3pixels.pdf}
-\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
-\label{fig:muon_image}
+\caption{Histogram czasu przyjścia dla 3 pikseli przed i po korekcjach czasowych.}
+\label{fig:time_corr_hist3}
 \end{figure}
-
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.35]{wykresy/drs4/time_corr_hist_all.pdf}
-\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
-\label{fig:muon_image}
+\includegraphics[scale=0.3]{wykresy/drs4/time_corr_hist_all.pdf}
+\caption{Histogram czasu przyjścia impulsu przed i po korekcjach czasowych dla wszystkich pikseli dla 1500 zdarzeń.}
+\label{fig:time_corr_hist_all}
 \end{figure}
+W tabeli \ref{tab:std} przedstawiam odchylenie standardowe czasu przyjścia impulsu przed i po korekcjach dla trzech wybranych pikseli oraz dla wszystkich pikseli. Na wykresie \ref{fig:std_hist_time_corr} przedstawiam histogram odchylenia standardowego przed i po dokonaniu korekcji dla wszystkich pikseli z wyłączeniem tych co miały mały sygnał, oraz wykluczam te dla których występowało duże odchylenie czasu przyjścia po dokonaniu korekcje, spowodowane, to jest problemami z kalibracją ponieważ dla tych pikseli podczas kalibracji impulsy kalibracyjne wychodzi poza region zainteresowania. Wykluczyć musiałem 105 pikseli, czyi 1750 działo dobrze. Na rysunku \ref{fig:std_map_time_corr} pokazuje mapę odchylenia standardowego dla każdego piksela. Czarne punkty są właśnie tymi pikselami, gdzie występowały jakieś problemy.
+\begin{table}[H]
+\caption{Odchylenie standardowe czasu przyjścia impulsu.}
+\begin{tabular}{|l|c|c|c|l|}
+\hline
+Piksel id & Przed korekcją  & Po korekcji względnej  & po korekcji bezwzględnej   \\ \hline
+180  & 1.70  & 1.03  & 0.42    \\ \hline
+1440 & 1,19  & 1.01  & 0.42    \\  \hline
+1590 & 2.05  & 1.02  & 0.44    \\  \hline
+Wszystkie & 1.70  & 1.02 & 0.42   \\  \hline
+\end{tabular}
+\label{tab:std}
+\end{table}
 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.35]{wykresy/drs4/std_arrival_time_hist.pdf}
-\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
-\label{fig:muon_image}
+\caption{Histogram odchylenia standardowego przed i po korekcji względnej oraz bezwzględnej.}
+\label{fig:std_hist_time_corr}
 \end{figure}
 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.35]{wykresy/drs4/std_arrival_time_map.pdf}
-\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
-\label{fig:muon_image}
+\caption{Mapa kamery z przedstawionym odchyleniem standardowym przed i po korekcjach oraz przedstawione na czarno piksele które zostały wykluczone z analizy z powodu problemów sprzętowych.}
+\label{fig:std_map_time_corr}
 \end{figure}
 \newpage
 \section{Zastosowanie korekcji do analizy obrazów pęków}
