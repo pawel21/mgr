@@ -88,7 +88,7 @@ LST (Large Size Telescope) jest największym z typów teleskopów czerenkowskich
 \section{Promieniowanie kosmiczne i astronomia gamma}
 Astronomia jest nauką umożliwiającą badanie zjawisk fizycznych poza naszą planetą. Do początku XX wieku astronomia zajmowała się badaniem zjawisk termicznej emisji źródeł charakteryzujących się widmem Plancka. To się zmieniło wraz z odkryciem promieniowania kosmicznego (ang. \textsl{Cosmic Rays}) przez Victora Hessa w 1912 roku poprzez pomiar wzrostu gęstości liczbowej zjonizowanych cząsteczek wraz z wysokością\cite{particle_de_angelis}. W promieniowaniu kosmicznym obserwuje się cząstki o energiach sięgających $10^{20}$\,eV \cite{particle_de_angelis}, procesy termiczne nie są w stanie nadać cząstkom taką energię, więc muszą być one produkowane w procesach nietermicznych, które zazwyczaj charakteryzują się widmem potęgowym. \\
 Promienie kosmiczne są cząstkami o największych znanych nam energiach, 
-dzięki nim możemy badać przyspieszanie cząstek w najbardziej ekstremalnych warunkach. Ich badanie pomaga nam także lepiej rozumieć skład i ewolucje Wszechświata. Jednakże są to cząstki naładowane elektrycznie, więc są odchylane w polach magnetycznym podczas propagacji, co utrudnia nam określenie źródła ich powstania. Kierunek ich nadejścia wydaje się być (prawie) izotropowy. Możliwe jest tylko określenie kierunku przyjścia cząstek naładowanych promieniowania kosmicznego o najwyższych energiach, czym zajmuje się obserwatorium \textsl{Pierre Auger} w Argentynie \cite{auger_web} oraz obserwatorium \textsl{Telescope Array} na półkuli północnej \cite{telescope_array_web}. Aby, określić źródła musimy badać cząstki neutralne takie jak: neutrina i fotony o najwyższych energiach, czyli promieniowanie gamma. Neutrina z uwagi na bardzo mały przekrój czynny są trudne do wykrycia. Więc tematem mojej pracy jest astronomia gamma bardzo wysokich energiach $>30$\,GeV. W tym rozdziale przedstawiam najważniejsze informacje o astronomii gamma, mechanizmy powstania fotonów $\gamma$ oraz techniki detekcji.
+dzięki nim możemy badać przyspieszanie cząstek w najbardziej ekstremalnych warunkach. Ich badanie pomaga nam także lepiej rozumieć skład i ewolucje Wszechświata. Jednakże są to cząstki naładowane elektrycznie, więc są odchylane w polach magnetycznym podczas propagacji, co utrudnia nam określenie źródła ich powstania. Kierunek ich nadejścia wydaje się być (prawie) izotropowy. Możliwe jest tylko określenie kierunku przyjścia cząstek naładowanych promieniowania kosmicznego o najwyższych energiach, czym zajmuje się obserwatorium \textsl{Pierre Auger} w Argentynie \cite{auger_web} \cite{auger_result} oraz obserwatorium \textsl{Telescope Array} na półkuli północnej \cite{telescope_array_web}. Aby, określić źródła musimy badać cząstki neutralne takie jak: neutrina i fotony o najwyższych energiach, czyli promieniowanie gamma. Neutrina z uwagi na bardzo mały przekrój czynny są trudne do wykrycia. Więc tematem mojej pracy jest astronomia gamma bardzo wysokich energiach $>30$\,GeV. W tym rozdziale przedstawiam najważniejsze informacje o astronomii gamma, mechanizmy powstania fotonów $\gamma$ oraz techniki detekcji.
 
 \subsection{Astronomia gamma}
 Promieniowanie gamma o bardzo wysokich energiach $\geq$ 30\,GeV ang.(\textsl{very high energy, VHE}) według dzisiejszej wiedzy jest wynikiem interakcji populacji relatywistycznych cząstek o bardzo wysokich energiach z otaczającą materią lub z niskoenergetycznymi polami promieniowania. Badanie fotonów gamma umożliwia nam poszerzanie naszej wiedzy na temat procesów przyspieszania cząstek o największych energiach, testowanie teorii fizycznych w ekstremalnych warunkach: bardzo silnej grawitacji (czarne dziury), bardzo silnego pola magnetycznego (gwiazdy neutronowe). Astronomia gamma dostarcza nam wyjątkowe narzędzia do badania wielu astrofizycznych zjawisk: pozagalaktyczne promieniowanie tła (\textsl{ang. Extragalactic background light (EBL)}), poszukiwanie ciemnej materii \cite{Gamma-ray_article}. Do tej pory zostało odkryte ponad 200 obiektów, które są źródłem fotonów o najwyższych energiach \cite{TeVCat}. Większość tych źródeł została odkryta za pomocą teleskopów czerenkowskich (ang. \textsl{Imaging Atmospheric Cherenkov Telescopes, IACT}), które zostaną opisane w tym rozdziale.\\
@@ -151,25 +151,33 @@ Wielkie pęki są wywoływane także przez promieniowanie kosmiczne (relatywisty
 \begin{equation*}
 \pi^- \rightarrow \mu^- + \bar{\nu}_{\mu}
 \end{equation*}
-Rożnice w morfologi pęku wraz z rekonstrukcją kierunku przyjścia pierwotnej cząstki, pozwalają na uzyskania wydajnego sposobu na odrzucenie obrazów produkowanych przez hadrony. Nawet dla silnych źródeł promieniowania gamma ilość kaskad hadronowych przewyższa o 3 rzędy wielkości ilość pęków zainicjowanych przez fotony gamma. Symulacje Monte Carlo wielkiego pęku kosmicznego zapoczątkowanego przez foton~\ref{fig:f1} oraz przez proton~\ref{fig:f2} pokazuje na rysunku poniżej.
-\begin{figure}[H]
-\label{mc_pek}
-  \begin{center}
-  \subfloat[Foton o energii 1\,TeV.]{\includegraphics[scale=0.15]{obrazy_teoria/foton_1TeV.png}\label{fig:f1}}
-  \hfill
-  \subfloat[Proton o energii 1\,TeV.]{\includegraphics[scale=0.15]{obrazy_teoria/proton_1TeV.png}\label{fig:f2}}
-  \caption{Symulacja Monte Carlo pęku kosmicznego za pomocą programu CORSIKA. Typ cząstki reprezentowany jest przez kolor śladu: czerwony = elektrony, pozytony, fotony gamma; zielony = miony, niebieski = hadrony. Parametry użyte do symulacji to: wysokość pierwszej interakcji = 30\,km, 
-zakres na osiach: Z(pionowa): 0 - 30.1\,km, X/Y: $\pm$ 5\,km wokół osi pęku, cięcia energii: 0.1\,MeV ($\mathtt{e^{-+}}$, fotony gamma) oraz 0.1\,GeV (miony i hadrony) \cite{monte_carlo}.}
-\end{center}
+Rożnice w morfologi pęku wraz z rekonstrukcją kierunku przyjścia pierwotnej cząstki, pozwalają na uzyskania wydajnego sposobu na odrzucenie obrazów produkowanych przez hadrony. Nawet dla silnych źródeł promieniowania gamma ilość kaskad hadronowych przewyższa o 3 rzędy wielkości ilość pęków zainicjowanych przez fotony gamma. Symulacje Monte Carlo rozwoju wielkiego pęku kosmicznego zapoczątkowanego przez foton oraz przez proton ~\ref{fig:cascade_mc} pokazuje na rysunku poniżej.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.6]{obrazy_teoria/kaskada_hadron_foton.pdf}
+\caption{Symulacja Monte Carlo pęku kosmicznego. Porównanie rozwoju kaskady elektromagnetycznej (po lewej stronie) zaincjnowanej przez foton o energii 100\,TeV i kaskady hadronowej (prawa strona) zaincjonowanej przez proton o energii 100\,TeV. Jedynie cząstki wtórne z energią $\geq$ 1\,GeV są pokazane. R. Tcaciuc, University of Siegen, 2004 \cite{astro_particle}}
+\label{fig:cascade_mc}
 \end{figure}
-Relatywistyczna cząstka poruszająca się w powietrzu szybciej niż prędkość światła w tyn ośrodku ($v > c/n_{air}$, gdzie $n_{air}$ jest współczynnikiem załamania dla powietrza) produkuje {\bf{promieniowanie Czerenkowa}}. Światło Czerenkowa ma swoje maksimum w zakresie UV (ciągnie się aż do zakresu optycznego) oraz jest produkowane przez cały czas rozwoju kaskady, maksimum emisji występuje, kiedy liczba wyprodukowanych cząstek w kaskadzie jest największa, na wysokość $\approx$ 10\,km dla fotonów gamma o pierwotnej energii od 100\,GeV do 1\,TeV \cite{IACT}. Każda cząstka produkuje światło Czerenkowa o stałym kącie $\theta_C$ do kierunku ruchu, co wyrażamy zależnością:
+
+
+%\begin{figure}[H]
+%\label{mc_pek}
+%  \begin{center}
+%  \subfloat[Foton o energii 1\,TeV.]{\includegraphics[scale=0.15]{obrazy_teoria/foton_1TeV.png}\label{fig:f1}}
+%  \hfill
+%  \subfloat[Proton o energii 1\,TeV.]{\includegraphics[scale=0.15]{obrazy_teoria/proton_1TeV.png}\label{fig:f2}}
+%  \caption{Symulacja Monte Carlo pęku kosmicznego za pomocą programu CORSIKA. Typ cząstki reprezentowany jest przez kolor śladu: czerwony = elektrony, pozytony, fotony gamma; zielony = miony, niebieski = hadrony. Parametry użyte do symulacji to: wysokość pierwszej interakcji = 30\,km, 
+%zakres na osiach: Z(pionowa): 0 - 30.1\,km, X/Y: $\pm$ 5\,km wokół osi pęku, cięcia energii: 0.1\,MeV ($\mathtt{e^{-+}}$, fotony gamma) oraz 0.1\,GeV (miony i hadrony) \cite{monte_carlo}.}
+%\end{center}
+%\end{figure}
+Relatywistyczna cząstka poruszająca się w powietrzu szybciej niż prędkość światła w tyn ośrodku ($v > c/n_{air}$, gdzie $n_{air}$ jest współczynnikiem załamania dla powietrza) indukuje {\bf{promieniowanie Czerenkowa}}. Światło Czerenkowa ma swoje maksimum w zakresie UV (ciągnie się aż do zakresu optycznego) oraz jest produkowane przez cały czas rozwoju kaskady, maksimum emisji występuje, kiedy liczba wyprodukowanych cząstek w kaskadzie jest największa, na wysokość $\approx$ 10\,km dla fotonów gamma o pierwotnej energii od 100\,GeV do 1\,TeV \cite{IACT}. Każda cząstka produkuje światło Czerenkowa o stałym kącie $\theta_C$ do kierunku ruchu, co wyrażamy zależnością:
 \begin{equation}
 \cos (\theta_C) = \frac{c}{v n_{air}}
 \end{equation}
 Kąt Czerenkowa wynosi $\approx \ang{1.3}$ na poziomie morza. \\
-Światła Czerenkowa produkowanego w kaskadzie jest mało (w przybliżeniu ilość światła proporcjonalna jest do energii cząstki pierwotnej), dlatego trzeba używać dużych teleskopów oraz możliwie redukować szum w elektronice systemu odczytu danych do wydajnej jego obserwacji. \\
+Światła Czerenkowa produkowanego w kaskadzie jest mało (w przybliżeniu ilość światła proporcjonalna jest do energii cząstki pierwotnej), dlatego trzeba używać dużych teleskopów oraz możliwie możliwie ograniczać szum w elektronice systemu odczytu danych do wydajnej jego obserwacji. \\
 %do tego momentu Julian sprawdzil tekst 
-Cząstki w kaskadzie elektromagnetycznej podlegają także wielokrotnemu rozpraszaniu wywołanego przez oddziaływanie Coulomba, co prowadzi do rozdzielenia ich kierunku propagacji w małym zakresie kątowym generując zasięg boczny pęku. W wyniku powstaje tzw. \textsl{light pool} o promieniu $\approx$ 130\,m oraz gęstości $\approx$ 100 fotonów $\mathtt{m^{-2}}$ dla fotonów gamma o energii 1\,TeV \cite{IACT}, co jest pokazane na rysunku \ref{fig:lightpool}.
+Cząstki w kaskadzie elektromagnetycznej podlegają także wielokrotnemu rozpraszaniu wywołanego przez oddziaływanie Coulomba, co prowadzi do rozdzielenia ich kierunku propagacji w małym zakresie kątowym generując rozkład poprzeczny pęku. W wyniku powstaje tzw. \textsl{light pool} o promieniu $\approx$ 130\,m oraz gęstości $\approx$ 100 fotonów $\mathtt{m^{-2}}$ dla fotonów gamma o energii 1\,TeV \cite{IACT}, co jest pokazane na rysunku \ref{fig:lightpool}. Wielkość \textsl{light pool} mówi nam o powierzchni detekcji promieniowania. Dla detektorów satelitarnych powierzchnia detekcji to mniej więcej rozmiar detektora. Natomiast dla teleskopów Czerenkowskich właśnie rozmiar \textsl{light pool} mówi nam jaka jest powierzchnia detekcji, która jest znacznie większa niż rozmiar teleskopu. Rozmiar teleskopu natomiast mówi nam jakie cząski o jak najniższych energiach będziemy w stanie zaobserwować, bo im energia niższa tym mniej światła na 1m$^2$, czyli do ich detekcji potrzebna jest większa powierzchnia teleskopu. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.5]{obrazy_teoria/lightpool.png}
@@ -238,8 +246,11 @@ Praca ta koncentruje się głównie na tym pierwszym etapie analizy danych, któ
 
 \newpage
 \section{System odczytu sygnału teleskopu LST}
-Teleskop LST  ma lustro o średnicy 23 metrów, a kamera LST składa się z 1855 fotopowielaczy (PMT). Ze względu na dużą powierzchnie lustra, fotony tła nocnego nieba (ang. \textsl{night sky background}, NSB) również są rejestrowane z częstotliwością kilkuset MHz na piksel. W celu redukcji zanieczyszczenia sygnału przez NSB oraz poprawy stosunku sygnału do szumu, konieczne jest próbkowanie  sygnału z szybkością $\sim$ 1 GHz i zmniejszenie czasu całkowania sygnału do kilku ns \cite{dragon_lst}.
-\subsection{Wprowadzenie}
+Teleskop LST używa systemy odczytu sygnały nazywanego Dragon
+, który został stworzony w Institude of Cosmic Ray Research Uniwersytetu Tokijskiego. System oparty jest na chipie DRS4, który wymaga szeregu korekcji programowalnych w celu optymalnej pracy. Zaletą chipu DRS4 jest duża szybkość próbkowania, dzięki której możliwe jest lepsza redukcja szumów od fotonów tła nocnego nieba (ang. \textsl{night sky background}, NSB).
+%Teleskop LST  ma lustro o średnicy 23 metrów, a kamera LST składa się z 1855 fotopowielaczy (PMT). 
+Ze względu na dużą powierzchnie lustra, fotony NSB są rejestrowane z częstotliwością kilkuset MHz na piksel. W celu redukcji zanieczyszczenia sygnału przez NSB oraz poprawy stosunku sygnału do szumu, konieczne jest próbkowanie  sygnału z szybkością $\sim$ 1 GHz i zmniejszenie czasu całkowania sygnału do kilku ns \cite{dragon_lst}.
+\subsection{System Dragon}
 Kamera LST składa się z 265 modułów, a każdy moduł składa się z 7 pikseli, co daje nam w sumie 1855 pikseli (fotopowielaczy), które tworzą kamerę LST. Jeden moduł (pokazany na rysunku \ref{fig:drs4}) składa się m.in. z chipu DRS4 będącym sercem układu odczytu sygnału, 7 fotopowielaczy(PMT), przedwzmacniacza.
 Z każdego piksela danego są odczytywane za pomocą jednego kanału chipu DRS4. W każdym module, sygnał z przedwzmacniacza jest dzielony na trzy linie: linię wysokiego wzmocnienia, linię niskiego wzmocnienia i linię wyzwalania (ang. \textsl{trigger}). Sygnały o wysokim wzmocnieniu (ang. \textsl{high gain}) i niskim wzmocnieniu (ang. \textsl{low gain}) są próbkowane przez układ DRS4 z częstotliwością 1\,GHz. Gdy następuje wyzwolenie sygnału, przebieg sygnału (ang. \textsl{waveform}) jest digitalizowany przez zewnętrzy przetwornik analogowo-cyfrowy (ADC) z częstotliwością $\sim$ 33\,MHz. Sygnał w postaci cyfrowej jest przesyłany do bramek programowalnych (FPGA), następnie do serwera, gdzie dane są przechowywane \cite{dragon_lst}. 
 \begin{figure}[H] 
@@ -395,27 +406,27 @@ Aby sprawdzić dla wszystkich pikseli jak dopasowane funkcje mają się do funkc
 \label{fig:dt_curve_hist}
 \end{figure}
 \subsubsection{Korekcja}
-Na rysunku \ref{fig:dt_corr_hist2d} pokazuje histogram 2-d dla jednego piksela, gdzie przedstawiony jest sygnał w funkcji różnicy czasu ostatniego odczytu tego samego kondensatora z używaną funkcją potęgową dla temperatury: 30 $^{\circ}$C. 
-\begin{figure}[H] 
-\centering
-\includegraphics[scale=0.25]{wykresy/drs4/dt_hist2d.pdf}
-\caption{Korekcja czasowa linii bazowej. Histogram 2-d dla jednego piksela (15 000 zdarzeń) z używaną funkcją potęgową do korekcji. Na górze przed korekcją, na dole po dokonaniu korekcji.}
-\label{fig:dt_corr_hist2d}
-\end{figure}
+%Na rysunku \ref{fig:dt_corr_hist2d} pokazuje histogram 2-d dla jednego piksela, gdzie przedstawiony jest sygnał w funkcji różnicy czasu ostatniego odczytu tego samego kondensatora z używaną funkcją potęgową dla temperatury: 30 $^{\circ}$C. 
+%\begin{figure}[H] 
+%\centering
+%\includegraphics[scale=0.25]{wykresy/drs4/dt_hist2d.pdf}
+%\caption{Korekcja czasowa linii bazowej. Histogram 2-d dla jednego piksela (15 000 zdarzeń) z używaną funkcją potęgową do korekcji. Na górze przed korekcją, na dole po dokonaniu korekcji.}
+%\label{fig:dt_corr_hist2d}
+%\end{figure}
 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.38]{wykresy/drs4/dt_corr_hist2d.pdf}
+\includegraphics[scale=0.4]{wykresy/drs4/dt_corr_hist2d_0.pdf}
 \caption{Korekcja czasowa linii bazowej. Histogram 2-d dla wszystkich pikseli dla High gain (15000 zdarzeń) z używaną funkcją potęgową do korekcji. Na górze przed korekcją, na dole po dokonaniu korekcji.}
 \label{fig:dt_corr_hist2d_all}
 \end{figure}
 
-\begin{figure}[H] 
-\centering
-\includegraphics[scale=0.38]{wykresy/drs4/dt_corr_lg_hist2d.pdf}
-\caption{Korekcja czasowa linii bazowej. Histogram 2-d dla wszystkich pikseli dla Low gain (15000 zdarzeń) z używaną funkcją potęgową do korekcji. Na górze przed korekcją, na dole po dokonaniu korekcji.}
-\label{fig:dt_corr_hist2d_all}
-\end{figure}
+%\begin{figure}[H] 
+%\centering
+%\includegraphics[scale=0.38]{wykresy/drs4/dt_corr_lg_hist2d.pdf}
+%\caption{Korekcja czasowa linii bazowej. Histogram 2-d dla wszystkich pikseli dla Low gain (15000 zdarzeń) z używaną funkcją potęgową do korekcji. Na górze przed korekcją, na dole po dokonaniu korekcji.}
+%\label{fig:dt_corr_hist2d_all}
+%\end{figure}
 
 Na rysunku \ref{fig:dt_corr_hist} pokazuje histogram rozkładu sygnału po dokonaniu korekcji czasowej linii bazowej w porównaniu do rozkładu sygnału po pierwszej korekcji linii bazowej. Histogramy zrobiłem dla wszystkich pikseli oraz dla jednego piksela dla wysokiego wzmocnienia (dla niskiego wzmocnienia histogram by wyglądał podobnie). Jak widzimy na histogramach, po korekcji czasowej rozkład staje się bardziej wąski, ale wciąż zostają ogony.  
 \begin{figure}[H] 
@@ -449,6 +460,21 @@ Po opisaniu poszczególnych korekcji, teraz pokaże jaki korekcje wpływają na 
 \caption{Odchylenie standardowe sygnału na całej kamerze przed i po zastosowaniu korekcji.}
 \label{fig:map_cam_corr}
 \end{figure}
+
+\begin{table}[H]
+\caption{Odchylenie standardowe czasu przyjścia impulsu.}
+\begin{tabular}{|l|c|c|c|c|c|c|}
+\hline
+korekcja & średnia HG  & std HG  & średnia LG & std LG & $> 2 \sigma$ [\%] HG & $> 2 \sigma$ [\%] LG \\ \hline
+bez  & 259.7  & 44.6  & 212.4 & 44.26    \\ \hline
+linii bazowa & 300.8  & 8.8  & 300.8 & 7.6 & 2.7 & 2.3    \\  \hline
+czasowa linii bazowej & 297.3  & 6.5  & 297.3 & 4.61 & 0.16 & 0.13  \\  \hline
+interpolacja SNG & 297.0  & 6. 3 &  297.1 & 4.36 & 0.05 & 0.02  \\  \hline
+\end{tabular}
+\label{tab:std}
+\end{table}
+
+
 \subsection{Korekcje w cta-lstchain}
 W bibliotece {\bf{cta-lstchain}} w module {\bf{calib/camera/r0.py}} znajduje się klasa $\mathtt{LSTR0Corrections}$ napisana w ramach pracy. Klasa ta ma trzy metody do korekcji:
 \begin{itemize}
@@ -460,7 +486,7 @@ oraz skrypt $\mathtt{create\_pedestal\_file.py}$ do tworzenia pliku z wartościa
 \newpage
 \section{Korekcja czasowa}
 W tym rozdziale opisuje korekcje czasu przyjścia sygnału. 
-W celu dokonania kalibracji czasowej zbierane są dedykowane pomiary kalibracyjne polegające na wstrzykiwaniu impulsów z lasera. Na rysunku \ref{fig:calib_waveform_hg} przedstawiam przebieg sygnału z impulsem kalibracyjnym dla wysokiego wzmocnienia wraz z wyznaczonym czasem przyjścia impulsu. Wyniki prezentowane w tym rozdziale są tylko dla sygnału z wysokim wzmocnieniem, spowodowane to jest, faktem, że impulsy dla niskiego wzmocnienia były słabe i nie było możliwe wykorzystanie tego sygnału do korekcji czasowej.  Na podstawie dostępnych danych obliczam współczynniki kalibracyjny będące współczynnikami w rozwinięciu Fouriera krzywej używanej do kalibracji. W ramach pracy napisałem kod: do wyznaczanie czasu przyjścia impulsu, obliczania współczynników oraz ich zapisywania do pliku (używam formatu pliku {\bf{h5py}}), kalibracji czasu przyjścia impulsu. Wyniki, które tutaj przestawiam oparte są na pomiarach za pomocą tzw. \textsl{calibration box}, które były zbierane 12 marca 2019 roku są to \textsl{run 250 i 252}. Na podstawie danych z \textsl{run 250} (11 500 zdarzeń) obliczyłem współczynniki kalibracyjne, a na danych z \textsl{run 252} (1500 zdarzeń) zastosowałem te korekcje. 
+W celu dokonania kalibracji czasowej zbierane są dedykowane pomiary kalibracyjne polegające na wstrzykiwaniu impulsów z lasera. Na rysunku \ref{fig:calib_waveform_hg} przedstawiam przebieg sygnału z impulsem kalibracyjnym dla wysokiego wzmocnienia wraz z wyznaczonym czasem przyjścia impulsu. Wyniki prezentowane w tym rozdziale są tylko dla sygnału z wysokim wzmocnieniem, spowodowane to jest, faktem, że impulsy dla niskiego wzmocnienia były słabe i nie było możliwe wykorzystanie tego sygnału do korekcji czasowej.  Na podstawie dostępnych danych obliczam współczynniki kalibracyjny będące współczynnikami w rozwinięciu Fouriera krzywej używanej do kalibracji, a następnie wykonuje kalibracje czasu przyjścia impulsu. W ramach pracy napisałem kod: do wyznaczanie czasu przyjścia impulsu, obliczania współczynników oraz ich zapisywania do pliku (używam formatu pliku {\bf{h5py}}), kalibracji czasu przyjścia impulsu. Wyniki, które tutaj przestawiam oparte są na pomiarach za pomocą tzw. \textsl{calibration box}, które były zbierane 12 marca 2019 roku są to \textsl{run 250 i 252}. Na podstawie danych z \textsl{run 250} (11 500 zdarzeń) obliczyłem współczynniki kalibracyjne, a na danych z \textsl{run 252} (1500 zdarzeń) zastosowałem korekcje. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.35]{wykresy/drs4/calib_pulse_waveform_hg.pdf}
@@ -471,7 +497,7 @@ Na rysunku \ref{fig:signal_map} pokazuje średni sygnał (który jest sumą 7 pr
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.25]{wykresy/drs4/mapka_sygnal_time_corr.pdf}
-\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\caption{Mapa kamery prezentująca średni sygnał na poszczególnych pikselach.}
 \label{fig:signal_map}
 \end{figure}
 \subsection{Krzywa kalibracyjna}
@@ -482,9 +508,9 @@ Na rysunku \ref{fig:fourier_fit_4096} przedstawiam zależność czasu przyjścia
 \caption{Zależność czasu przyjścia impulsu od pozycji w pierścieniu DRS4 dla 4096 kondensatorów z funkcją dopasowaną przez rozwinięcie w szereg Fouriera przy wykorzystaniu 32 harmonicznych.}
 \label{fig:fourier_fit_4096}
 \end{figure}
-Ze względu, że w systemie odczytu sygnału używany przez LST jeden piksel jest obsługiwany przez 4 kanały tego samego chipu DRS4, a wszystkie kanały mają taką samą krzywą opóźnienia, to wystarczył to odczytaną pozycje pierwszego kondensatora $FC$ w pierścieniu DRS4 liczyć jako modulo 1024 oraz w celu zwiększenia statystyki 8 kondensatorów binuje jako jeden punkt. 
+Ze względu, że w systemie odczytu sygnału Dragon jeden piksel jest obsługiwany przez 4 kanały tego samego chipu DRS4, a wszystkie kanały mają taką samą krzywą opóźnienia, to wystarczył tą odczytaną pozycje pierwszego kondensatora $FC$ w pierścieniu DRS4 liczyć jako modulo 1024 oraz, w celu zwiększenia statystyki 8 kondensatorów binuje jako jeden punkt. 
 \newpage
-Otrzymaną zależność rozwijam w szereg Fouriera (niezupełnie) wtedy
+Otrzymaną zależność rozwijam w szereg Fouriera wtedy
 średnią wartość przyjścia impulsu od pozycji w pierścieniu DRS4 zapisujemy jako sumę sinusów i cosinusów
 \begin{equation}
 y(FC) = \sum_{i=1}^{N} A_n \sin \left( \frac{FC}{1024} \right) + B_n \cos \left( \frac{FC}{1024} \right)
@@ -510,7 +536,7 @@ Na rysunku \ref{fig:fourier_fit_3} przedstawiam krzywe opóźnienia dla trzech p
 \label{fig:fourier_fit_3}
 \end{figure}
 \subsection{Korekcja czasu przyjścia impulsów}
-Mając wyznaczone krzywe opóźnienia stosuje korekcje czasową w celu poprawienia rozdzielczości czasowej czasu przyjścia. Rozróżniamy dwie korekcje czasowe:
+Mając wyznaczone krzywe opóźnienia na podstawie pozycji pierwszego odczytanego kondensatora stosuje korekcje czasową w celu poprawienia rozdzielczości czasowej czasu przyjścia. Rozróżniamy dwie korekcje czasowe:
 \begin{itemize}
 \item {\bf{względną}} polegającą na odjęciu czasu z danej krzywej opóźnienia dla danego piksela od wyznaczonego czasu przyjścia impulsu.
 \item {\bf{bezwzględną}} polegającą na odjęciu czasu z wyznaczonej krzywej opóźnienia od wyznaczonego czasu przyjścia impulsu z uwzględnieniem średniego czasu przyjścia impulsu we wszystkich pikselach, który sygnał jest powyżej progu.
@@ -531,18 +557,6 @@ Rozkład nieskalibrowanych czasów przyjścia pokazuje wiele pików z powodu dys
 \label{fig:time_corr_hist_all}
 \end{figure}
 W tabeli \ref{tab:std} przedstawiam odchylenie standardowe czasu przyjścia impulsu przed i po korekcjach dla trzech wybranych pikseli (dla których pokazałem histogramy czasu przyjścia przed i po korekcjach) oraz dla wszystkich działających pikseli. Na wykresie \ref{fig:std_hist_time_corr} przedstawiam histogram odchylenia standardowego przed i po dokonaniu korekcji dla wszystkich pikseli z wyłączeniem tych o których pisałem wcześniej. Na rysunku \ref{fig:std_map_time_corr} pokazuje mapę odchylenia standardowego dla każdego piksela. Czarne punkty są właśnie tymi pikselami, gdzie występował jakiś problem.
-\begin{table}[H]
-\caption{Odchylenie standardowe czasu przyjścia impulsu.}
-\begin{tabular}{|l|c|c|c|l|}
-\hline
-Piksel id & Przed korekcją  & Po korekcji względnej  & po korekcji bezwzględnej   \\ \hline
-180  & 1.70  & 1.03  & 0.42    \\ \hline
-1440 & 1,19  & 1.01  & 0.42    \\  \hline
-1590 & 2.05  & 1.02  & 0.44    \\  \hline
-Wszystkie & 1.70  & 1.02 & 0.42   \\  \hline
-\end{tabular}
-\label{tab:std}
-\end{table}
 
 \begin{figure}[H] 
 \centering
@@ -559,57 +573,68 @@ Wszystkie & 1.70  & 1.02 & 0.42   \\  \hline
 \end{figure}
 \newpage
 \section{Zastosowanie korekcji do analizy obrazów pęków}
-W tym rozdziale prezentuje zastosowanie korekcji opisanych w dwóch poprzednich rozdziałach do analizy obrazów pęków. Pokazuje jak korekcje linii bazowej oraz interpolacja szumów niegaussowskich obniża szum sygnału, w wyniku czego użyteczny sygnał jest dostawany, oraz jak korekcja czasowa pozwala lepiej wyznaczyć rozwój pęku w czasie.
+W tym rozdziale prezentuje zastosowanie korekcji opisanych w dwóch poprzednich rozdziałach do analizy obrazów pęków. Pokazuje jak korekcje linii bazowej oraz interpolacja szumów niegaussowskich obniża szum sygnału, w wyniku czego użyteczny sygnał jest otrzymywany, oraz jak korekcja czasowa pozwala lepiej wyznaczyć rozwój pęku w czasie. Dane, które używam w tym rozdziale były zbierane 11 lutego 2019 roku. 
+\subsection{Pierwszy obraz}
+Na rysunku \ref{fig:image_27_map} prezentuje obraz kaskady przed zastosowaniem korekcji i po zastosowaniu korekcji. Jak widzimy na obrazie, dla wysokiego wzmocnienia (HG) szumy ulegają redukcji oraz obraz staje się bardziej wyraźny. Natomiast na obrazie dla niskiego wzmocnienia (LG) przed zastosowanie korekcji prawie nic nie widać, obraz zdominowany jest przez szum, natomiast po zastosowaniu korekcji otrzymuje wyraźny obraz pęku. Pęk ten był zainicjowanego prawdopodobnie przez hadron. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{wykresy/drs4/shower_id_27.pdf}
-\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
-\label{fig:muon_image}
+\caption{Obraz pęku na kamerze dla wzmocnienia wysokiego (HG) oraz niskiego (LG) przed i po zastosowaniu korekcji dla pierwszego analizowanego obrazu.}
+\label{fig:image_27_map}
 \end{figure}
-
+\newpage
+Na rysunku \ref{fig:waveform_27_hg} przedstawiam przebieg sygnału dla wysokiego wzmocnienia dla dwóch pikseli ze sygnałem od pęku oraz dwóch pikseli gdzie występuje szum elektroniki oraz szumów od fotonów nocnego nieba. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{wykresy/drs4/waveform_HG_id_27.pdf}
-\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
-\label{fig:muon_image}
+\caption{Przebieg sygnału dla wysokiego wzmocnienia dla pierwszego analizowanego obrazu pęku. Pokazane są dwa piksele z sygnałem od pęku, i dwa piksele z szumem. Sygnał przed korekcją (niebieska linia) i po korekcjach (czerwona linia).}
+\label{fig:waveform_27_hg}
 \end{figure}
-
+Na rysunku \ref{fig:waveform_27_lg} pokazuje analogiczny przebieg sygnału, tylko dla niskiego wzmocnienia (LG). Jak widzimy w tych przebiegach szum sygnału jest dużo mniejszy, ale także sygnał jest bardzo słaby i dzięki zastosowaniu korekcji możliwe jest uzyskanie użytecznego sygnału.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{wykresy/drs4/waveform_LG_id_27.pdf}
-\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
-\label{fig:muon_image}
+\caption{Przebieg sygnału dla niskiego wzmocnienia dla pierwszego analizowanego obrazu pęku. Pokazane są dwa piksele z sygnałem od pęku, i dwa piksele z szumem. Sygnał przed korekcją (niebieska linia) i po korekcjach (czerwona linia).}
+\label{fig:waveform_27_lg}
 \end{figure}
-
+\newpage
+Na rysunku \ref{fig:map_time_27} pokazuje mapę czasu przyjścia sygnału przed i po zastosowaniu korekcji względnej. Przedstawiony obraz jest po wyczyszczeniu obrazu za pomocą funkcji {\bf{tailcuts\_clean}} z biblioteki {\bf{ctapipe}}. Na obrazie po dokonaniu korekcji czasowej widzimy wyraźny gradient czasu przyjścia.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.5]{wykresy/drs4/time_corr_image_id_27_clean.png}
+\caption{Mapa czasu przyjścia sygnału przed i po korekjci czasowej.}
+\label{fig:map_time_27}
+\end{figure}
+\subsection{Drugi obraz}
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.35]{wykresy/drs4/shower_id_77.pdf}
 \caption{Korekcja linii bazowej histogram, wszystkie piksele.}
 \label{fig:muon_image}
 \end{figure}
 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.35]{wykresy/drs4/shower_id_85.pdf}
+\includegraphics[scale=0.3]{wykresy/drs4/waveform_HG_id_77.pdf}
 \caption{Korekcja linii bazowej histogram, wszystkie piksele.}
 \label{fig:muon_image}
 \end{figure}
 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.3]{wykresy/drs4/waveform_HG_id_85.pdf}
+\includegraphics[scale=0.3]{wykresy/drs4/waveform_LG_id_77.pdf}
 \caption{Korekcja linii bazowej histogram, wszystkie piksele.}
 \label{fig:muon_image}
 \end{figure}
 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.3]{wykresy/drs4/waveform_LG_id_85.pdf}
+\includegraphics[scale=0.5]{wykresy/drs4/time_corr_image_77.pdf}
 \caption{Korekcja linii bazowej histogram, wszystkie piksele.}
 \label{fig:muon_image}
 \end{figure}
 
-\subsection{Poszukiwanie mionów}
+\subsection{Obraz mionu}
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{wykresy/drs4/shower_id_184.pdf}
@@ -619,7 +644,21 @@ W tym rozdziale prezentuje zastosowanie korekcji opisanych w dwóch poprzednich 
 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.3]{wykresy/drs4/shower_id_12.pdf}
+\includegraphics[scale=0.3]{wykresy/drs4/waveform_HG_id_184.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:muon_image}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{wykresy/drs4/waveform_LG_id_184.pdf}
+\caption{Korekcja linii bazowej histogram, wszystkie piksele.}
+\label{fig:muon_image}
+\end{figure}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.5]{wykresy/drs4/time_corr_image_184.pdf}
 \caption{Korekcja linii bazowej histogram, wszystkie piksele.}
 \label{fig:muon_image}
 \end{figure}
@@ -637,6 +676,9 @@ A. De Angelis, M. J. M. Pimenta.
 
 \bibitem{auger_web}
 \url{https://www.auger.org/}
+
+\bibitem{auger_result}
+\url{https://arxiv.org/pdf/1708.06592.pdf}
 
 \bibitem{telescope_array_web}
 \url{http://www.telescopearray.org/}
