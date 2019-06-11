@@ -49,16 +49,13 @@
   \end{flushleft} 
       
   \vspace{1cm}  
-  \LARGE\textbf{{Badanie i wdrożenie procedur
-niskopoziomowych korekcji przebiegu
-sygnałów systemu odczytu danych Dragon
-dla teleskopów LST.}}
+  \LARGE\textbf{{Badanie i wdrożenie procedur niskopoziomowych korekcji przebiegu sygnałów w teleskopach czerenkowskich LST obserwujących promieniowanie gamma ze źródeł kosmicznych.}}
    
    
   \vspace{2,5cm}
   \begin{flushleft}
   \normalsize\textbf{\hspace*{7,2cm}{Praca magisterska}} \\
-  \normalsize{\hspace*{7,9cm}{wykonana pod kierunkiem}\\ \hspace*{7,9cm}{prof. UŁ dr hab.} \\ \hspace*{7,9cm}{Julian Sitarek} \\ \hspace*{7,9cm}{w Katedrze Astrofizyki}} 
+  \normalsize{\hspace*{7,9cm}{wykonana pod kierunkiem}\\ \hspace*{7,9cm}{prof. UŁ dr hab.} \\ \hspace*{7,9cm}{Juliana Sitarka} \\ \hspace*{7,9cm}{w Katedrze Astrofizyki}} 
   \end{flushleft}
    \begin{flushright}
    \end{flushright}
@@ -84,31 +81,33 @@ dla teleskopów LST.}}
 \setcounter{page}{1}
 \section{Wstęp}
 LST (Large Size Telescope) jest największym z typów teleskopów czerenkowskich wchodzących w skład budowanego właśnie Obserwatorium CTA (Cherenkov Telescope Array). Konstrukcja pierwszego teleskopu LST zakończyła się 10 października 2018 roku. Poprzez obserwowanie słabych i ultrakrótkich błysków promieniowania czerenkowa, teleskopy czerenkowskie są w stanie obserwować elektromagnetyczne kaskady zainicjowane w atmosferze przez promieniowanie gamma. Światło czerenkowskie jest zbierane na kamerze i konwertowane na impulsy elektryczne korzystając z fotopowielaczy. Sygnał ten jest później próbkowany z częstotliwością rzędu GHz. W teleskopach LST system odczytu danych Dragon oparty jest na chipie DRS4 (Domino Ring Sampler 4), który wymaga szeregu korekcji dla optymalnego działania. \\
-W pracy opisuję krótko astronomię gamma, przedstawiam korekcje redukujące szum sygnału m.in. na linię bazową każdego próbkującego kondensatora, korekcje zależności od czasu ostatniego odczytu danego kondensatora, przewidywanie pozycji oraz interpolacje niegaussowskiego szumu. Przedstawiam, także korekcją czasową której celem jest poprawa rozdzielczość czasowej chipu DRS4. \\
+W pracy opisuję krótko astronomię gamma, przedstawiam korekcje redukujące szum sygnału m.in. na linię bazową każdego próbkującego kondensatora, korekcje zależności od czasu ostatniego odczytu danego kondensatora, przewidywanie pozycji oraz interpolacje niegaussowskiego szumu. Przedstawiam, także korekcję czasową której celem jest poprawa rozdzielczości czasowej chipu DRS4. \\
 Korekcje zostały przetestowane na danych testowych zbieranych w laboratorium w Hiszpanii, oraz na pierwszych danych z prototypu LST, znajdującego się w obserwatorium Roque de los Muchachos na wyspach kanaryjskich.  
 \newpage
 \section{Promieniowanie kosmiczne i astronomia gamma}
 Astronomia jest nauką umożliwiającą badanie zjawisk fizycznych poza naszą planetą. Do początku XX wieku astronomia zajmowała się badaniem zjawisk termicznej emisji źródeł charakteryzujących się widmem Plancka. To się zmieniło wraz z odkryciem promieniowania kosmicznego (ang. \textsl{Cosmic Rays}) przez Victora Hessa w 1912 roku poprzez pomiar wzrostu gęstości liczbowej zjonizowanych cząsteczek wraz z wysokością\cite{particle_de_angelis}. W promieniowaniu kosmicznym obserwuje się cząstki o energiach sięgających $10^{20}$\,eV \cite{particle_de_angelis}, procesy termiczne nie są w stanie nadać cząstkom taką energię, więc muszą być one produkowane w procesach nietermicznych, które zazwyczaj charakteryzują się widmem potęgowym. \\
 Promienie kosmiczne są cząstkami o największych znanych nam energiach, 
-dzięki nim możemy badać przyspieszanie cząstek w najbardziej ekstremalnych warunkach. Ich badanie pomaga nam także lepiej rozumieć skład i ewolucje Wszechświata. Jednakże są to cząstki naładowane elektrycznie, więc są odchylane w polach magnetycznym podczas propagacji, co utrudnia nam określenie źródła ich powstania. Kierunek ich nadejścia wydaje się być (prawie) izotropowy. Możliwe jest tylko określenie kierunku przyjścia cząstek naładowanych promieniowania kosmicznego o najwyższych energiach, czym zajmuje się obserwatorium \textsl{Pierre Auger} w Argentynie \cite{auger_web} \cite{auger_result} oraz obserwatorium \textsl{Telescope Array} na półkuli północnej \cite{telescope_array_web}. Aby, określić źródła musimy badać cząstki neutralne takie jak: neutrina i fotony o najwyższych energiach, czyli promieniowanie gamma. Neutrina z uwagi na bardzo mały przekrój czynny są trudne do wykrycia. Więc tematem mojej pracy jest astronomia gamma bardzo wysokich energiach $>30$\,GeV. W tym rozdziale przedstawiam najważniejsze informacje o astronomii gamma, mechanizmy powstania fotonów $\gamma$ oraz technikę detekcji.
+dzięki nim możemy badać przyspieszanie cząstek w najbardziej ekstremalnych warunkach. Ich badanie pomaga nam także lepiej rozumieć skład i ewolucje Wszechświata. Jednakże są to cząstki naładowane elektrycznie, więc są odchylane w polach magnetycznych podczas propagacji, co utrudnia nam określenie źródła ich powstania. Kierunek ich nadejścia wydaje się być (prawie) izotropowy. Możliwe jest tylko określenie kierunku przyjścia cząstek naładowanych promieniowania kosmicznego o najwyższych energiach, czym zajmuje się obserwatorium \textsl{Pierre Auger} w Argentynie \cite{auger_web} \cite{auger_result} oraz obserwatorium \textsl{Telescope Array} na półkuli północnej \cite{telescope_array_web}. Aby, określić źródła musimy badać cząstki neutralne takie jak: neutrina i fotony o najwyższych energiach, czyli promieniowanie gamma. Neutrina z uwagi na bardzo mały przekrój czynny są trudne do wykrycia. Więc tematem mojej pracy jest astronomia gamma bardzo wysokich energii $>30$\,GeV. W tym rozdziale przedstawiam najważniejsze informacje o astronomii gamma, mechanizmy powstania fotonów $\gamma$ oraz technikę detekcji.
 
 \subsection{Astronomia gamma}
 Promieniowanie gamma o bardzo wysokich energiach $\geq$ 30\,GeV ang.(\textsl{very high energy, VHE}) według dzisiejszej wiedzy jest wynikiem interakcji populacji relatywistycznych cząstek o bardzo wysokich energiach z otaczającą materią lub z niskoenergetycznymi polami promieniowania. Badanie fotonów gamma umożliwia nam poszerzanie naszej wiedzy na temat procesów przyspieszania cząstek o największych energiach, testowanie teorii fizycznych w ekstremalnych warunkach: bardzo silnej grawitacji (czarne dziury), bardzo silnego pola magnetycznego (gwiazdy neutronowe). Astronomia gamma dostarcza nam wyjątkowe narzędzia do badania wielu astrofizycznych zjawisk: pozagalaktyczne promieniowanie tła (\textsl{ang. Extragalactic background light (EBL)}), poszukiwanie ciemnej materii \cite{Gamma-ray_article}. Do tej pory zostało odkryte ponad 200 obiektów, które są źródłem fotonów o najwyższych energiach \cite{TeVCat}. Większość tych źródeł została odkryta za pomocą teleskopów czerenkowskich (ang. \textsl{Imaging Atmospheric Cherenkov Telescopes, IACT}), które zostaną opisane w tym rozdziale.\\
 Początki astronomii gamma datuje się na lata 50. XX wieku.
 Pierwszym znaczącym przełomem było odkrycie emisji w zakresie TeV z mgławicy Craba w 1989 roku dokonanej przez teleskop Whipple \cite{whipple}.
 
-Atmosfera ziemska absorbuje fotony gamma, więc bezpośrednim sposobem badania tych fotonów jest wysłanie misji kosmicznej. Jednakże strumień fotonów o najwyższych energiach jest bardzo mały, co wynika z mechanizmu produkcji tych fotonów. Na przykład mgławica Craba, jeden z najintensywniejszych obiektów będącym źródłem fotonów $\gamma$ wytwarza strumień jedynie $\sim$ 6 fotonów $\mathtt{m^{-2}}$ $\mathtt{rok^{-1}}$ na powierzchni ziemi o energii powyżej 1\,TeV \cite{IACT}. W celu badania kosmosu w tych zakresach energii potrzebna jest bardzo duża powierzchnia, na której można dokonywać detekcji, znacznie większa niż możliwa powierzchnia detektora w przestrzeni kosmicznej $\sim$ 1\,$\mathtt{m^{2}}$. Teleskopy czerenkowskie spełniają ten warunek poprzez detekcje promieniowania Czerenkowa powstającego poprzez oddziaływanie fotonu gamma z cząstkami atmosfery (głównie azotem). Ziemska atmosfera jest nieodłączną częścią procesu detekcji, spełnia rolę kalorymetru (czyli mierzy energię) oraz trakera (czyli mierzy kierunek przyjścia cząstki). \\
+Atmosfera ziemska absorbuje fotony gamma, więc bezpośrednim sposobem badania tych fotonów jest wysłanie misji kosmicznej. Jednakże strumień fotonów o najwyższych energiach jest bardzo mały, co wynika z mechanizmu produkcji tych fotonów. Ze względu na duże koszty wysyłania misji kosmicznych, możliwa powierzchnia detektorów mogących bezpośrednio obserwować promieniowanie gamma jest jedynie rzędu 1\,m$^2$.
+Na przykład mgławica Craba, jeden z najintensywniejszych obiektów będącym źródłem fotonów $\gamma$ wytwarza strumień jedynie $\sim$ 6 fotonów $\mathtt{m^{-2}}$ $\mathtt{rok^{-1}}$ na powierzchni ziemi o energii powyżej 1\,TeV \cite{IACT}.
+Zatem, dla badania emisji TeVowej źródeł kosmicznych potrzebna jest technika będąca w stanie osiągnąć znacznie większe powierzchnie detekcji. 
+
+Teleskopy czerenkowskie spełniają ten warunek poprzez detekcje promieniowania Czerenkowa powstającego poprzez oddziaływanie fotonu gamma z cząstkami atmosfery. Ziemska atmosfera jest nieodłączną częścią procesu detekcji, spełnia rolę kalorymetru (czyli mierzy energię) oraz trakera (czyli mierzy kierunek przyjścia cząstki). \\
 \subsection{Źródła promieniowanie Gamma}
-Źródłami wysokoenergetycznego promieniowania kosmicznego oraz promieniowania gamma są pozostałości po supernowych, szybko rotujące obiekty takie jak pulsary i gwiazdy neutronowe, aktywne jądra galaktyk, układy podwójne ze zwartym obiektem (gwiazdą neutronową lub czarną dziurą). Promieniowanie gamma powstaje także podczas akrecji materii w galaktykach aktywnych oraz układach podwójnych \cite{astro_particle}. 
+Znamy szeroką gamę różnych obiektów będących źródłami wysokoenergetycznego promieniowania gamma. Dotychczas emisja taka została wykryta z pozostałości po supernowych, szybko rotujących obiektach takich jak pulsary i gwiazdy neutronowe, aktywne jądra galaktyk, układy podwójne ze zwartym obiektem (gwiazdą neutronową lub czarną dziurą). Promieniowanie gamma powstaje także podczas akrecji materii w galaktykach aktywnych oraz układach podwójnych \cite{astro_particle}. 
 \subsection{Mechanizmy produkcji promieniowania Gamma}
 Produkcję fotonów gamma odbywa się przez następujące mechanizmy \cite{astro_particle}:
 \begin{itemize}
-\item {\bf{Promieniowanie synchrotronowe}}
-produkowane jest przez relatywistyczne naładowane cząstki (głównie elektrony) w polu magnetycznym w którym są hamowane, w wyniku czego produkują nietermiczne promieniowanie elektromagnetyczne. Moc promieniowania $P$ zależy do energii cząstki $E$ oraz natężenia pola magnetycznego $B$ w postaci $P \sim E^2 B^2$.
 \item {\bf{Bremsstrahlung} (Promieniowanie hamowania) }:
 kiedy naładowana cząstka jest hamowana w polu elektrycznym emituje fotony. Prawdopodobieństwo oddziaływania $\phi$ zależy od ładunku $z$, masy $m$ i energii $E$ uginanej cząstki oraz liczby atomowej $Z$ ośrodka: $\phi \sim \frac{z^2 Z^2 E}{m^2}$. Z powodu małej masy elektronów, głownie te cząstki biorą udział w procesie Bremsstrahlung. Widmo fotonów produkowanych w procesie jest ciągłe oraz maleje jak $1/E_{\gamma}$ dla wysokich energii.  
 \item {\bf{Odwrotny efekt Comptona}}:
-relatywistyczny elektron przyspieszany w źródle, oddziałuje z fotonami tła, w wyniku czego przekazuje im część energii. Wyróżniamy dwa reżimy: {\bf{Thomsona}}, gdy energia fotonu jest znacznie mniejsza niż energia elektronu oraz {\bf{Kleina-Nishiny}}, gdy energia fotonu staje się porównywalna z energią elektronu w układzie środka masy. 
+relatywistyczny elektron przyspieszany w źródle, oddziałuje z fotonami tła, w wyniku czego przekazuje im część energii. Wyróżniamy dwa zakresy: {\bf{Thomsona}}, gdy w układzie związanym z elektronem energia fotonu jest znacznie mniejsza od energii spoczynkowej elektronu oraz {\bf{Kleina-Nishiny}}, gdy energia fotonu staje się porównywalna z energią elektronu w układzie środka masy. 
 \item {\bf{Rozpad $\pi^0$}}: proton podczas przyspieszania może wyprodukować naładowane oraz neutralne piony w procesach oddziaływania proton-proton oraz proton-jądro:
 \begin{equation}
 p + \text{jądro} \rightarrow p' + \text{jądro'} + \pi^+ + \pi^- + \pi^0
@@ -120,7 +119,7 @@ Czas życia naładowanych pionów to 26\,ns, po których rozpadają się one na 
 Których energia w układzie środka masy wynosi 72.5\,MeV.
 \end{itemize}
 \subsection{Mechanizmy detekcji promieniowania Gamma}
-Procesy fizyce, na których opiera się detekcja fotonów $\gamma$ to \cite{astro_particle}:
+Procesy fizyczne, na których opiera się detekcja fotonów $\gamma$ to \cite{astro_particle}:
 \begin{itemize}
 \item {\bf{Efekt fotoelektryczny}}, gdy $E_{\gamma} \leq 100$\,keV
 \begin{equation}
@@ -137,8 +136,8 @@ Procesy fizyce, na których opiera się detekcja fotonów $\gamma$ to \cite{astr
 \end{itemize}
 Ten ostatni proces jest szczególnie ważny w opisie rozwoju kaskady wywołanej przez wysokoenergetyczny foton $\gamma$. Co zostanie opisane w następny punkcie.
 \subsection{Promieniowanie Czerenkowa i wielkie pęki atmosferyczne}
-Podstawą działania teleskopów czerenkowskich jest detekcja promieniowanie Czerenkowa powstającego w wielkim pęku atmosferycznym na skutek oddziaływania fotonu gamma z atomami tworzącymi atmosferę ziemską. 
-Foton gamma o bardzo wysokiej energii oddziałując z ziemską atmosferą tworzy parę elektron-pozyton. Następnie zachodzące naprzemiennie procesy Bremsstrahlung (promieniowanie hamowania) oraz produkcji par prowadzą do generacji {\bf{kaskady elektromagnetycznej}} w atmosferze. Długość radiacyjna $X_0$ dla wysokoenergetycznych fotonów w procesie Bremmstrahlung wynosi 37,15 $\mathtt{g} \cdot \mathtt{cm^{-2}}$ \cite{IACT}, co odpowiada 7/9 drogi swobodnej dla produkcji par $\mathtt{e^{\pm}}$. Te uproszenia są fundamentem dla łatwej analitycznej formuły opisania pęków atmosferycznych. Całkowita liczba elektronów, pozytonów i fotonów jest podwajana co $\ln(2) X_0$. Pierwotna energia fotonu gamma $E_0$ dzieli się równo między cząstki wtórne. Proces trwa, aż średnia energia elektronów produkowanych w kaskadzie osiągnie energią krytyczną $E_c = 84$\,MeV, a sam pęk na wysokości na jakiej to ma miejsce osiąga swoje maksimum. Dalej   dominują już straty jonizacyjne i kaskada powoli się wygasza \cite{IACT}. Maksymalna liczba cząstek wyprodukowanych w takiej kaskadzie dana jest zależnością $E_0 / E_c$. Schematyczny rozwój kaskady elektromagnetycznej przedstawiam na rysunku~\ref{fig:cas_em}. 
+Podstawą działania teleskopów czerenkowskich jest detekcja promieniowania Czerenkowa powstającego w wielkim pęku atmosferycznym na skutek oddziaływania fotonu gamma z atomami tworzącymi atmosferę ziemską. 
+Foton gamma o bardzo wysokiej energii oddziałując z ziemską atmosferą tworzy parę elektron-pozyton. Następnie zachodzące naprzemiennie procesy Bremsstrahlung (promieniowanie hamowania) oraz produkcji par prowadzą do generacji {\bf{kaskady elektromagnetycznej}} w atmosferze. Jednostka kaskadowa $X_0$ dla wysokoenergetycznych fotonów w procesie Bremmstrahlung wynosi 37,15 $\mathtt{g} \cdot \mathtt{cm^{-2}}$ \cite{IACT}, co odpowiada 7/9 drogi swobodnej dla produkcji par $\mathtt{e^{\pm}}$. Te uproszenia są fundamentem dla łatwej analitycznej formuły opisania pęków atmosferycznych. Całkowita liczba elektronów, pozytonów i fotonów jest podwajana co $\ln(2) X_0$. Pierwotna energia fotonu gamma $E_0$ dzieli się równo między cząstki wtórne. Proces trwa, aż średnia energia elektronów produkowanych w kaskadzie osiągnie energią krytyczną $E_c = 84$\,MeV, a sam pęk na wysokości na jakiej to ma miejsce osiąga swoje maksimum. Dalej   dominują już straty jonizacyjne i kaskada powoli się wygasza \cite{IACT}. Maksymalna liczba cząstek wyprodukowanych w takiej kaskadzie dana jest zależnością $E_0 / E_c$. Schematyczny rozwój kaskady elektromagnetycznej przedstawiam na rysunku~\ref{fig:cas_em}. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.28]{rysunki/kaskada_em.png}
@@ -174,7 +173,7 @@ Rożnice w morfologi pęku wraz z rekonstrukcją kierunku przyjścia pierwotnej 
 %zakres na osiach: Z(pionowa): 0 - 30.1\,km, X/Y: $\pm$ 5\,km wokół osi pęku, cięcia energii: 0.1\,MeV ($\mathtt{e^{-+}}$, fotony gamma) oraz 0.1\,GeV (miony i hadrony) \cite{monte_carlo}.}
 %\end{center}
 %\end{figure}
-Relatywistyczna cząstka poruszająca się w powietrzu szybciej niż prędkość światła w tyn ośrodku ($v > c/n_{air}$, gdzie $n_{air}$ jest współczynnikiem załamania dla powietrza) indukuje {\bf{promieniowanie Czerenkowa}}.
+Relatywistyczna cząstka poruszająca się w powietrzu szybciej niż prędkość światła w tym ośrodku ($v > c/n_{air}$, gdzie $n_{air}$ jest współczynnikiem załamania dla powietrza) indukuje {\bf{promieniowanie Czerenkowa}}.
 Wydajność produkcji światła Czerenkowa jest proporcjonalne do 1/$\lambda^2$ ($\lambda$ --- długość fali), dlatego spektrum powstałego promieniowania jest zdominowane przez emisje w zakresie niebieskim/UV, mające maksimum w okolicy 340\,nm. Krótsze długości fali są absorbowane (głównie przez ozon w atmosferze). Światło Czerenkowa produkowane jest przez cały czas rozwoju kaskady, maksimum emisji występuje, kiedy liczba wyprodukowanych cząstek w kaskadzie jest największa, na wysokość $\approx$ 10\,km dla fotonów gamma o pierwotnej energii od 100\,GeV do 1\,TeV \cite{IACT}. Każda cząstka produkuje światło Czerenkowa o stałym kącie $\theta_C$ do kierunku ruchu, co wyrażamy zależnością:
 \begin{equation}
 \cos (\theta_C) = \frac{c}{v n_{air}}
@@ -184,7 +183,7 @@ Kąt Czerenkowa wynosi $\approx \ang{1.3}$ na poziomie morza. \\
 Fotony Czerenkowskie z pęku obserwowane są jako krótkie impulsy światła o długości kilku nanosekund, co wymaga elektroniki która jest w stanie także próbkować sygnały z takimi częstotliwościami. 
 
 %do tego momentu Julian sprawdzil tekst 
-Cząstki w kaskadzie elektromagnetycznej podlegają także wielokrotnemu rozpraszaniu wywołanego przez oddziaływanie Coulomba, co prowadzi do rozdzielenia ich kierunku propagacji w małym zakresie kątowym generując rozkład poprzeczny pęku. W wyniku powstaje tzw. \textsl{light pool} o promieniu $\approx$ 130\,m oraz gęstości $\approx$ 100 fotonów $\mathtt{m^{-2}}$ dla fotonów gamma o energii 1\,TeV \cite{IACT}, co jest pokazane na rysunku \ref{fig:lightpool}. Wielkość \textsl{light pool} mówi nam o powierzchni detekcji promieniowania. Dla detektorów satelitarnych powierzchnia detekcji to mniej więcej rozmiar detektora. Natomiast dla teleskopów Czerenkowskich właśnie rozmiar \textsl{light pool} mówi nam jaka jest powierzchnia detekcji, która jest znacznie większa niż rozmiar teleskopu. Rozmiar teleskopu natomiast mówi nam jakie cząstki o jak najniższych energiach będziemy w stanie zaobserwować, bo im energia niższa tym mniej światła na 1m$^2$, czyli do ich detekcji potrzebna jest większa powierzchnia teleskopu. 
+Cząstki w kaskadzie elektromagnetycznej podlegają także wielokrotnemu rozpraszaniu wywołanego przez oddziaływanie Coulomba, co prowadzi do rozdzielenia ich kierunku propagacji w małym zakresie kątowym generując rozkład poprzeczny pęku. W wyniku powstaje tzw. \textsl{light pool} o promieniu $\approx$ 130\,m oraz gęstości $\approx$ 100 fotonów $\mathtt{m^{-2}}$ dla fotonów gamma o energii 1\,TeV \cite{IACT}, co jest pokazane na rysunku \ref{fig:lightpool}. Wielkość \textsl{light pool} mówi nam o powierzchni detekcji promieniowania. Dla detektorów satelitarnych powierzchnia detekcji to mniej więcej rozmiar detektora. Natomiast dla teleskopów Czerenkowskich właśnie rozmiar \textsl{light pool} mówi nam jaka jest powierzchnia detekcji, która jest znacznie większa niż rozmiar teleskopu. Rozmiar teleskopu określa natomiast próg energetyczny teleskopów, czyli minimalną energię, która zapewni wystarczającą ilość światła czerenkowskiego do efektywnej detekcji i analizy pęku.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.5]{obrazy_teoria/lightpool.png}
@@ -193,10 +192,10 @@ Cząstki w kaskadzie elektromagnetycznej podlegają także wielokrotnemu rozpras
 \end{figure}
 \newpage
 \subsection{Technika IACT (Imaging Atmospheric Cherenkov Telescope)}
-Do detekcji fotonów gamma o bardzo wysokich energiach najczęściej używana jest technika IACT, czyli teleskopy Czerenkowskie z kamerą. Technika ta polega na zbieraniu światła Czerenkowa produkowanego w kaskadzie na lustrze teleskopu, które po odbiciu od lustra jest rejestrowane przez kamerę. Kamera składa się z wielu fotopowielaczy (\textsl{photomultiplier, {\bf{PMT}}}), które zazwyczaj charakteryzują się sprawnością kwantową 30\% \cite{particle_de_angelis}. Średnica kamery jest rzędu 1\,m. Sygnał z kamery jest transmitowany w postaci analogowej do systemu wyzwalania (ang. \textsl{trigger systems}). Przypadki, które wyzwolą sygnał są wysyłane do systemu zbierania danych, który zazwyczaj operuje z częstotliwości kilkuset Hz. Typowa rozdzielczość czasu przyjścia impulsu do fotopowielacza jest mniejsza niż 1\,ns, a czas rejestracji kaskady to kilka nanosekund (2-3\,ns). Sygnał całkowity jest proporcjonalny do energii cząstki, która wywołała kaskadę.
+Do detekcji fotonów gamma o bardzo wysokich energiach najczęściej używana jest technika IACT, czyli teleskopy Czerenkowskie z kamerą. Technika ta polega na zbieraniu światła Czerenkowa produkowanego w kaskadzie na lustrze teleskopu, które po odbiciu od lustra jest rejestrowane przez kamerę na której otrzymujemy obraz pęku. Kamera składa się z wielu fotopowielaczy (\textsl{photomultiplier, {\bf{PMT}}}), które zazwyczaj charakteryzują się sprawnością kwantową 30\% \cite{particle_de_angelis}. Średnica kamery jest rzędu 1\,m. Sygnał z kamery jest transmitowany w postaci analogowej do systemu wyzwalania (ang. \textsl{trigger systems}). Przypadki, które wyzwolą sygnał są wysyłane do systemu zbierania danych, który zazwyczaj operuje z częstotliwości kilkuset Hz. Typowa rozdzielczość czasu przyjścia impulsu do fotopowielacza jest mniejsza niż 1\,ns, a czas rejestracji kaskady to kilka nanosekund (2-3\,ns). Sygnał całkowity jest proporcjonalny do energii cząstki, która wywołała kaskadę.
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.12]{obrazy_teoria/iact.pdf}
+\includegraphics[scale=0.12]{obrazy_teoria/iact2.pdf}
 \caption{Schemat działania teleskopu Czerenkowskiego.}
 \label{fig:kamera}
 \end{figure}
@@ -211,28 +210,28 @@ Obrazy, które obserwujemy na kamerze pochodzą od fotonów gamma, hadronów (kt
 \end{figure}
 Większość obecnej techniki identyfikacji kaskady polega na metodzie opracowanej przez Michaela Hillasa w latach 80-tych XX wieku poprzez wyznaczenie tzw. parametrów Hillasa \cite{hilas}. \\
 Struktura czasowa przyjścia impulsów światła Czerenkowa również jest używana w odróżnieniu obrazów wyprodukowanych przez fotony gamma i hadrony. \\
-Do obserwacje pęków zazwyczaj używany jest tryb obserwacji gdzie każdy pęk jest widziany przez co najmniej dwa teleskopy, jest to tzw. \textsl{tryb stereoskopowy}. Zapewnia to lepszą możliwość odrzucanie tła, lepszą rozdzielczość kątową oraz lepszą rozdzielczość energetyczną niż jeden teleskop.
+Do obserwacje pęków zazwyczaj używany jest tryb obserwacji gdzie każdy pęk jest widziany przez co najmniej dwa teleskopy, jest to tzw. \textsl{tryb stereoskopowy}. Zapewnia to trójwymiarową rekonstrukcje pęku, dzięki czemu istnieje lepsza możliwość odrzucanie tła, poprawia się rozdzielczość kątową oraz energetyczną.
 
 W tym momencie istnieją trzy główne eksperymenty, które używają techniki IACT do detekcji fotonów bardzo wysokich energii, to H.E.S.S, MAGIC i VERITAS, pierwszy znajduje się na półkuli południowej, natomiast dwa ostatnie na półkuli północnej \cite{particle_de_angelis}. 
 \begin{itemize}
-\item {\bf{H.E.S.S}} \cite{hess} znajduje się w Namibii, w skład obserwatorium wchodzą 4 teleskopy o średnicy 12\,m, pracujące od 2003 roku. Piąty teleskop o średnicy około 25\,m jest ulokowany w centrum od 2012 roku.
+\item {\bf{H.E.S.S}} \cite{hess} znajduje się w Namibii, w skład obserwatorium wchodzą 4 teleskopy o średnicy 12\,m, pracujące od 2003 roku. Piąty teleskop o średnicy około 28\,m jest ulokowany w centrum od 2012 roku.
 \item {\bf{MAGIC}} \cite{magic} znajduje się na wyspach Kanaryjskich na wyspie La Palma. Jest to system dwóch parabolicznych teleskopów, każdy o średnicy 17\,m oraz o powierzchni 236\,$\mathtt{m^2}$. Pracuje od 2004 roku.
 \item {\bf{VERITAS}} \cite{veritas} znajduje się w Stanach Zjednoczonych w Arizonie, składa się z czterech teleskopów o średnicy 12\,m. Działa od 2007 roku.
 \end{itemize}
-Typowa czułość teleskopów H.E.S.S MAGIC i VERITAS jest taka, że źródło o  strumieniu światła mniejszym niż 1\% emisji z mgławicy Crab będzie wykryte na poziomie znaczności statystycznej 5$\sigma$ podczas obserwacji trwającej 50 godzin \cite{particle_de_angelis}. 
+Typowa czułość teleskopów H.E.S.S, MAGIC i VERITAS jest taka, że źródło o  strumieniu światła rzędu 1\% emisji z mgławicy Crab będzie wykryte na poziomie znaczności statystycznej 5$\sigma$ podczas obserwacji trwającej 50 godzin \cite{particle_de_angelis}. 
 \newpage
 \subsection{CTA}
 Obserwatorium {\bf{Cherenkov Telescope Array}} jest następną generacją teleskopów do obserwacji promieniowania gamma bardzo wysokich energii. Oczekuje się, że czułość teleskopów CTA będzie o rząd wielkości większa niż czułość obecnych teleskopów. 
-Zespół dziesiątek teleskopów będzie obserwował kaskady elektromagnetyczne zainicjowane przez promieniowanie gamma na dużej większej powierzchni niż obecnie, zwiększając efektywność oraz czułość teleskopów poprzez obserwacje kaskady przez większą ilość teleskopów. Dzięki temu poprawiona będzie rozdzielczość kątowa oraz efektywność eliminacji tła od hadronów.
+Zespół dziesiątek teleskopów będzie obserwował kaskady elektromagnetyczne zainicjowane przez promieniowanie gamma na dużo większej powierzchni niż obecnie, zwiększając efektywność oraz czułość teleskopów poprzez obserwacje kaskady przez większą ilość teleskopów. Dzięki temu poprawiona będzie rozdzielczość kątowa oraz efektywność eliminacji tła od hadronów.
 
 Obserwatorium będzie znajdować się na dwóch półkulach w Hiszpanii i w Chile. W skład obserwatorium będą wchodzić trzy typy teleskopów o różnej średnicy $d$ lustra:
 \begin{itemize}
-\item {\bf{Mały} ang. \textsl{Small-Sized Telescope (SST)}} o średnicy $d = 4$\,m. Ma być ich 70, przeznaczonych do detekcji pęków zapoczątkowanych przez fotony o energii od 5\,TeV do 300\,TeV.
-\item {\bf{Średni} ang. \textsl{Medium-Sized Telescope (MST)}} o średnicy $d = 11.5$\,m. Ma być ich 25 na półkuli południowej i 15 na półkuli północnej. Przewidywany zakres energii to 150\,GeV -- 5\,TeV.
-\item {\bf{Duży} ang. \textsl{Large-Sized Telescope (LST)}} mają być 4 zarówno na półkuli południowej jak i północnej, $d = 23\,m$. Inauguracja pierwszego teleskopu LST miała miejsce w październiku 2018 roku. Przewidywany zakres energii to 20\,GeV -- 150\,GeV.
+\item {\bf{Mały} ang. \textsl{Small-Sized Telescope (SST)}} o średnicy $d = 4$\,m. Ma być ich 70, przeznaczonych do detekcji pęków zapoczątkowanych przez fotony o energii od $\sim$ 5\,TeV do 300\,TeV.
+\item {\bf{Średni} ang. \textsl{Medium-Sized Telescope (MST)}} o średnicy $d = 11.5$\,m. Ma być ich 25 na półkuli południowej i 15 na półkuli północnej. Przewidywany zakres energii to $\sim$ 150\,GeV -- 5\,TeV.
+\item {\bf{Duży} ang. \textsl{Large-Sized Telescope (LST)}} mają być 4 zarówno na półkuli południowej jak i północnej, $d = 23\,m$. Inauguracja pierwszego teleskopu LST miała miejsce w październiku 2018 roku. Przewidywany zakres energii to $\sim$ 20\,GeV -- 150\,GeV.
 \end{itemize}
 Na półkuli południowej w Chile będą wszystkie 3 typy teleskopów,
- aby pokryć cały zakres energii jaki będzie celem CTA, czyli od 20\,GeV do 300\,TeV \cite{cta_web}.
+ aby pokryć cały zakres energii jaki będzie celem CTA, czyli od 20\,GeV do 300\,TeV \cite{cta-perform}.
 Na wykresie \ref{fig:cta_perform} pokazuje {\bf{różniczkową czułość}} \footnote{ {\bf{Różniczkowa czułość}} jest zdefiniowana jako minimalny strumień wymagany przez CTA do detekcji na poziomie 5 odchyleń standardowych źródła punktowego, obliczonego w nienakładających się logarytmicznych binach energii} teleskopów wchodzących w skład CTA wraz z zaznaczonym zakresem energii, do którego będą przeznaczone. 
 Natomiast na półkuli północnej w obserwatorium Roque de los Muchachos będą znajdować się twa typy teleskopów: duży i średni.
 \begin{figure}[H] 
@@ -243,41 +242,39 @@ Natomiast na półkuli północnej w obserwatorium Roque de los Muchachos będą
 \end{figure}
 
 \subsection{Duży teleskop (\textsl{Large-Sized Telescope})}
-Ponieważ praca ta dotyczy dużego teleskopu, to opiszę go tutaj dokładniej. 
-
-W skład projektu LST wchodzi ponad 100 naukowców z dziesięciu krajów: Brazylii, Chorwacji, Francji, Niemiec, Indii, Włoch, Japonii, Polski, Hiszpanii i Szwecji. Ponieważ fotony gamma o niskich energiach wytwarzają niewielką ilość światła Czerenkowa, do ich detekcji wymagane są teleskopy z dużymi zwierciadłami. Cztery teleskopy będą zarówno na półkuli południowej jak i północnej. Celem dużych teleskopu będzie pokrycie zakresu o niskiej energii między 20 a 150 GeV. Teleskopy LST będą również miały bardzo dobrą czułość aż do energii kilku TeV, która będzie jednak bardziej efektywnie pokrywana przez średnie teleskopy (MST). \\
+W skład projektu LST wchodzi ponad 100 naukowców z dziesięciu krajów: Brazylii, Chorwacji, Francji, Niemiec, Indii, Włoch, Japonii, Polski, Hiszpanii i Szwecji. Ponieważ fotony gamma o niskich energiach wytwarzają niewielką ilość światła Czerenkowa, do ich detekcji wymagane są teleskopy z dużymi zwierciadłami. Cztery teleskopy będą zarówno na półkuli południowej jak i północnej. Celem LST będzie pokrycie zakresu o niskiej energii między 20 a 150 GeV. Teleskopy LST będą również miały bardzo dobrą czułość aż do energii kilku TeV, który to zakres będzie jednak bardziej efektywnie pokrywany przez średnie teleskopy (MST). \\
 Lustro LST ma kształt paraboliczny o średnicy 23\,m, powierzchnia odbijająca wynosi $\sim$ 400 m$^2$, gdzie zbierane i skupiane jest światło Czerenkowa w kierunku kamery, tam fotopowielacze przetwarzają światło w sygnały elektryczne, które są przetwarzane przez dedykowaną elektronikę. \\
-Kamera LST składa się z 1855 pikseli (PMT) podzielonych na 265 modułów. Fotopowielacze charakteryzują się  wydajności kwantową 42\% w piku, przekształcają one światło na sygnały elektryczne. Każdy piksel sprężony jest z elektroniką odczytu, która oparta jest o chip Domino Ring Sampler Version 4 (DRS4) \cite{cta_web}, który zostanie dokładnie opisany w następnym rozdziale. Konstrukcja pierwszego teleskopu LST (pokazanego na rysunku \ref{fig:lst}) zakończyła się 10 października. Pierwsze testowe dane z pęków były zbierane 14 grudnia 2018 roku oraz 11 lutego 2019 roku.
+Kamera LST składa się z 1855 pikseli (PMT) podzielonych na 265 modułów. Fotopowielacze charakteryzują się  wydajności kwantową 42\% w piku, przekształcają one światło na sygnały elektryczne. Każdy piksel sprężony jest z elektroniką odczytu, która oparta jest o chip Domino Ring Sampler Version 4 (DRS4) \cite{cta-web-lst}, który zostanie dokładnie opisany w następnym rozdziale. Konstrukcja pierwszego teleskopu LST (pokazanego na rysunku \ref{fig:lst}) zakończyła się 10 października 2018. Pierwsze testowe dane z pęków były zbierane 14 grudnia 2018 roku oraz 11 lutego 2019 roku.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.25]{obrazy_teoria/lst.pdf}
-\caption{Pierwszy teleskop LST w obserwatorium Roque de los Muchachos. Zdjęcie: Sarah A.Brands.}
+\caption{Pierwszy teleskop LST w obserwatorium Roque de los Muchachos. Zdjęcie: Sarah A. Brands.}
 \label{fig:lst}
 \end{figure}
 \subsection{Analiza danych IACT}
-Celem analizy danych jest identyfikacja rodzaju cząstki wytwarzającej  kaskadę, której obraz rejestrujemy, wyznaczenie jej kierunku przyjścia oraz energii. Następnie te informacje są używane do obliczenie znaczności statystycznej badanego obszaru nieba (czy znajduje się tam źródło fotonów gamma), wyznaczenia: rozkładu sygnału na badanym obszarze, strumienia fotonów gamma oraz widma energetycznego. 
+Celem analizy danych z teleskopów czerenkowskich jest identyfikacja rodzaju cząstki wytwarzającej  kaskadę, której obraz rejestrujemy, wyznaczenie jej kierunku przyjścia oraz energii. Następnie te informacje są używane do obliczenia znaczności statystycznej badanego obszaru nieba (czy znajduje się tam źródło fotonów gamma), wyznaczenia: rozkładu sygnału na badanym obszarze, strumienia fotonów gamma oraz widma energetycznego. 
 
 Surowy sygnał z teleskopów czerenkowskich pochodzący z systemu akwizycji danych zawiera cyfrowo próbkowany ślad sygnału dla każdego fotopowielacza wchodzącego w skład kamery. Wzrost sygnału pochodzi od fotonów czerenkowa rejestrowanych przez kamerę, co pokazane jest na rysunku \ref{fig:signal_theory}.
- Maksimum tego sygnału w przybliżeniu jest czasem przyjścia impulsu.
+Maksimum tego sygnału jest miernikiem czasu przyjścia impulsu.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.45]{obrazy_teoria/wykresy/sygnal_teoria.pdf}
-\caption{Typowy przebieg sygnału pochodzący of fotonów Czerenkowa, sygnał w zaznaczonym czerwonym obszarze jest całkowany.}
+\caption{Typowy przebieg sygnału pochodzący od fotonów Czerenkowa, sygnał w zaznaczonym czerwonym obszarze jest całkowany.}
 \label{fig:signal_theory}
 \end{figure}
 
-Pierwszym krokiem w analizie sygnału jest zmierzenie i odjęcie linii bazowej, czyli wartości sygnału podczas nieobecności światła Czerenkowa. W celu uzyskania sygnału od kaskady całkuje się obszar pod krzywa używając algorytmu okna przesuwnego (ang. \textsl{sliding window}) poprzez poszukiwanie maksymalnej wartości sumy ustalonej liczby próbek sygnału.
+Pierwszym krokiem w analizie sygnału jest zmierzenie i odjęcie linii bazowej, czyli wartości sygnału podczas nieobecności światła Czerenkowa. W celu uzyskania sygnału od kaskady całkuje się obszar pod krzywą używając algorytmu okna przesuwnego (ang. \textsl{sliding window}) poprzez poszukiwanie maksymalnej wartości sumy ustalonej liczby próbek sygnału.
 
-Praca ta koncentruje się głównie na tym pierwszym etapie obróbki danych dotyczącym linii bazowej. Celem mojej pracy jest redukcja szumów w elektronice oraz poprawa rozdzielczość czasowej systemu odczytu sygnału teleskopu LST o nazwie Dragon opartego o chip DRS4.
+Praca ta koncentruje się głównie na tym pierwszym etapie obróbki danych dotyczącym analizy przebiegów sygnałów obserwowanych w pikselach kamery LST. Celem mojej pracy jest redukcja szumów w elektronice oraz poprawa rozdzielczości czasowej systemu odczytu sygnału teleskopu LST o nazwie Dragon opartego o chip DRS4.
 
 \newpage
 \section{System odczytu sygnału teleskopu LST}
-Teleskop LST używa systemu odczytu sygnału o nazwie \textsl{Dragon}, który został stworzony w Institude of Cosmic Ray Research (ICRR) Uniwersytetu Tokijskiego. System oparty jest na chipie DRS4, który wymaga szeregu korekcji programowalnych w celu optymalnej pracy. Zaletą chipu DRS4 jest duża szybkość próbkowania, dzięki której możliwe jest lepsza redukcja szumów od fotonów tła nocnego nieba (ang. \textsl{night sky background}, NSB).
+Teleskop LST używa systemu odczytu sygnału o nazwie \textsl{Dragon}, który został stworzony w Institude of Cosmic Ray Research (ICRR) Uniwersytetu Tokijskiego. System oparty jest na chipie DRS4, który wymaga szeregu korekcji programowalnych w celu optymalnej pracy. Zaletą chipu DRS4 jest duża szybkość próbkowania, dzięki której możliwa jest lepsza redukcja szumów od fotonów tła nocnego nieba (ang. \textsl{night sky background}, NSB).
 %Teleskop LST  ma lustro o średnicy 23 metrów, a kamera LST składa się z 1855 fotopowielaczy (PMT). 
-Ze względu na dużą powierzchnie lustra, fotony NSB są rejestrowane z częstotliwością kilkuset MHz na piksel. W celu redukcji zanieczyszczenia sygnału przez NSB oraz poprawy stosunku sygnału do szumu, konieczne jest próbkowanie  sygnału z szybkością $\sim$ 1 GHz i zmniejszenie okna całkowania sygnału do kilku ns \cite{dragon_lst}. Szybkie próbkowanie umożliwia lepszą wyznaczenie parametrów czasowych w analizie, co polepsza parametry eksploatacyjne teleskopów. \\
-W tym rozdziale opisuje system odczytu sygnału używany przez LST oraz zasadę działania chipu DRS4. Przedstawiam jakie korekcje należy używać w celu poprawy sygnału (redukcji szumów) oraz poprawy rozdzielczość czasowej. 
+Ze względu na dużą powierzchnie lustra, fotony NSB są rejestrowane z częstotliwością kilkuset MHz na piksel. W celu redukcji zanieczyszczenia sygnału przez NSB oraz poprawy stosunku sygnału do szumu, konieczne jest próbkowanie  sygnału z szybkością $\sim$ 1 GHz i zmniejszenie okna całkowania sygnału do kilku ns \cite{dragon_lst}. Szybkie próbkowanie umożliwia lepsze wyznaczenie parametrów czasowych w analizie, co polepsza parametry eksploatacyjne teleskopów \cite{time_corr}. \\
+W tym rozdziale opisuje system odczytu sygnału używany przez LST oraz zasadę działania chipu DRS4. Przedstawiam jakie korekcje należy używać w celu poprawy sygnału (redukcji szumów) oraz poprawy rozdzielczości czasowej. 
 \subsection{System Dragon}
-Kamera LST składa się z 265 modułów, a każdy moduł składa się z 7 pikseli, co daje nam w sumie 1855 pikseli (PMT), które tworzą kamerę LST, co było już wspomniane w poprzednim rozdziale. Jeden moduł (pokazany na rysunku \ref{fig:drs4}) składa się m.in. z chipu DRS4 będącego sercem układu odczytu sygnału, 7 fotopowielaczy, przedwzmacniacza, zasilacza.
+Kamera LST składa się z 265 modułów, a każdy moduł składa się z 7 pikseli, co daje nam w sumie 1855 pikseli (PMT), które tworzą kamerę LST. Jeden moduł (pokazany na rysunku \ref{fig:drs4}) składa się m.in. "stożków Winstona (ang. \textsl{Winston Cone}) umieszczonych na każdym fotopowielaczu, które niwelują straty światła padającego pomiędzy fotokatodami poszczególnych pikseli, z 8 chipów DRS4 będących sercem układu odczytu sygnału, 7 fotopowielaczy, przedwzmacniacza, zasilacza.
 Z każdego piksela sygnał jest odczytywany za pomocą czterech kanałów chipu DRS4. W każdym module, sygnał z przedwzmacniacza jest dzielony na trzy linie: linię wysokiego wzmocnienia, linię niskiego wzmocnienia i linię wyzwalania (ang. \textsl{trigger}). Sygnały o wysokim wzmocnieniu (ang. \textsl{high gain}, HG) i niskim wzmocnieniu (ang. \textsl{low gain}, LG) są próbkowane przez układ DRS4 z częstotliwością 1\,GHz. Gdy następuje wyzwolenie sygnału, przebieg sygnału (ang. \textsl{waveform}) jest digitalizowany przez zewnętrzy przetwornik analogowo-cyfrowy (ADC) z częstotliwością $\sim$ 33\,MHz. Sygnał w postaci cyfrowej jest przesyłany do bramek programowalnych (FPGA), następnie do serwera, gdzie dane są przechowywane \cite{dragon_lst}. 
 \begin{figure}[H] 
 \centering
@@ -290,14 +287,14 @@ Z każdego piksela sygnał jest odczytywany za pomocą czterech kanałów chipu 
 Chip DRS4 (Domino Ring Sampler w wersji 4) został stworzony w Paul Scherrer Institute (PSI) w Szwajcarii do eksperymentu MEG \cite{meg_experiment}.
 Znajduje on także zastosowanie w astronomii gamma, używają go eksperymenty MAGIC \cite{magic_hardware} i FACT \cite{fact}, a także ma być używany w planowanym eksperymencie TAIGA \cite{tunka}.
 
-Układ DRS4 ma dziewięć kanałów wejściowych o szerokości pasma 950\,MHz, a każdy kanał ma 1024 kondensatorów pamięci, których przełączniki zapisu są obsługiwane przez pierścień zwany \textsl{domino wave circuit}. Prędkość próbkowania można zmieniać w zakresie 700\,MHz do 5\,GHz za pomocą zegara referencyjnego z FPGA. Osiem chipów DRS4 na moduł wchodzi w skład układu odczytu sygnału, a każdy chip jest połączony z dwoma kanałami fotopowielacza. Możliwe jest kaskadowe połączenie do ośmiu kanałów DRS4 w celu uzyskania głębszego próbkowania sygnału, czyli przechowywania dłuższej historii obserwowanego przebiegu sygnału. W systemie odczytu, używanym przez teleskop LST cztery kanały DRS4 są kaskadowane, co oznacza, że sygnał każdego wejścia jest próbkowany przez 4096 kondensatorów, co daje głębokość próbkowania $\sim 4 \mathtt{\mu}$s w przypadku próbkowania z częstotliwością 1\,GHz \cite{dragon_lst}.
+Układ DRS4 ma dziewięć kanałów wejściowych o szerokości pasma 950\,MHz. Prędkość próbkowania można zmieniać w zakresie 700\,MHz do 5\,GHz za pomocą zegara referencyjnego z FPGA. Osiem chipów DRS4 na moduł wchodzi w skład układu odczytu sygnału, a każdy chip jest połączony z dwoma pikselami. Możliwe jest kaskadowe połączenie do ośmiu kanałów DRS4 w celu uzyskania głębszego próbkowania sygnału, czyli przechowywania dłuższej historii obserwowanego przebiegu sygnału. W systemie odczytu, używanym przez teleskop LST cztery kanały DRS4 są kaskadowane, co oznacza, że sygnał każdego wejścia jest próbkowany przez 4096 kondensatorów, co daje głębokość próbkowania $\sim 4 \mathtt{\mu}$s w przypadku próbkowania z częstotliwością 1\,GHz \cite{dragon_lst}.
 
-Zasada działania chipu DRS4 jest następująco: sygnał wychodzący z systemu odczytu jest sekwencyjne połączony z pierścieniem (układem) 1024 kondensatorów poprzez szybkie przełączniki zsynchronizowane z zegarem zewnętrznym. Na każdym z kondensatorów jest napięcie wytworzone przez sygnał analogowy z danego piksela w funkcji czasu, który jest proporcjonalny do okresu zegara sterującego przełącznikiem (tzw. fala Domino). Kondensatory są nadpisywane po 1024 cyklach zegara. Po wyzwoleniu sygnału fala Domino zatrzymuje się i ładunek zostaje zapisany na 1024 kondensatorach, następnie 40 kondensatorów(w regionie zainteresowania ang. \textsl{region of interest}) jest digitalizowany przez przetwornik analogowo-cyfrowy (ADC). Sygnał ten jest przechowywany przez system akwizycji danych (DAQ) \cite{drs4_psi}. 
+Zasada działania chipu DRS4 jest następująca: każdy kanał ma 1024 kondensatorów pamięci, których przełączniki zapisu są obsługiwane przez pierścień zwany \textsl{domino wave circuit}. Sygnał wychodzący z systemu odczytu jest sekwencyjne połączony z pierścieniem (układem) 1024 kondensatorów poprzez szybkie przełączniki zsynchronizowane z zegarem zewnętrznym. Na każdym z kondensatorów jest napięcie wytworzone przez sygnał analogowy z danego piksela w funkcji czasu, który jest proporcjonalny do okresu zegara sterującego przełącznikiem (tzw. fala Domino). W przypadku próbkowania pojedynczym kanałem DRS4: kondensatory są nadpisywane po 1024 cyklach zegara. Po wyzwoleniu sygnału fala Domino zatrzymuje się i ładunek zostaje zapisany na 1024 kondensatorach, następnie wybraną ilość kondensatorów w regionie zainteresowania (ang. \textsl{region of interest}) jest digitalizowany przez przetwornik analogowo-cyfrowy (ADC). W standardowym trybie obserwacji system odczytu Dragon zapisuje 2 x 40 próbek każdego piksela (z wysokim i niskim wzmocnieniem sygnału). Liczba ta jest motywowana rozwojem czasowym pęku oraz rozrzutem w czasie użytych układów elektronicznych. Sygnał ten jest przechowywany przez system akwizycji danych (DAQ) \cite{drs4_psi}. 
 
 Chip DRS4 wymaga szeregu korekcji programowalnych w celu optymalnej pracy, które zostaną przedstawione w następującej części rozdziału.
 \subsection{Procedury korekcji w DRS4}
 \subsubsection{Podstawowa korekcja linii bazowej}
-Każdy kondensator w chipie DRS4 ma swoją własną wartość szumów. Na rysunku pokazana jest średnia wartość bazową oraz jej odchylenie standardowe $\sigma$ (czyli drugi moment centralny) w funkcji absolutnej pozycji w pierścieniu domino \ref{fig:baseline_cap}. Różna wartość bazowa danego kondensatora spowodowana jest fizyczną różnicą magazynowania ładunku w każdym kondensatorze, która jest większa niż jego odchylenie standardowe. Wyraźny skok na pozycji 512 spowodowany jest wewnętrzną konstrukcją chipu DRS4. Wartość bazowa każdego kondensatora musi być skalibrowana w celu osiągnięcia niskich wartości szumów elektroniki. W tym celu stosuje się prostą kalibracje polegającą na obliczeniu średniej wartości bazowej (szumu) w funkcji numeru kondensatora z danych pochodzących z pomiaru kalibracyjnego linii bazowej (tzw. \textsl{pedestal run}). Ta obliczona średnia wartość bazowa może być następnie odjęta z sygnału dla danego kondensatora \cite{drs4_magic}. 
+Każdy kondensator w chipie DRS4 ma swoją własną wartość szumów. Na rysunku \ref{fig:baseline_cap} pokazana jest średnia wartość bazowa oraz jej odchylenie standardowe $\sigma$ (czyli drugi moment centralny) w funkcji absolutnej pozycji w pierścieniu domino . Różna wartość bazowa danego kondensatora spowodowana jest fizyczną różnicą magazynowania ładunku w każdym kondensatorze, która jest większa niż jego odchylenie standardowe. Wyraźny skok na pozycji 512 spowodowany jest wewnętrzną konstrukcją chipu DRS4. Wartość bazowa każdego kondensatora musi być skalibrowana w celu osiągnięcia niskich wartości szumów elektroniki. W tym celu stosuje się prostą kalibracje polegającą na obliczeniu średniej wartości bazowej (szumu) w funkcji numeru kondensatora z danych pochodzących z pomiaru kalibracyjnego linii bazowej (tzw. \textsl{pedestal run}). Ta obliczona średnia wartość bazowa może być następnie odjęta z sygnału dla danego kondensatora \cite{drs4_magic}. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.27]{wykresy/drs4/pedestal_teoria2.pdf}
@@ -305,7 +302,7 @@ Każdy kondensator w chipie DRS4 ma swoją własną wartość szumów. Na rysunk
 \label{fig:baseline_cap}
 \end{figure}
 \subsubsection{Korekcja czasowa linii bazowej dla przypadków z losowym czasem przyjścia}
-Nawet po zastosowaniu kalibracji opisanych w poprzedniej sekcji, linia bazowa nie jest w pełni stabilna dla wyzwalacza z losowym czasem przyjścia. Jest to spowodowane zależność linii bazowej od ostatniego czasu odczytu danego kondensatora. Może się zdarzyć, że dany kondensator jest odczytywany w krótkim odstępie czasu, wtedy dochodzi do skoku sygnału na tym kondensatorze \cite{drs4_magic}. Według Stefana Ritta, który jest autorem DRS4, przeskoki te prawdopodobnie spowodowane są rozgrzewaniem wzmacniaczy używanych do odczytania sygnału z poszczególnych kondensatorów. Przykładowe przebiegi sygnału kiedy następuje skok sygnału przedstawiony jest na rysunku \ref{fig:dt_corr}. 
+Nawet po zastosowaniu kalibracji opisanych w poprzedniej sekcji, linia bazowa nie jest w pełni stabilna dla wyzwalacza z losowym czasem przyjścia. Jest to spowodowane zależnością linii bazowej od ostatniego czasu odczytu danego kondensatora. Może się zdarzyć, że dany kondensator jest odczytywany w krótkim odstępie czasu, wtedy dochodzi do skoku sygnału na tym kondensatorze \cite{drs4_magic}. Według Stefana Ritta, który jest autorem DRS4, przeskoki te prawdopodobnie spowodowane są rozgrzewaniem wzmacniaczy używanych do odczytania sygnału z poszczególnych kondensatorów. Przykładowe przebiegi sygnału kiedy następuje skok sygnału przedstawiony jest na rysunku \ref{fig:dt_corr}. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.5]{wykresy/drs4/dt_corr_waveform.pdf}
@@ -315,9 +312,9 @@ Nawet po zastosowaniu kalibracji opisanych w poprzedniej sekcji, linia bazowa ni
 W celu korekcji sygnału używa się funkcji potęgowej w postaci:
 \begin{equation}
 \label{eqn:power_law}
-y = A \cdot dt^B + C
+y = A \cdot \delta t^B + C
 \end{equation}
-gdzie: $dt$ --- czas pomiędzy odczytem danego kondensatora; $A, B, C$ --- współczynniki wyznaczone eksperymentalnie. 
+gdzie: $\delta t$ --- czas pomiędzy odczytem danego kondensatora; $A, B, C$ --- współczynniki wyznaczone eksperymentalnie. 
 Współczynniki te zależą głównie od temperatury w jakiej pracuje elektronika. Na rysunku \ref{fig:dt_corr_fit} pokazana jest funkcja potęgowa dopasowana do danych w różnych temperaturach, dane zostały zebrane w laboratorium ICRR. Jednym z moich zadań w tej pracy jest sprawdzenie jakie są współczynniki w układzie działającym w LST, oraz czy są one różne dla różnych pikseli. 
 \begin{figure}[H] 
 \centering
@@ -336,52 +333,53 @@ Na rysunku \ref{fig:spike_corr} pokazany jest przebieg sygnału, gdzie występuj
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.55]{wykresy/drs4/spikes_teoria.pdf}
-\caption{Przebieg sygnału w którym wystąpił szum niegausowski typu A (lewy) i B(prawy). Wykres od Takayuki Saito.}
+\caption{Przebieg sygnału w którym wystąpił szum niegausowski typu A (lewy) i B(prawy). Dwa pierwsze i ostatnie piksele należy wykluczyć podczas odczytu, z uwagi na występowania skoków sygnału. Wykres od Takayuki Saito.}
 \label{fig:spike_corr}
 \end{figure}
 \subsubsection{Korekcja czasowa}
-Innym, ważnym rodzajem korekcji, które należy zastosować w DRS4 jest korekcja czasu przyjścia impulsu. W chipie DRS4 występuje typowy rozrzut położenia impulsu rzędu 1\,ns (do 4\,ns), zależne od absolutnej pozycji impulsu w pierścieniu domino. Różnice w czasie przyjścia mogą być skalibrowane za pomocą impulsów kalibracyjnych. W tym celu oblicza się średni czas przyjścia impulsu w funkcji pozycji impulsu w pierścieniu domino. Zależność ta jest różna dla różnych kanałów w chipie DRS4. Dla każdego kanału wykorzystywane jest rozwinięcie w szereg Fouriera, aby uzyskać funkcje (współczynniki) korekcji \cite{drs4_magic}. 
+Innym, ważnym rodzajem korekcji, które należy zastosować w DRS4 jest korekcja czasu przyjścia impulsu. W chipie DRS4 występuje typowy rozrzut położenia impulsu rzędu 1\,ns (do 4\,ns), zależny od absolutnej pozycji impulsu w pierścieniu domino. Różnice w czasie przyjścia mogą być skalibrowane za pomocą impulsów kalibracyjnych. W tym celu oblicza się średni czas przyjścia impulsu w funkcji pozycji impulsu w pierścieniu domino. Zależność ta jest różna dla różnych kanałów w chipie DRS4. Dla każdego kanału wykorzystywane jest rozwinięcie w szereg Fouriera, aby uzyskać funkcje (współczynniki) korekcji \cite{drs4_magic}. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.45]{wykresy/drs4/time_corr.pdf}
 \caption{Kalibracja czasu przyjścia impulsów. Po lewej stronie : średni czas przyjścia w funkcji pozycji w pierścieniu DRS4 (punkty) wraz z rozwinięciem w szereg Fouriera (czerwona krzywa). Po prawej stronie: rozkład czasów przyjścia przed (przerywana linia) i po (ciągła linia) kalibracji. Źródło: \cite{drs4_magic}. }
 \label{fig:spike_corr}
 \end{figure}
-Korekcja ta jest ważna do wyznaczenie ewolucji czasowej rozwoju pęku, co może być następnie użyte m.in. do separacji obrazów wytworzonych przez fotony gamma/leptony, a hadrony. 
+Korekcja ta jest ważna do wyznaczenie ewolucji czasowej rozwoju pęku, co może być następnie użyte m.in. bardziej efektywnego wybierania pikseli zawierających sygnał z pęku \cite{time_corr}. Gradient czasu przyjścia impulsu liczony wzdłuż głównej linii obrazu jest również pomocny w określaniu kierunku przyjścia cząstki pierwotnej oraz w separacji fotonów gamma od tła.
 \subsubsection{Implementacja korekcji}
 W ramach pracy zaimplementowane wyżej opisane korekcje w bibliotece cta-lstchain. Biblioteka cta-lstchain  \footnote{\url{https://github.com/cta-observatory/cta-lstchain}} jest biblioteką napisaną w języku Python do analizy danych z teleskopu LST. Biblioteka ta jest oparta o bibliotekę ctapipe \footnote{\url{https://github.com/cta-observatory/ctapipe}}, będącą podstawowym narzędziem do analizy danych z teleskopów CTA.
 
-
 \newpage
 \section{Zastosowanie korekcji}
-W tym rozdziale pokaże zastosowanie korekcji do danych testowych zbieranych w obserwatorium Roque de los Muchachos w Hiszpanii, gdzie znajduje się teleskop LST. Dane były zbierane w okresie listopad 2018 -- marzec 2019. Ich celem było przetestowanie jak działa elektronika, system akwizycji danych, jak działają korekcje. Pokaże rozkłady sygnału przed i po dokonaniu korekcji, pokaże jak poszczególne korekcji zmniejszają szum sygnału. Korekcje są niezbędne w celu wydobycia użytecznego sygnału z danych, co będzie pokazane w dalszych rozdziałach. W tym rozdziale pokazuje zastosowanie korekcji do danych testowych: \textsl{Run00097}, których celem był pomiar szumów elektroniki. Na rysunku \ref{fig:data_hist} pokazuje pokrycie pierwszego kondensator oraz histogram czasu między zdarzeniami (ang. \textsl{events}). Z przedstawionych histogramów wynika, że rozkład pokrycia kondensatorów nie był w pełni równomierny, ale każdy kondensator był pokryty.
+W tym rozdziale pokażę zastosowanie korekcji do danych testowych zbieranych w obserwatorium Roque de los Muchachos w Hiszpanii, gdzie znajduje się teleskop LST. Dane były zbierane w okresie listopad 2018 -- marzec 2019. Ich celem było przetestowanie jak działa elektronika, system akwizycji danych oraz sfinalizowanie procedur korekcji danych. Dane są zbierane w postaci bloków danych numerowanych sekwencyjnie (\textsl{runxxxxx}, gdzie xxxxx to numer bloku danych). Wyróżniamy różnego rodzaju bloki danych, zawierające: pęki atmosferyczne, impulsy światła z zewnętrznego kalibratora oraz bloki linii bazowej, którymi zajmuje się w tym rozdziale. Podczas odczytywania przebiegu sygnału, który składa się z 40 próbek czasu, pomijam 2 pierwsze i 2 ostatnie próbki, ponieważ wykazują one znacznie większy szum niż pozostałe.
+\\ Pokażę rozkłady sygnału przed i po dokonaniu korekcji, pokażę jak poszczególne korekcję zmniejszają szum sygnału. Korekcje są niezbędne w celu wydobycia użytecznego sygnału z danych, co będzie pokazane w dalszych rozdziałach. W tym rozdziale pokazuję zastosowanie korekcji do danych testowych \texttt{run00097}, których celem był pomiar szumów elektroniki. \\ 
+Na rysunku \ref{fig:data_hist} pokazuje pokrycie pierwszego kondensatora oraz histogram czasu między zdarzeniami. Z przedstawionych histogramów wynika, że rozkład pokrycia kondensatorów był zbliżony do równomiernego.
 Przypadki były zapisywane w sposób, który symuluje losowość czasów ich przyjścia. 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.36]{wykresy/drs4/hist_fc_arrival_time2.pdf}
-\caption{Histogram pokrycia pierwszego kondensatora oraz czasu przyjścia zdarzeń. Użyte 15 000 zdarzeń z danych \textsl{Run 00097}.}
+\includegraphics[scale=0.32]{wykresy/drs4/hist_fc_arrival_time2.pdf}
+\caption{Histogram pokrycia pierwszego kondensatora oraz czasu przyjścia zdarzeń. Użyte 15 000 zdarzeń z danych.}
 \label{fig:data_hist}
 \end{figure}
 \subsection{Podstawowa korekcja linii bazowej}
-Aby zastosować korekcje linii bazowej, potrzebujemy znać średnią wartość bazową każdego kondensatora. W ramach pracy napisałem skrypt do tworzenia pliku, który zawiera te wartości dla każdego kondensatora wchodzącego w układ systemu odczytu sygnału. Wielkość tego pliku to $\sim 30$\,MB, zawarte w nim są wartość dla 1855 pikseli, każdy piksel ma dwa poziomy wzmocnień i składa się z 4096 kondensatorów. Plik jest tworzony na podstawie dedykowanego pomiaru tzw.\textsl{pedestal run}. Na rysunku \ref{fig:ped_4096} pokazuje średnią wartość bazową w funkcji absolutnej pozycji w pierścieniu domino dla jednego piksela. Skok co 512 kondensatorów wynika z wewnętrznej konstrukcji chipu DRS4, co było wspomniane już w rozdziale 2.
+Aby zastosować korekcje linii bazowej, potrzebujemy znać średnią wartość bazową każdego kondensatora. W ramach pracy napisałem skrypt do tworzenia pliku, który zawiera te wartości dla każdego kondensatora wchodzącego w układ systemu odczytu sygnału. Wielkość tego pliku to $\sim 30$\,MB, zawarte w nim są wartość dla 1855 pikseli, każdy piksel ma dwa poziomy wzmocnień i składa się z 4096 kondensatorów. Plik jest tworzony na podstawie dedykowanego pomiaru tzw.\textsl{pedestal run}. Na rysunku \ref{fig:ped_4096} pokazuję średnią wartość bazową w funkcji absolutnej pozycji w pierścieniu domino dla jednego piksela. Skok co 512 kondensatorów wynika z wewnętrznej konstrukcji chipu DRS4, co było wspomniane już w rozdziale 2.
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.35]{wykresy/drs4/ped_hg2.pdf}
+\includegraphics[scale=0.32]{wykresy/drs4/ped_hg2.pdf}
 \caption{Średnia wartość bazowa w funkcji absolutnej pozycji dla jednego piksela wraz z obliczoną wartość odchylenia standardowego $\sigma$.}
 \label{fig:ped_4096}
 \end{figure}
-Wartość błędu wartość bazowej każdego kondensatora możemy oszacować za pomocą policzenia drugiego momentu centralnego, czyli odchylenia standardowego $\sigma$. 
-Wartość $\sigma$ zależy od wzmocnienia kanału, generalnie dla niskiego wzmocnienia sygnału (ang. \textsl{low gain}) będzie ono mniejsze, niż dla wysokiego wzmocnienia kanału (ang. \textsl{high gain}). Histogram wartości $\sigma$ dla low i high gain dla jednego piksela pokazuje na rysunku \ref{fig:hist_rms}.
+Wartość niepewności wyznaczania wartość bazowej każdego kondensatora możemy oszacować za pomocą policzenia drugiego momentu centralnego, czyli odchylenia standardowego $\sigma$. 
+Wartość $\sigma$ zależy od wzmocnienia kanału, generalnie dla niskiego wzmocnienia sygnału (ang. \textsl{low gain}) będzie ono mniejsze, niż dla wysokiego wzmocnienia kanału (ang. \textsl{high gain}). Histogram wartości $\sigma$ dla low i high gain dla jednego piksela pokazuję na rysunku \ref{fig:hist_rms}.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{wykresy/drs4/hist_rms.pdf}
-\caption{Histogram błędu (liczonego za pomocą odchylenia standardowego) wartości bazowej każdego z 4096 kondensatorów dla jednego piksela oraz dla dwóch poziomów wzmocnień.}
+\caption{Histogram niepewności wyznaczenia (liczonego za pomocą odchylenia standardowego) wartości bazowej każdego z 4096 kondensatorów dla jednego piksela oraz dla dwóch poziomów wzmocnień.}
 \label{fig:hist_rms}
 \end{figure}
 %W celu uzyskanie wartości szumów dla każdego kondensatora wchodzącego w skład piksela, bierze się tzw. pedestal run, w którym zbiera się wartości sygnału/szumów na danym kondensatorze. 
 %W ramach pracy napisałem program do tworzenia pliku z wartościami szumu, dostępny w bibliotece cta-lstchain, opartej na bibliotece ctapipe, będącej biblioteką do niskopoziomowych kalibracji teleskopów CTA. 
 \newpage
-Kiedy znamy średnią wartość bazową każdego kondensatora, stosujemy pierwszą kalibracje polegającą na odjęciu tej wartość dla danego kondensatora w odczytanym sygnale. Przebieg sygnału po zastosowaniu tej korekcji pokazuje na rysunku \ref{fig:baseline_corr}. W celu unikania negatywnych wartości dodaje do sygnału wartość 300. Na rysunku \ref{fig:baseline_corr_hist} pokazuje rozkład sygnału dla wszystkich pikseli po odjęciu średniej wartości bazowej. Rozkład jest zrobiony przy wykorzystaniu 15 000 zdarzeń. Jako miarę sygnału używam odchylenie standardowe $\sigma$ sygnału liczone za pomocą funkcji $\mathtt{numpy.std}$ \footnote{\url{https://docs.scipy.org/doc/numpy/reference/generated/numpy.std.html}}. 
+Kiedy znamy średnią wartość bazową każdego kondensatora, stosujemy pierwszą korekcję polegającą na odjęciu tej wartość dla danego kondensatora w odczytanym sygnale. Przebieg sygnału po zastosowaniu tej korekcji pokazuję na rysunku \ref{fig:baseline_corr}. W celu unikania negatywnych wartości dodaję do sygnału wartość 300 zliczeń ADC. Na rysunku \ref{fig:baseline_corr_hist} pokazuję rozkład sygnału dla wszystkich pikseli po odjęciu średniej wartości bazowej. Rozkład jest zrobiony przy wykorzystaniu 15 000 zdarzeń. Jako miarę sygnału używam odchylenie standardowe $\sigma$ sygnału.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{wykresy/drs4/baseline_corr.pdf}
@@ -395,10 +393,10 @@ Kiedy znamy średnią wartość bazową każdego kondensatora, stosujemy pierwsz
 \caption{Histogram sygnału przed korekcją (niebieska przerywana linia) i po podstawowej korekcji linii bazowej (pomarańczowa ciągła linia) dla dwóch wzmocnień oraz wszystkich pikseli. }
 \label{fig:baseline_corr_hist}
 \end{figure}
-Podstawowa korekcja linii bazowej redukuje mocno odchylenie standardowe sygnału, wartość ta jest trochę mniejsza dla sygnału z niskim poziomem wzmocnienia, jak należy się spodziewać. Rozkład przedstawiony na histogramach nie ma kształtu gaussowskiego, ponieważ zostaje \textsl{ogon}  tzn. rozkład ciągnie się do wyższych wartości niż by to wynikało z gaussowskiego szumu. Widać także, że sygnału o wyższych wartościach jest więcej przy wysokim wzmocnieniu. Aby pozbyć się ogonów należy zastosować inne korekcje, które opiszę w następnych podrozdziałach.
+Podstawowa korekcja linii bazowej redukuje mocno odchylenie standardowe sygnału, wartość ta jest trochę mniejsza dla sygnału z niskim poziomem wzmocnienia, jak należy się spodziewać. Rozkład przedstawiony na histogramach nie ma kształtu gaussowskiego, ponieważ zostaje tzw. \textsl{ogon},  tj. rozkład ciągnie się do wyższych wartości niż by to wynikało z gaussowskiego szumu. Widać również, że nadmiarowych silnych szumów jest więcej przy wysokim wzmocnieniu. Aby pozbyć się ogonów należy zastosować inne korekcje, które opiszę w następnych podrozdziałach.
 
 \subsection{Korekcja czasowa linii bazowej}
-Na rysunku \ref{fig:dt_corr_Waveform} pokazuje przebieg sygnału, gdzie występuje skok sygnału spowodowany małym odstępem czasu odczytu danego kondensatora. W celu korekcji sygnału używam funkcji potęgowej, której argumentem jest czas, który upłynął od ostatniego odczytu tego samego kondensatora.  Każdy moduł ma zegar o częstotliwość 133\,MHz z którego biorę czas każdego zdarzenia. W danych otrzymywanych z pomiaru jest również informacje o id pierwszego odczytywanego kondensatora dla danego piksela w danym module. Dzięki tym dwóm informacją mogę wyznaczyć ostatni czas odczytu danego kondensatora. 
+Na rysunku \ref{fig:dt_corr_Waveform} pokazuję przebieg sygnału, gdzie występuje skok sygnału spowodowany małym odstępem czasu odczytu danego kondensatora. W celu korekcji sygnału używam funkcji potęgowej, której argumentem jest czas, który upłynął od ostatniego odczytu tego samego kondensatora.  Każdy moduł ma zegar o częstotliwość 133\,MHz z którego biorę czas każdego zdarzenia. W danych otrzymywanych z pomiaru jest również informacje o id pierwszego odczytywanego kondensatora dla danego piksela w danym module. Dzięki tym dwóm informacjom mogę wyznaczyć ostatni czas odczytu danego kondensatora. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.35]{wykresy/drs4/dt_corr_teoria.pdf}
@@ -406,20 +404,21 @@ Na rysunku \ref{fig:dt_corr_Waveform} pokazuje przebieg sygnału, gdzie występu
 \label{fig:dt_corr_Waveform}
 \end{figure}
 \subsubsection{Funkcja potęgowa do kalibracji}
-Jak było napisane w poprzednim rozdziale do kalibracji wykorzystuje się funkcje potęgową \ref{eqn:power_law}, której współczynniki zależą od temperatury. Podczas testów w Japonii zostały wyznaczone współczynniki przy różnych temperaturach: 10, 20, 30, 40 i 50 $^\circ$C. W ramach swojej pracy wyznaczyłem  współczynniki dla wszystkich pikseli wchodzących w skład systemu odczytu sygnału działającego w teleskopie LST. Na wykresie \ref{fig:dt_curve_fit_all_temp} pokazuje krzywą korekcji czasowej dopasowaną do danych testowych dla jednego piksela, wykreśliłem także funkcje potęgową używaną do korekcji dla różnych temperatur. Jak widzimy na rysunku, najlepiej pasuje ta ze współczynnikami dla temperatury 30$^{\circ}$C. 
+Jak było napisane w poprzednim rozdziale do kalibracji wykorzystuje się funkcje potęgową \ref{eqn:power_law}, której współczynniki zależą od temperatury. Podczas testów w Japonii zostały wyznaczone współczynniki przy różnych temperaturach: 10, 20, 30, 40 i 50 $^\circ$C. W ramach swojej pracy wyznaczyłem  współczynniki dla wszystkich pikseli wchodzących w skład systemu odczytu sygnału działającego w teleskopie LST w warunkach zbliżonych do tych które będą zachodziły w przyszłych obserwacjach naukowych. Od Oscara Blanch (odpowiedzialnego za konstrukcję kamery LST) dostałem informacje, że temperatura nie jest stale monitorowana na poszczególnych chipach DRS4. Ze specjalnych danych testowych w których mierniki temperatury zostały umieszczone w kilku punktach kamery oraz ze stałego monitorowania temperatury na płycie głównej kamery oraz w układach Slow Control poszczególnych klastrów wynika, że maksymalne wahania mogą wynieść 5$^{\circ}$C. Na wykresie \ref{fig:dt_curve_fit_all_temp} pokazuje krzywą korekcji czasowej dopasowaną do danych testowych dla jednego piksela, wykreśliłem także funkcje potęgową używaną do korekcji dla różnych temperatur. Jak widzimy na rysunku \ref{fig:dt_curve_fit_all_temp} dane testowe zebrane z teleskopu LST1 najlepiej są opisane przez krzywą dla temperatury 30$^{\circ}$C. 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.4]{wykresy/drs4/dt_curve_fit.pdf}
+\includegraphics[scale=0.31]{wykresy/drs4/dt_curve_fit.pdf}
 \caption{Funkcja potęgowa do korekcji czasowej: dopasowana do histogram 2-d oraz wyznaczona eksperymentalnie dla różnych temperatur. Wykres dla  pojedynczego piksela dla wysokiego wzmocnienia.}
 \label{fig:dt_curve_fit_all_temp}
 \end{figure}
-Na wykresie na rysunku \ref{fig:dt_curve_fit_few_pixels} pokazuje dopasowaną funkcje potęgową dla kilku losowo wybranych pikseli, wraz z wykreśloną funkcją potęgową dla temperatur: 20, 30, 40 $^{\circ}$C, także widzimy, że funkcje dla temperatury 30$^{\circ}$C pasuje najlepiej.
+Na wykresie na rysunku \ref{fig:dt_curve_fit_few_pixels} pokazuję dopasowaną funkcje potęgową dla kilku losowo wybranych pikseli, wraz z wykreśloną funkcją potęgową dla temperatur: 20, 30, 40 $^{\circ}$C, także widzimy, że funkcje dla temperatury 30$^{\circ}$C pasuje najlepiej.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{wykresy/drs4/dt_curve_fit_diff.pdf}
 \caption{Funkcja potęgowa dopasowana dla kilku pikseli wraz z funkcjami potęgowymi dla temperatur 20, 30, 40$^{\circ}$.}
 \label{fig:dt_curve_fit_few_pixels}
 \end{figure}
+\newpage
 Aby sprawdzić dla wszystkich pikseli jak dopasowane funkcje mają się do funkcji potęgowej dla różnych temperatury, policzyłem różnice w dwóch punktach: 0.05\,ms i 0.45\,ms i sporządziłem histogramy pokazane na rysunku \ref{fig:dt_curve_hist}. Z histogramów jasno wynika, że najlepiej pasuje funkcja potęgowa dla temperatury 30$^{\circ}$C dla której rozrzut różnic jest najmniejszy.
 \begin{figure}[H] 
 \centering
@@ -428,7 +427,7 @@ Aby sprawdzić dla wszystkich pikseli jak dopasowane funkcje mają się do funkc
 \label{fig:dt_curve_hist}
 \end{figure}
 \subsubsection{Korekcja}
-Na rysunku \ref{fig:dt_corr_hist2d_all} pokazuje histogram 2-d dla wszystkich pikseli, przed i po korekcji czasowej linii bazowej dla wysokiego wzmocnienia sygnału. Widać, że funkcja potęgowa ze współczynnikami dla temperatury 30$^{\circ}$C działa dobrze i redukuje skoki sygnału.
+Na rysunku \ref{fig:dt_corr_hist2d_all} pokazuję histogram 2-d dla wszystkich pikseli, przed i po korekcji czasowej linii bazowej dla wysokiego wzmocnienia sygnału. Widać, że funkcja potęgowa ze współczynnikami dla temperatury 30$^{\circ}$C redukuje skoki sygnału.
 %\begin{figure}[H] 
 %\centering
 %\includegraphics[scale=0.25]{wykresy/drs4/dt_hist2d.pdf}
@@ -438,8 +437,8 @@ Na rysunku \ref{fig:dt_corr_hist2d_all} pokazuje histogram 2-d dla wszystkich pi
 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.34]{wykresy/drs4/delta_t_corr_hist2d_hg.pdf}
-\caption{Korekcja czasowa linii bazowej. Histogram 2-d dla wszystkich pikseli dla High gain (15000 zdarzeń) z używaną funkcją potęgową do korekcji. Na górze przed korekcją, na dole po dokonaniu korekcji. Sygnał został przesunięty o wartość 300 (przerywana zielona linia). }
+\includegraphics[scale=0.3]{wykresy/drs4/delta_t_corr_hist2d_hg.pdf}
+\caption{Korekcja czasowa linii bazowej. Histogram 2-d dla wszystkich pikseli dla High gain (15000 zdarzeń) z używaną funkcją potęgową do korekcji. Na górze przed korekcją, na dole po dokonaniu korekcji. Sygnał został przesunięty o wartość 300 zliczeń ADC (przerywana zielona linia). }
 \label{fig:dt_corr_hist2d_all}
 \end{figure}
 
@@ -450,7 +449,7 @@ Na rysunku \ref{fig:dt_corr_hist2d_all} pokazuje histogram 2-d dla wszystkich pi
 %\label{fig:dt_corr_hist2d_all}
 %\end{figure}
 
-Na rysunku \ref{fig:dt_corr_hist} pokazuje histogram rozkładu sygnału po dokonaniu korekcji czasowej linii bazowej w porównaniu do rozkładu sygnału po podstawowej korekcji linii bazowej. Histogramy zrobiłem dla wszystkich pikseli oraz dwóch wzmocnień. Jak widzimy na histogramach, po korekcji czasowej rozkład staje się bardziej wąski, wciąż zostają ogony oraz tworzy się drugi mniejszy pik. 
+Na rysunku \ref{fig:dt_corr_hist} pokazuję histogram rozkładu sygnału po dokonaniu korekcji czasowej linii bazowej w porównaniu do rozkładu sygnału po podstawowej korekcji linii bazowej. Histogramy zrobiłem dla wszystkich pikseli oraz dwóch wzmocnień. Jak widzimy na histogramach, po korekcji czasowej rozkład staje się bardziej wąski, wciąż zostają ogony oraz tworzy się drugi mniejszy pik. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.45]{wykresy/drs4/dt_corr_hist2.pdf}
@@ -466,7 +465,7 @@ Na rysunku \ref{fig:spike_corr} pokazany jest przebieg sygnału, gdzie występuj
 \caption{Przebieg sygnału w którym wystąpił szum niegausowski typu A (lewy) i B(prawy). Czerwona przerywana linia przed interpolacją, zielona ciągła linia po.}
 \label{fig:spike_corr}
 \end{figure}
-Na rysunku \ref{fig:spike_hist} przedstawiam histogram po interpolacji szumów niegaussowskich. Po interpolacji drugi pik znika, dla niskiego wzmocnienia rozkład przypomina rozkład Gaussa, Natomiast dla wysokiego wzmocnienia zostaje trochę sygnału, którego wartość wynosi ponad 400 zliczeń ADC, spowodowane to może być jakimś nagłym skokiem sygnału, jednakże sygnału o tej wartości jest o kilka rzędów mniej. 
+Na rysunku \ref{fig:spike_hist} przedstawiam histogram po interpolacji szumów niegaussowskich. Po interpolacji drugi pik znika, dla niskiego wzmocnienia rozkład przypomina rozkład Gaussa, Natomiast dla wysokiego wzmocnienia występują próbki sygnału, którego wartość przekracza 400 zliczeń ADC, spowodowane to może być jakimś nagłym skokiem sygnału, jednakże sygnału o tej wartości jest o kilka rzędów mniej. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.45]{wykresy/drs4/spike_corr_hist2.pdf}
@@ -474,7 +473,7 @@ Na rysunku \ref{fig:spike_hist} przedstawiam histogram po interpolacji szumów n
 \label{fig:spike_hist}
 \end{figure}
 \subsection{Mapa rozkładu sygnału na całej kamerze}
-Po opisaniu poszczególnych korekcji, teraz pokaże jak korekcje wpływają na sygnał na całej kamerze. W tym celu obliczyłem średnie odchylenie sygnału $\sigma$ przed korekcją i po korekcji używając 15 000 zdarzeń dla wszystkich pikseli, ilustrując to na całej kamerze, dla  wysokiego wzmocnienia (High Gain, HG) oraz niskiego wzmocnienia (Low Gain, LG) na rysunku \ref{fig:map_cam_corr}. Na kamerze widać, że jeden piksel z sygnałem przy wysokim poziomie wzmocnieniem ma wyższe $\sigma$ niż pozostałe piksele, dla niskiego poziomu wzmocnienia efekt ten już nie występuje. Na histogramie widzimy, że przed korekcją $\sigma$ wynosi około $\sim$ 30, natomiast po zastosowaniu korekcji $\sigma$ wynosi $\sim$ 6 dla HG i $\sim$ 4 dla LG. Wartość $\sigma$ po korekcji jest dużo bardziej jednolita na całej kamerze. Na rysunku \ref{fig:hist_corr_map} przedstawiam histogram odchylenie standardowego dla dwóch wzmocnień, jak na nim widzimy: przed korekcją rozkład wartości $\sigma$ jest podobny i przyjmuje wartości z zakresu 25--33, natomiast po korekcji wszystkie piksele z niskim wzmocnieniem mają $\sigma < 5$, a piksele z wysokim wzmocnieniem mają $\sigma$ z zakresu 5--8, z wyjątkiem jednego piksela, którego wartość $\sigma$ jest trochę większa i wynosi $\sim 8.9$.
+Po opisaniu poszczególnych korekcji, teraz pokażę jak korekcje wpływają na sygnał na całej kamerze. W tym celu obliczyłem średnie odchylenie sygnału $\sigma$ przed korekcją i po korekcji używając 15 000 zdarzeń dla wszystkich pikseli, ilustrując to na całej kamerze, dla  wysokiego wzmocnienia (High Gain, HG) oraz niskiego wzmocnienia (Low Gain, LG) na rysunku \ref{fig:map_cam_corr}. Na kamerze widać, że jeden piksel z sygnałem przy wysokim poziomie wzmocnieniem ma wyższe $\sigma$ niż pozostałe piksele, dla niskiego poziomu wzmocnienia efekt ten już nie występuje. Na histogramie widzimy, że przed korekcją $\sigma$ wynosi około $\sim$ 30 ADC, natomiast po zastosowaniu korekcji $\sigma$ wynosi $\sim$ 6 ADC dla HG i $\sim$ 4 ADC dla LG. Wartość $\sigma$ po korekcji jest dużo bardziej jednolita na całej kamerze. Na rysunku \ref{fig:hist_corr_map} przedstawiam histogram odchylenia standardowego dla dwóch wzmocnień, jak na nim widzimy: przed korekcją rozkład wartości $\sigma$ jest podobny i przyjmuje wartości z zakresu 25--33 ADC, natomiast po korekcji wszystkie piksele z niskim wzmocnieniem mają $\sigma < 5$, a piksele z wysokim wzmocnieniem mają $\sigma$ z zakresu 5--8 ADC, z wyjątkiem jednego piksela, którego wartość $\sigma$ jest trochę większa i wynosi $\sim 8.9$ ADC.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.5]{wykresy/drs4/map_std.pdf}
@@ -490,15 +489,15 @@ Po opisaniu poszczególnych korekcji, teraz pokaże jak korekcje wpływają na s
 Na rysunku \ref{fig:hist_corr_bad_pixel} pokazuje rozkład sygnału dla piksela o id = 449, który miał największą wartość odchylenia standardowego przy wysokim wzmocnieniu sygnału. Jak widzimy sygnał z tego piksela był odpowiedzialny za większość ogonów w rozkładzie sygnału dla wysokiego wzmocnienia na rysunku \ref{fig:spike_hist}.
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.35]{wykresy/drs4/hist_corr_pixel_449.pdf}
-\caption{Histogram rozkładu sygnału po korekcjach dla piksela 449 z największym odchyleniem standardowym przy wysokim wzmocnieniu sygnału.}
+\includegraphics[scale=0.35]{wykresy/drs4/hist_corr_pixel_449_2.pdf}
+\caption{Po lewej stronie: histogram rozkładu sygnału po korekcjach dla piksela 449 z największym odchyleniem standardowym przy wysokim wzmocnieniu sygnału. Po prawej stronie: histogram dla wszystkich pikseli z wyłączeniem piksela 449 dla wysokiego poziomu wzmocnienia sygnału.}
 \label{fig:hist_corr_bad_pixel}
 \end{figure}
 \newpage
-W tabeli niżej przedstawiam wartość średnią, odchylenie standardowe $\sigma$ oraz procent sygnału, którego wartość jest powyżej 2 $\sigma$ po zastosowanych korekcji podstawowej i czasowej linii bazowej (l.b.) dla dwóch wzmocnień : niskiego (LG) i wysokiego (HG). Z przedstawionej tabeli wynika, że wraz z każdą korekcją $\sigma$ ulega zmniejszeniu, największa zmiana jest po zastosowaniu podstawowej linii bazowej. Bez korekcji $\sigma$ dla dwóch wzmocnień jest prawie taka sama, natomiast po korekcjach, odchylenie standardowe jest mniejsze dla sygnału z niskim wzmocnieniem. Policzyłem także jaki procent sygnału leży powyżej 2 $\sigma$ po każdej korekcji.    
-To, że ta wielkość się zwiększyła po interpolacji SNG, spowodowane jest zmniejszeniem się odchylenie standardowego po dokonaniu korekcji. 
+W tabeli niżej przedstawiam wartość średnią, odchylenie standardowe $\sigma$ oraz procent sygnału, którego wartość jest powyżej 2 $\sigma$ (liczone dla dodatnich wartości) po zastosowanych korekcji podstawowej i czasowej linii bazowej (l.b.) dla dwóch wzmocnień: niskiego (LG) i wysokiego (HG). Z przedstawionej tabeli wynika, że wraz z każdą korekcją $\sigma$ ulega zmniejszeniu, największa zmiana jest po zastosowaniu podstawowej linii bazowej. Bez korekcji $\sigma$ dla dwóch wzmocnień jest prawie taka sama, natomiast po korekcjach, odchylenie standardowe jest mniejsze dla sygnału z niskim wzmocnieniem. Policzyłem także jaki procent sygnału leży powyżej 2 $\sigma$ po każdej korekcji.    
+To, że ta wielkość się zwiększyła po interpolacji SNG, spowodowane jest zmniejszeniem się odchylenia standardowego po dokonaniu korekcji. Nawet przy jednym pikselu z większym szumem, procent sygnału powyżej $2 \sigma$ jest bardzo mały. 
 \begin{table}[H]
-\caption{Odchylenie standardowe czasu przyjścia impulsu.}
+\caption{Średnia wartość oraz odchylenie standardowe sygnału. Wartość średniej oraz odchylenia standardowego podane są w zliczeniach ADC.}
 \begin{tabular}{|l|c|c|c|c|c|c|}
 \hline
 korekcja & średnia HG  & $\sigma$ HG  & średnia LG & $\sigma$ LG & $> 2 \sigma$ [\%] HG & $> 2 \sigma$ [\%] LG \\ \hline
@@ -517,30 +516,33 @@ W bibliotece {\bf{cta-lstchain}} w module {\bf{calib/camera/r0.py}} \footnote{\u
 \item interpolacji szumów niegaussowskich $\mathtt{interpolate\_spikes(event)}$
 \end{itemize}
 Napisałem również skrypt $\mathtt{create\_pedestal\_file.py}$ \footnote{\url{https://github.com/cta-observatory/cta-lstchain/blob/master/scripts/create_pedestal_file.py}} oraz moduł $\mathtt{drs4.py}$ \footnote{\url{https://github.com/cta-observatory/cta-lstchain/blob/master/lstchain/calib/camera/drs4.py}} do tworzenia pliku z wartościami bazowymi każdego kondensatora (wielkość pliku $\sim$30\,MB). 
+
+Ważne przy implementacji było, aby korekcje działy szybko, dzięki użyciu biblioteki $\mathtt{numba}$ \footnote{\url{https://numba.pydata.org/}} udało się osiągnąć zadowalającą szybkość działania kodu. W porównaniu z pierwszą implementacją wykorzystującą zagnieżdżone pętle \texttt{for} skok prędkości był o 2 rzędy wielkości.  $\mathtt{Numba}$ jest kompilatorem JIT (ang. \textsl{just-in-time compilation}), czyli kompiluje fragment programu do kodu maszynowego bezpośrednie przed jego wykonaniem. 
+
 \newpage
 \section{Korekcja czasowa}
-W tym rozdziale opisuje korekcje czasu przyjścia sygnału. 
+W tym rozdziale opisuję korekcje czasu przyjścia sygnału. 
 W celu dokonania kalibracji czasowej zbierane są dedykowane pomiary kalibracyjne polegające na wstrzykiwaniu impulsów z lasera. Na rysunku \ref{fig:calib_waveform_hg} przedstawiam przebieg sygnału z impulsem kalibracyjnym dla wysokiego wzmocnienia wraz z wyznaczonym czasem przyjścia impulsu.
-W celu wyznaczenia czasu przyjścia impulsu $t_{arr}$, który definiuje jako średnia ważoną sygnału w okolicy punktu, gdzie sygnał osiąga maksymalną wartość $peak$ napisałem własną funkcje {\bf{extract\_pulse\_time(waveform)}} \footnote{ \url{https://github.com/pawel21/low_level_calib_drs4/blob/master/time_corr/simple_extracor.py}}
+W celu wyznaczenia czasu przyjścia impulsu $t_{arr}$, który definiuję jako średnią ważoną sygnału w okolicy punktu, gdzie sygnał osiąga maksymalną wartość $peak$ napisałem własną funkcje {\bf{extract\_pulse\_time(waveform)}} \footnote{ \url{https://github.com/pawel21/low_level_calib_drs4/blob/master/time_corr/simple_extracor.py}}
 \begin{equation}
 t_{arr} = \frac{ \sum_{i=peak - shift}^{peak - shift + width - 1} S_i \cdot i }{ \sum_{i=peak - shift}^{peak - shift + width -1} S_i}
 \label{egn:time}
 \end{equation} 
 gdzie: $S_i$ --- sygnał w danej próbce czasu, $shift$ --- parametr przesunięcia, $width$ --- parament szerokości. Wartości parametrów wynosiły $shift = 3$, $width = 7$. \\
 
- Wyniki prezentowane w tym rozdziale są tylko dla sygnału z wysokim wzmocnieniem, spowodowane to jest, faktem, że impulsy dla niskiego wzmocnienia były słabe i nie było możliwe wykorzystanie tego sygnału do korekcji czasowej.  Na podstawie dostępnych danych obliczam współczynniki kalibracyjne będące współczynnikami w rozwinięciu Fouriera krzywej używanej do kalibracji, a następnie wykonuję kalibracje czasu przyjścia impulsu. W ramach pracy napisałem kod: do wyznaczanie czasu przyjścia impulsu, obliczania współczynników oraz ich zapisywania do pliku (używam formatu pliku {\bf{h5py}}) \footnote{\url{www.h5py.org}}, kalibracji czasu przyjścia impulsu. Wyniki, które tutaj przestawiam oparte są na pomiarach za pomocą tzw. \textsl{calibration box}, które były zbierane 12 marca 2019 roku są to \textsl{run 250 i 252}. Na podstawie danych z \textsl{run 250} (11 500 zdarzeń) obliczyłem współczynniki kalibracyjne, a na niezależnych danych \textsl{run 252} (1500 zdarzeń) zastosowałem korekcję w celu przetestowania jej dokładności. 
+Wyniki prezentowane w tym rozdziale są tylko dla sygnału z wysokim wzmocnieniem, spowodowane to jest, faktem, że impulsy dla niskiego wzmocnienia były słabe w porównaniu z odchyleniem standardowym szumu, czyli sygnał zdominowany był przez szum. Z tego powodu nie było możliwe wykorzystanie tego sygnału do korekcji czasowej. Na podstawie dostępnych danych obliczam współczynniki kalibracyjne będące współczynnikami w rozwinięciu Fouriera krzywej używanej do kalibracji, a następnie wykonuję kalibracje czasu przyjścia impulsu. W ramach pracy napisałem kod: do wyznaczanie czasu przyjścia impulsu, obliczania współczynników oraz ich zapisywania do pliku (używam formatu pliku {\bf{h5py}}) \footnote{\url{www.h5py.org}}, kalibracji czasu przyjścia impulsu. Wyniki, które tutaj przestawiam oparte są na pomiarach za pomocą tzw. \textsl{calibration box}, które były zbierane 12 marca 2019 roku są to \texttt{run 00250 i 00252}. Na podstawie danych z \texttt{run 00250} (11 500 zdarzeń) obliczyłem współczynniki kalibracyjne, a na niezależnych danych \texttt{run 00252} (1500 zdarzeń) zastosowałem korekcję w celu przetestowania jej dokładności. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.35]{wykresy/drs4/calib_pulse_waveform_hg.pdf}
 \caption{Przebieg sygnału z impulsem kalibracyjnym (czerwona ciągła linia) dla dwóch pikseli dla wysokiego wzmocnienia wraz z wyznaczonym czasem przyjścia (zielona kreskowana).}
 \label{fig:calib_waveform_hg}
 \end{figure}
-Na rysunku \ref{fig:signal_map} pokazuje średni sygnał, który jest sumą 7 próbek czasu w okolicy punktu wyznaczonego jako czas przyjścia impulsu za pomocą {\bf{LocalPeakWindowSum}} \footnote{\url{https://cta-observatory.github.io/ctapipe/ctapipe_api/image/extractor.html}} na całej kamerze dla danych z pomiarów \textsl{run 250 i 252}. 
+Na rysunku \ref{fig:signal_map} pokazuję średni sygnał, który jest sumą 7 próbek czasu w okolicy punktu wyznaczonego jako czas przyjścia impulsu za pomocą {\bf{LocalPeakWindowSum}} \footnote{\url{https://cta-observatory.github.io/ctapipe/ctapipe_api/image/extractor.html}} na całej kamerze dla danych z pomiarów \textsl{run 250 i 252}. 
 
 Widoczny wzór na kamerze, gdzie sygnał jest bardzo mały spowodowany jest prawdopodobnie cieniem elementu systemu używanego do kalibracji. W danych z \textsl{run 252} widzimy także, że na dwóch modułach był brak sygnału.
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.25]{wykresy/drs4/mapka_sygnal_time_corr.pdf}
+\includegraphics[scale=0.25]{wykresy/drs4/mapka_sygnal_time_corr2.pdf}
 \caption{Mapa kamery prezentująca średni sygnał na poszczególnych pikselach.}
 \label{fig:signal_map}
 \end{figure}
@@ -553,11 +555,11 @@ Na rysunku \ref{fig:fourier_fit_4096} przedstawiam zależność średniego czasu
 \caption{Zależność średniego czasu przyjścia impulsu od pozycji w pierścieniu DRS4 dla 4096 kondensatorów z funkcją dopasowaną przez rozwinięcie w szereg Fouriera przy wykorzystaniu 32 harmonicznych.}
 \label{fig:fourier_fit_4096}
 \end{figure}
-Ze względu, że w systemie odczytu sygnału Dragon jeden piksel jest obsługiwany przez 4 kanały tego samego chipu DRS4, a wszystkie kanały mają taką samą krzywą opóźnienia, to odczytaną pozycje pierwszego kondensatora $FC$ w pierścieniu DRS4 liczę jako modulo 1024 oraz, w celu zwiększenia statystyki 8 kondensatorów binuje jako jeden punkt. 
+Ze względu, że w systemie odczytu sygnału Dragon jeden piksel jest obsługiwany przez 4 kanały tego samego chipu DRS4, a wszystkie kanały mają taką samą krzywą opóźnienia, to odczytaną pozycję pierwszego kondensatora $FC$ w pierścieniu DRS4 liczę jako modulo 1024 oraz, w celu zwiększenia statystyki 8 kondensatorów binuje jako jeden punkt. 
 Otrzymaną zależność rozwijam w szereg Fouriera wtedy
 średnią wartość przyjścia impulsu od pozycji w pierścieniu DRS4 zapisuje jako sumę sinusów i cosinusów
 \begin{equation}
-y(FC) = \sum_{i=1}^{N} A_n \sin \left( \frac{ i \cdot (FC\%1024)  }{1024} \right) + B_n \cos \left( \frac{i \cdot (FC\%1024) }{1024} \right)
+y(FC) = B_0 + \sum_{i=1}^{N} \left( A_n \sin \left( \frac{ i \cdot (FC \text{ mod } 1024)  }{1024} \right) + B_n \cos \left( \frac{i \cdot (FC \text{ mod } 1024) }{1024} \right) \right)
 \end{equation}
 gdzie $A_n$ i $B_n$ są współczynnikami rozwinięcia funkcji w szereg Fouriera; $N$ --- ilość harmonicznych.
 %Na rysunku \ref{fig:fourier_fit_4096} przedstawiam zależność czasu przyjścia impulsu od pozycji w pierścieniu DRS4 dla 4096 kondensatorów. 
@@ -579,15 +581,15 @@ Na rysunku \ref{fig:fourier_fit_3} przedstawiam krzywe opóźnienia dla trzech p
 \label{fig:fourier_fit_3}
 \end{figure}
 \subsection{Korekcja czasu przyjścia impulsów}
-Mając wyznaczone krzywe opóźnienia na podstawie pozycji pierwszego odczytanego kondensatora stosuje korekcje czasową w celu poprawienia rozdzielczości czasowej czasu przyjścia. Rozróżniamy dwie korekcje czasowe:
+Mając wyznaczone krzywe opóźnienia na podstawie pozycji pierwszego odczytanego kondensatora stosuję korekcję czasową w celu poprawienia rozdzielczości czasowej czasu przyjścia. Rozróżniamy dwie korekcje czasowe:
 \begin{itemize}
 \item {\bf{względną}} polegającą na odjęciu czasu z danej krzywej opóźnienia dla danego piksela od wyznaczonego czasu przyjścia impulsu.
 \item {\bf{bezwzględną}} polegającą na odjęciu czasu z wyznaczonej krzywej opóźnienia od wyznaczonego czasu przyjścia impulsu z uwzględnieniem średniego czasu przyjścia impulsu we wszystkich pikselach, w których sygnał jest powyżej progu.
 \end{itemize} 
 Do analizy danych z teleskopów czerenkowskich używana jest pierwsza korekcja, drugą korekcję wprowadziłem, aby móc badać rozdzielczość czasową po pierwszej korekcji.
 
-Na rysunku \ref{fig:time_corr_hist3} pokazuje histogram czasu przyjścia impulsu przed korekcją, po korekcji względnej i po korekcji bezwzględnej dla trzech pikseli, a na rysunku \ref{fig:time_corr_hist_all} histogram czasu przyjścia dla wszystkich pikseli z wyłączeniem tych co miały mały sygnał, oraz wykluczam te dla których występowało duże odchylenie czasu przyjścia po dokonaniu korekcji, spowodowane, to jest problemami z kalibracją ponieważ dla tych pikseli podczas kalibracji niektóre impulsy wychodzi poza region zainteresowania, co pokazuje na rysunku \ref{fig:time_calib}. Zatem 105 spośród 1855 pikseli zostało wykluczonych z analizy.  \\
-Na rysunku \ref{fig:hist_harm} pokazuje jeszcze histogram czasu przyjścia impulsu po korekcji bezwzględnej dla różnej liczby harmonicznych: 4, 8, 16. Odchylenie standardowe przy używaniu większej liczby harmonicznych zmniejszyło się odpowiednio $0.49 \rightarrow 0.43 \rightarrow 0.41$\,ns. \\
+Na rysunku \ref{fig:time_corr_hist3} pokazuję histogram czasu przyjścia impulsu przed korekcją, po korekcji względnej i po korekcji bezwzględnej dla trzech pikseli, a na rysunku \ref{fig:time_corr_hist_all} histogram czasu przyjścia dla wszystkich pikseli z wyłączeniem tych co miały mały sygnał, oraz wykluczam te dla których występowało duże odchylenie czasu przyjścia po dokonaniu korekcji, spowodowane, to jest problemami z kalibracją ponieważ dla tych pikseli podczas kalibracji niektóre impulsy nie mieszczą się w zarejestrowanym oknie 40(-4) próbek sygnału, co pokazuje na rysunku \ref{fig:time_calib}. Zatem 105 spośród 1855 pikseli zostało wykluczonych z analizy.  \\
+Na rysunku \ref{fig:hist_harm} pokazuję jeszcze histogram czasu przyjścia impulsu po korekcji bezwzględnej dla różnej liczby harmonicznych: 4, 8, 16. Odchylenie standardowe przy używaniu większej liczby harmonicznych zmniejszyło się odpowiednio $0.49 \rightarrow 0.43 \rightarrow 0.41$\,ns. \\
 Rozkład nieskalibrowanych czasów przyjścia pokazuje wiele pików z powodu dyskretnych wartości, przyjmowanych przez impulsy podczas wyznaczania czasu przyjścia. Ta struktura  znika już po dokonaniu  względnej kalibracji czasu i odchylenie czasu przyjścia impulsu zmniejsza się z $\sim$1.7\,ns do $\sim$1\,ns, a po uwzględnieniu także średniego czasu przyjścia impulsu dla wszystkich pikseli w danym zdarzeniu, zmniejsza się ono do $\sim$0.4\,ns
 
 \begin{figure}[H] 
@@ -617,7 +619,7 @@ Rozkład nieskalibrowanych czasów przyjścia pokazuje wiele pików z powodu dys
 \caption{Histogram czasu przyjścia impulsu przed i po korekcjach czasowych przy użyciu 16 harmonicznych dla wszystkich 1755 pikseli, które spełniały kryteria jakości sygnału dla 1500 zdarzeń.}
 \label{fig:time_corr_hist_all}
 \end{figure}
-W tabeli \ref{tab:std} przedstawiam odchylenie standardowe czasu przyjścia impulsu przed i po korekcjach dla trzech wybranych pikseli (dla których pokazałem histogramy czasu przyjścia przed i po korekcjach) oraz dla wszystkich działających pikseli. Na wykresie \ref{fig:std_hist_time_corr} przedstawiam histogram odchylenia standardowego przed i po dokonaniu korekcji dla wszystkich pikseli z wyłączeniem tych o których pisałem wcześniej. Na rysunku \ref{fig:std_map_time_corr} pokazuje mapę odchylenia standardowego dla każdego piksela. Widać na niej, że po dokonaniu korekcji mapa staje się jednolita. Czarne punkty są właśnie tymi pikselami, gdzie występował jakiś problem.
+W tabeli \ref{tab:std} przedstawiam odchylenie standardowe czasu przyjścia impulsu przed i po korekcjach dla trzech wybranych pikseli (dla których pokazałem histogramy czasu przyjścia przed i po korekcjach) oraz dla wszystkich działających pikseli. Na wykresie \ref{fig:std_hist_time_corr} przedstawiam histogram odchylenia standardowego przed i po dokonaniu korekcji dla wszystkich pikseli z wyłączeniem tych o których pisałem wcześniej. Na rysunku \ref{fig:std_map_time_corr} pokazuję mapę odchylenia standardowego dla każdego piksela. Widać na niej, że po dokonaniu korekcji mapa staje się jednolita. Czarne punkty są właśnie tymi pikselami, gdzie występował jakiś problem.
 \begin{table}[H]
 \caption{Odchylenie standardowe czasu przyjścia impulsu.}
 \begin{tabular}{|l|c|c|c|l|}
@@ -644,32 +646,31 @@ Wszystkie dobre & 1.70  & 1.02 & 0.42   \\  \hline
 \label{fig:std_map_time_corr}
 \end{figure}
 
-\subsection{Implementacja}
-W tym momencie kod do korekcji czasowej oparty o bibliotekę {\bf{ctapipe}} oraz {\bf{cta-lstchain}} znajduje się na moim profilu w repozytorium github \footnote{\url{https://github.com/pawel21/low_level_calib_drs4/tree/master/time_corr}}
 \newpage
 \section{Zastosowanie korekcji do analizy obrazów pęków}
-W tym rozdziale prezentuje zastosowanie korekcji opisanych w dwóch poprzednich rozdziałach do analizy obrazów pęków. Pokazuje jak podstawowa i czasowa korekcja linii bazowej oraz interpolacja szumów niegaussowskich obniża szum sygnału, w wyniku czego użyteczny sygnał jest otrzymywany, oraz jak korekcja czasowa pozwala lepiej wyznaczyć rozwój pęku w czasie. Dane, które używam w tym rozdziale były zbierane 11 lutego 2019 roku przez prototypowy teleskop LST1 umieszczony w Obserwatorium Roque de los Muchachos. 
+W tym rozdziale prezentuję zastosowanie korekcji opisanych w dwóch poprzednich rozdziałach do analizy obrazów pęków. Pokazuję jak podstawowa i czasowa korekcja linii bazowej oraz interpolacja szumów niegaussowskich obniża szum sygnału, w wyniku czego użyteczny sygnał jest otrzymywany, oraz jak korekcja czasowa pozwala lepiej wyznaczyć rozwój pęku w czasie. Dane, które używam w tym rozdziale były zbierane 11 lutego 2019 roku przez prototypowy teleskop LST1 umieszczony w Obserwatorium Roque de los Muchachos. 
 
 W celu wyznaczeniu całkowitego sygnału używam metody {\bf{LocalPeakWindowSum}} \footnote{\url{https://cta-observatory.github.io/ctapipe/ctapipe_api/image/extractor.html}} (jest to klasa w bibliotece {\bf{ctapipe}}) która całkuje (sumuje) sygnał w oknie o podanej szerokości, gdzie środek okna znajduje się w położenia maksymalnej wartości sygnału w danym przebiegu sygnału w każdym pikselu. Używałem okno o szerokości 6 próbek sygnału. \\ 
 Natomiast w celu wyznaczenia czasu przyjścia pęku $t_{arr}$, który zdefiniowałem w poprzednim rozdziale \ref{egn:time} używam swoją funkcje {\bf{extract\_pulse\_time(waveform)}} z parametrami: $shift = 3$, $width = 7$. \\
-Większość pikseli w takim obrazie ma sygnały od NSB, które są losowe w czasie przyjścia, dlatego należy zastosować czyszczenie obrazu. aby zostały tylko piksele zawierające cześć obrazu pęku. W celu pozbycia się szumów używałem funkcje {\bf{tailcuts\_clean}} \footnote{ \url{https://cta-observatory.github.io/ctapipe/ctapipe_api/image/cleaning.html}} z biblioteki {\bf{ctapipe}}. Czyszczenie jest dokonywane w następujący sposób: najpierw poszukiwany jest rdzeń obrazu posiadający mocniejszy sygnał, następnie do tego rdzenia dodawane są piksele o mniejszym sygnale, ale znajdujące się obok piksela z rdzenia. Metoda {\bf{tailcuts\_clean}} przyjmuje 4 argumenty: $geom$ --- geometria kamery, $image$ --- tablica reprezentująca obraz, $picture\_thresh$ --- próg sygnału rdzenia, $boundary\_thresh$ --- próg sygnału w okolicach rdzenia, $min\_number\_picure\_neighbors$ --- liczba sąsiadów piksela aby był pozostawiony na obrazie. \\
+Większość pikseli w obrazie pęku ma sygnały od NSB, które są losowe w czasie przyjścia, dlatego należy zastosować czyszczenie obrazu. aby zostały tylko piksele zawierające obraz pęku. W celu pozbycia się szumów używałem funkcję {\bf{tailcuts\_clean}} \footnote{ \url{https://cta-observatory.github.io/ctapipe/ctapipe_api/image/cleaning.html}} z biblioteki {\bf{ctapipe}}. Czyszczenie jest dokonywane w następujący sposób: najpierw poszukiwany jest rdzeń obrazu posiadający mocniejszy sygnał, następnie do tego rdzenia dodawane są piksele o mniejszym sygnale, ale znajdujące się obok piksela z rdzenia. Metoda {\bf{tailcuts\_clean}} przyjmuje argumenty: $picture\_thresh$ --- próg sygnału rdzenia, $boundary\_thresh$ --- próg sygnału w okolicach rdzenia, $min\_number\_picture\_neighbors$ --- liczba sąsiadów piksela aby był pozostawiony na obrazie. \\
+Metoda działa w sposób nastepujący: najpierw poszukiwane są piksele które są powyżej $picture\_thresh$, a potem dodawane są do obrazu piksele z mniejszym sygnałem, a wciąż  powyżej $boundary\_thresh$ i które dodatkowo są obok piksela zakwalifikowanego do rdzenia.
 W celu pokazania czasu przyjścia pęku stosowałem mapę ilustrującą całą kamerę.
 \subsection{Obrazy od tła hadronowego}
-Na rysunkach \ref{fig:image_27_map} i \ref{fig:image_77} prezentuje obrazy kaskady przed zastosowaniem korekcji i po zastosowaniu korekcji. Jak widzimy na obrazach, dla wysokiego wzmocnienia (HG) szumy ulegają redukcji oraz obraz staje się bardziej wyraźny. Natomiast na obrazach dla niskiego wzmocnienia (LG) przed zastosowanie korekcji prawie nic nie widać, obrazy zdominowane są przez szumy, natomiast po zastosowaniu korekcji otrzymuje wyraźne obrazy pęków. Pęki te były zainicjowanego prawdopodobnie przez hadrony. 
+Na rysunkach \ref{fig:image_27_map} i \ref{fig:image_77} prezentuję obrazy kaskady przed zastosowaniem korekcji i po zastosowaniu korekcji. Jak widzimy na obrazach, dla wysokiego wzmocnienia (HG) szumy ulegają redukcji oraz obraz staje się bardziej wyraźny. Natomiast na obrazach dla niskiego wzmocnienia (LG) przed zastosowanie korekcji obrazy zdominowane są przez szumy, natomiast po zastosowaniu korekcji otrzymuję wyraźne obrazy pęków. Pęki te były zainicjowanego prawdopodobnie przez hadrony. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{wykresy/drs4/shower_id_27.pdf}
 \caption{Obraz pęku na kamerze dla wzmocnienia wysokiego (HG) oraz niskiego (LG) przed i po zastosowaniu korekcji dla pierwszego analizowanego obrazu.}
 \label{fig:image_27_map}
 \end{figure}
-Na rysunku \ref{fig:waveform_27_hg} przedstawiam przebieg sygnału dla wysokiego wzmocnienia dla dwóch pikseli ze sygnałem od pęku oraz dwóch pikseli gdzie występuje szum elektroniki oraz szumów od fotonów nocnego nieba. 
+Na rysunku \ref{fig:waveform_27_hg} przedstawiam przebieg sygnału dla wysokiego wzmocnienia dla dwóch pikseli ze sygnałem od pęku oraz dwóch pikseli gdzie występuje szum elektroniki oraz szum od fotonów nocnego nieba dla pierwszego analizowanego przypadku. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{wykresy/drs4/waveform_HG_id_27.pdf}
 \caption{Przebieg sygnału dla wysokiego wzmocnienia dla pierwszego analizowanego obrazu pęku. Pokazane są dwa piksele z sygnałem od pęku, i dwa piksele z szumem. Sygnał przed korekcją (niebieska linia) i po korekcjach (czerwona linia).}
 \label{fig:waveform_27_hg}
 \end{figure}
-Na rysunku \ref{fig:waveform_27_lg} pokazuje analogiczny przebieg sygnału, tylko dla niskiego wzmocnienia (LG). Jak widzimy w tych przebiegach szum sygnału jest dużo mniejszy, ale także sygnał jest bardzo słaby i dopiero dzięki zastosowaniu korekcji możliwe jest uzyskanie użytecznego sygnału pochodzącego od kaskady. \\
+Na rysunku \ref{fig:waveform_27_lg} pokazuję analogiczny przebieg sygnału, tylko dla niskiego wzmocnienia (LG). Jak widzimy w tych przebiegach szum sygnału jest dużo mniejszy, ale także sygnał jest bardzo słaby i dopiero dzięki zastosowaniu korekcji możliwe jest uzyskanie użytecznego sygnału pochodzącego od kaskady. \\
 Dla niskiego wzmocnienia efekt od NSB jest dużo mniejszy, dlatego też na obrazach LG szum jest mały, a na obrazach HG szum jest dużo większy.
 \begin{figure}[H] 
 \centering
@@ -677,10 +678,11 @@ Dla niskiego wzmocnienia efekt od NSB jest dużo mniejszy, dlatego też na obraz
 \caption{Przebieg sygnału dla niskiego wzmocnienia dla pierwszego analizowanego obrazu pęku. Pokazane są dwa piksele z sygnałem od pęku, i dwa piksele z szumem. Sygnał przed korekcją (niebieska linia) i po korekcjach (czerwona linia).}
 \label{fig:waveform_27_lg}
 \end{figure}
-Na rysunkach \ref{fig:map_time_27} i \ref{fig:map_time_corr_77} pokazuje mapę czasu przyjścia sygnału przed i po zastosowaniu korekcji względnej. Na obrazach po dokonaniu korekcji czasowej widzimy wyraźny gradient czasu przyjścia. Do obrazów tła hadronowego w celu czyszczenie obrazu używałem następujących parametrów: $picture\_thresh$ = 950, $boundary\_thresh$ = 600, $min\_number\_picure\_neighbors$ = 4.
+Na rysunkach \ref{fig:map_time_27} i \ref{fig:map_time_corr_77} pokazuję mapę czasu przyjścia sygnału przed i po zastosowaniu korekcji czasowej względnej. Na obrazach po dokonaniu korekcji czasowej widzimy wyraźny gradient czasu przyjścia. Do obrazów tła hadronowego w celu czyszczenie obrazu używałem następujących parametrów: $picture\_thresh$ = 950\,ADC, $boundary\_thresh$ = 600\,ADC, $min\_number\_picture\_neighbors$ = 4. \\
+Wartość paramentów podane są w jednostkach ADC, w przybliżeniu 100 zliczeń ADC to 1 fotoelektron. 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.5]{wykresy/drs4/time_corr_img_27.pdf}
+\includegraphics[scale=0.45]{wykresy/drs4/time_corr_img_27.pdf}
 \caption{Mapa czasu przyjścia sygnału przed i po korekcji czasowej dla pierwszego analizowanego obrazu.}
 \label{fig:map_time_27}
 \end{figure}
@@ -701,18 +703,15 @@ Na rysunkach \ref{fig:map_time_27} i \ref{fig:map_time_corr_77} pokazuje mapę c
 
 \subsection{Obraz mionu}
 Na rysunku \ref{fig:muon_image} zaprezentowany jest obraz innego zarejestrowanego przypadku. 
-Charakterystyczny kształt pierścienia wskazuje na to że powstał on w wyniku przejścia pojedynczego mionu w polu widzenia teleskopu \cite{muon_ring}. Dzięki zastosowaniu korekcji obraz staje się wyraźny dla sygnału z wysokim wzmocnieniem. Dla sygnału z niskim wzmocnieniem po zastosowaniu korekcji widać kawałek pierścienia. 
+Charakterystyczny kształt pierścienia wskazuje na to, że powstał on w wyniku przejścia pojedynczego mionu w polu widzenia teleskopu \cite{muon_ring}. Dzięki zastosowaniu korekcji obraz staje się wyraźny dla sygnału z wysokim wzmocnieniem. Dla sygnału z niskim wzmocnieniem po zastosowaniu korekcji widać kawałek pierścienia. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{wykresy/drs4/shower_id_184.pdf}
 \caption{Obraz pęku na kamerze dla wzmocnienia wysokiego (HG) oraz niskiego (LG) przed i po zastosowaniu korekcji dla analizowanego obrazu mionu.}
 \label{fig:muon_image}
 \end{figure}
-
-
-
-Na rysunku \ref{fig:time_corr_map_muon} pokazuje czas przyjścia sygnału od mionu, przed i po dokonaniu korekcji czasowej. Po korekcji widać, że czas jest bardziej jednolity.
-Do obrazu mionu w celu czyszczenie obrazu używałem następujących parametrów: $picture\_thresh$ = 550, $boundary\_thresh$ = 450, $min\_number\_picure\_neighbors$ = 4.
+Na rysunku \ref{fig:time_corr_map_muon} pokazuje czas przyjścia sygnału od mionu, przed i po dokonaniu korekcji czasowej względnej. Po korekcji widać, że czas jest bardziej jednolity.
+Do obrazu mionu w celu czyszczenie obrazu używałem następujących parametrów: $picture\_thresh$ = 550 ADC, $boundary\_thresh$ = 450 ADC, $min\_number\_picture\_neighbors$ = 4.
  %oraz, że sygnał z prawej strony przyszedł wcześniej niż sygnał z lewej strony, co może sugerować, że mion leciał pod kątem do obserwacji. 
 \begin{figure}[H] 
 \centering
@@ -722,16 +721,20 @@ Do obrazu mionu w celu czyszczenie obrazu używałem następujących parametrów
 \end{figure}
 \newpage
 \section{Podsumowanie}
-W ramach pracy napisałem program do korekcji szumów z chipu DRS4, który jest częścią systemu odczytu sygnału Dragon używanego przez pierwszy teleskop LST, którego inaguracja miała miejsce 10 października 2018 roku. Kod do tych korekcji znajduję się w bibliotece cta-lstchain, będącej narzędziem do analizy danych z teleskopu LST, opartej na bibliotece ctapipe. Część tych korekcji (podstawowa oraz czasowa korekcja linii bazowej) będzie wykonywana online, dzięki mojej pracy możliwe było sprawdzenie jak te korekcje działają oraz wyznaczenie współczynników do funkcji potęgowej używanej w korekcji czasowej linii bazowej. W tym momencie rozwijana jest także ... Mój skrypt jest używany w obserwatorium do tworzenia pliku  zawierające wartości podstawowej linii bazowej przed każdym pomiarem. \\
-Możliwe, że nadal będzie konieczna interpolacja szumów niegaussowskich wykonaywane ofline za pomocą mojego kodu. \\
-W ramach pracy zacząłem także rozwijać program do korekcji czasu przyjścia sygnału. Stworzyłem program do korekcji czasu przyjścia, który m.in. za pomocą szeregu Fouriera dopasowuje krzywą opóźnienia dla każdego piksela, a następnie tworzy plik ze współczynnikami które następnie jest używam do kalibracji czasu przyjścia impulsu przez program napisane przeze mnie. Wyznaczyłem ilość harmonicznych, która należy używać do korekcji czasowej. Korekcja czasowe będzie wykonywana offline.\\
-Powyżej opisane korekcje, które redukują szum sygnału oraz poprawiają rozdzielczość czasową przetestowałem na pierwszych danych testowych zbieranych w obserwatorium Roque de los Muchachos w Hiszpanii, oraz do pierwszych obrazów pęków.  
-Wyniki, które otrzymałem są bardzo zadawolające: szum sygnału ulega dużej redukcji dzięki czemu otrzymane obrazy pęków są dużo lepszej jakości, oraz poprawia się rozdzielczość czasowa. 
+W ramach pracy napisałem program w którym zaimplementowałem procedury korekcji dla chipu DRS4, który jest częścią systemu odczytu sygnału Dragon używanego przez pierwszy prototypowy teleskop LST-1, którego inauguracja miała miejsce 10 października 2018 roku w Obserwatorium Roque de los Muchachos.\\
+Kod do podstawowej i czasowej korekcji linii bazowej oraz interpolacji szumów niegaussowskich znajduję się w bibliotece {\bf{cta-lstchain}}, będącej narzędziem do analizy danych z teleskopu LST, opartej na bibliotece {\bf{ctapipe}}. Korekcje te redukuje szum sygnału: odchylenie standardowe sygnału z $\sim$ 44 zliczeń ADC redukuje się do 6 zliczeń ADC dla sygnału z wysokim poziomem wzmocnienia, oraz do 4 zliczeń ADC do sygnału z niskim poziomem wzmocnienia. \\ Podstawowa oraz czasowa korekcja linii bazowej w przyszłości będzie wykonywana online, dzięki mojej pracy możliwe było sprawdzenie jak te korekcje działają oraz wyznaczenie współczynników do funkcji potęgowej używanej w korekcji czasowej linii bazowej.  Mój skrypt jest używany w obserwatorium do tworzenia pliku  zawierającego średnią wartość bazową każdego kondensatora. \\
+W standardowym trybie operacyjnym teleskopów LST interpolacji niegaussowskich szumów będzie wykonywana albo offline korzystając bezpośrednio z zaprezentowanego w tej pracy kodu, bądź podobnie jak to się stało z podstawową i czasową korekcją linii bazowej, kod ten zostanie przeniesiony i zaimplementowany w oprogramowaniu systemu odczytu danych Dragon, aby mógł być wykonywany online. \\
+W ramach pracy zacząłem także rozwijać program do korekcji czasu przyjścia impulsu. Kod znajduje się na moim profilu w repozytorium github \footnote{\url{https://github.com/pawel21/low_level_calib_drs4/tree/master/time_corr}}. Stworzyłem program do korekcji czasu przyjścia impulsu, co poprawia rozdzielczość czasową układa z $\sim$1.7\,ns do $\sim$0.4\,ns. Mój program za pomocą szeregu Fouriera dopasowuje krzywą opóźnienia dla każdego piksela, a następnie tworzy plik ze współczynnikami kalibracyjnymi. Współczynniki te są używane do kalibracji czasu przyjścia impulsu. Wyznaczyłem ilość harmonicznych, którą należy używać do korekcji czasowej. Korekcja czasowe będzie wykonywana offline.\\
+Powyżej opisane korekcje przetestowałem na pierwszych danych testowych zbieranych w obserwatorium Roque de los Muchachos w Hiszpanii, oraz zastosowałem do pierwszych obrazów pęków.  
+Wyniki, które otrzymałem są bardzo zadowalające (przedstawiłem je w rozdziale 6): szum sygnału ulega dużej redukcji dzięki czemu otrzymane obrazy pęków są dużo lepszej jakości, oraz poprawia się rozdzielczość czasowa. 
 Korekcje te są niezbędne w celu optymalnej pracy teleskopu i możliwości detekcji fotonów o jak najniższych energiach. 
 
-Praca była realizowane w ramach grantu Sonata 2015/19/D/ST9/00616, dzięki czemu miałem możliwość prezentacji moich wyników podczas spotkania CTA w Berlinie (wrzesień 2018 roku) oraz LST bootcamp w Padwie(listopad 2018). Ponadto swoje wyniki prezentowałem w ramach symbozjum młodych naukowców w 2018 roku, oraz przedstawiłem prezentacje o niskopoziomowych kalibracjach dla teleskopu LST w 2019 roku, za którą otrzymałem nagrodę za jedną z najlepszych prezentacji na symbozjum 
+Praca była realizowane w ramach grantu Sonata 2015/19/D/ST9/00616, dzięki czemu miałem możliwość prezentacji moich wstępnych wyników podczas spotkania konsorcjum CTA w Berlinie (wrzesień 2018) oraz podczas spotkanie \textsl{First LST Analysis bootcamp} w Padwie (listopad 2018). Ponadto swoje wyniki prezentowałem na sympozjum młodych naukowców w Warszawie: w 2018 roku przygotowałem plakat, a w 2019 roku przedstawiłem prezentacje o niskopoziomowych kalibracjach dla teleskopu LST, która została nagrodzona jako wyróżniające się wystąpienie ustne. 
 
 \newpage
+\section{Bibliografia}
+\begingroup
+\renewcommand{\section}[2]{}%
 
 \begin{thebibliography}{9}
 \bibitem{particle_de_angelis}
@@ -742,6 +745,7 @@ A. De Angelis, M. J. M. Pimenta.
 \url{https://www.auger.org/}
 
 \bibitem{auger_result}
+A. Aab et al. Contributions to ICRC 2017 
 \url{https://arxiv.org/pdf/1708.06592.pdf}
 
 \bibitem{telescope_array_web}
@@ -749,6 +753,7 @@ A. De Angelis, M. J. M. Pimenta.
 
 \bibitem{Gamma-ray_article}
 A. De Angelis, M. Mallamaci.
+Eur. Phys. J. Plus (2018) 133: 324
 \textit{Gamma-Ray Astrophysics} 
 \url{https://arxiv.org/abs/1805.05642}
 
@@ -756,7 +761,7 @@ A. De Angelis, M. Mallamaci.
 \url{tevcat.uchicago.edu}
 Stan na 22.03.2019
 \bibitem{IACT}
-J. Holder
+J. Holder.  WSPC Handbook of Astronomical Instrumentation, David Burrows (ed.)
 \textit{Atmospheric Cherenkov Gamma-ray Telescopes}
 \url{https://arxiv.org/abs/1510.05675}
 
@@ -799,12 +804,14 @@ VERITAS Collaboration, dostęp czerwiec 2019 r.
 \textit{Welcome to VERITAS }
 \url{https://veritas.sao.arizona.edu/}
 
+
+\bibitem{cta-web-lst}
+Strona CTA, dostęp czerwiec 2019 r.
+\url{https://www.cta-observatory.org/project/technology/lst/}
+
 \bibitem{cta-perform}
 Strona CTA, dostęp czerwiec 2019 r.
 \url{https://www.cta-observatory.org/science/cta-performance/}
-
-\bibitem{cta_web}
-\url{https://www.cta-observatory.org/}
 
 \bibitem{cta-concept}
 CTA Consortium, Astroparticle Physics (2013)
@@ -818,7 +825,8 @@ Cherenkov Telescope Array}
 \url{arXiv:1509.00548}
 
 \bibitem{lst_report}
-Large Size Telescope Technical Design Report, 2019
+LST Collaboration, 2019.
+\textsl{Large Size Telescope Technical Design Report}
 
 \bibitem{meg_experiment}
 J. Adam, et al.,
@@ -831,17 +839,24 @@ MAGIC Collaboration, 2014
 \url{https://arxiv.org/abs/1409.6073}
 
 \bibitem{tunka}
-M Budnev et al, 2014, Journal of Instrumentation
+M. Budnev et al, 2014, Journal of Instrumentation
 \textit{Tunka Advanced Instrument for cosmic rays and Gamma Astronomy (TAIGA): Status, results and perspectives}
 
 \bibitem{fact}
-H Anderhub et al 2013 JINST 8 P06008
+H. Anderhub et al 2013 JINST 8 P06008
 \textit{Design and operation of FACT – the first G-APD
 Cherenkov telescope}
 
 \bibitem{drs4_magic}
 Sitarek, J., Gaug, M., Mazin, D., Paoletti, R., Tescaro, D., \textit{Analysis techniques and performance of the Domino Ring Sampler version 4 based readout for the MAGIC
 telescopes}, Nuclear Instruments and Methods in Physics Research A, 723, 109, (2013)
+
+\bibitem{time_corr}
+E. Aliu et al. MAGIC Collaboration. Astropart.Phys. 30 (2009) 293-305
+\textit{Improving the performance of the single-dish
+Cherenkov telescope MAGIC through the use
+of signal timing}
+
 
 \bibitem{drs4_psi}
 DRS4 datasheet rev. 0.9
@@ -853,4 +868,6 @@ Fleury, P. \& Artemis-Whipple Collaboration
 22. International Cosmic Ray Conference (ICRC-22), Vol. 2, p. 595 - 598
 
 \end{thebibliography}
+
+\endgroup
 \end{document}
